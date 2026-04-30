@@ -40,24 +40,24 @@ This also skips incomplete rows, so when we add more, please ensure all columns 
 # Category weights based on what was given to me
 # Any category not listed in the CSV gets an auto-assigned sectionId and weight of 0.
 CATEGORY_META = {
-    "Safety and Infection Control": {"sectionId": 1, "weight": 34},
-    "Skin Care":                    {"sectionId": 2, "weight": 27},
-    "Skin Analysis":                {"sectionId": 3, "weight": 13},
-    "Hair Removal":                 {"sectionId": 4, "weight": 13},
-    "Advanced Treatments":           {"sectionId": 5, "weight": 5},
-    "Makeup":                       {"sectionId": 6, "weight": 4},
-    "Client Consultation":          {"sectionId": 7, "weight": 4},
+    "Safety and Infection Control": {"weight": 34},
+    "Skin Care":                    {"weight": 27},
+    "Skin Analysis":                {"weight": 13},
+    "Hair Removal":                 {"weight": 13},
+    "Advanced Treatments":          {"weight": 5},
+    "Makeup":                       {"weight": 4},
+    "Client Consultation":          {"weight": 4},
 }
 
 
 def csv_to_json(csv_path: str, json_path: str) -> None:
     sections: OrderedDict[str, dict] = OrderedDict()
     question_id = 1
-    next_section_id = max((m["sectionId"] for m in CATEGORY_META.values()), default=0) + 1
 
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
+            category_id = int(row.get("Category ID") or 0)
             category = (row.get("Category") or "").strip()
             question  = (row.get("Question") or "").strip()
             correct   = (row.get("Correct Answer") or "").strip()
@@ -70,19 +70,26 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
                 continue
 
             if category not in sections:
-                if category in CATEGORY_META:
-                    meta = CATEGORY_META[category]
-                    sid, weight = meta["sectionId"], meta["weight"]
-                else:
-                    sid, weight = next_section_id, 0
-                    next_section_id += 1
-
+                weight = CATEGORY_META.get(category, {}).get("weight", 0)
                 sections[category] = {
-                    "sectionId": sid,
-                    "topic": category,
+                    "sectionId": category_id,
+                    "category": category,
                     "weight": weight,
                     "questions": [],
                 }
+
+            seen_questions: dict[str, int] = {}
+            duplicates = 0
+
+            key = question.lower().strip()
+            if key in seen_questions:
+                print(f"  DUPLICATE: row {reader.line_num} matches row {seen_questions[key]} - {question!r}")
+                duplicates += 1
+                continue
+            seen_questions[key] = reader.line_num
+
+            if duplicates:
+                print(f"\n  {duplicates} duplicate(s) found and skipped")
 
             sections[category]["questions"].append({
                 "id": question_id,
@@ -100,7 +107,7 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
     total_questions = question_id - 1
     print(f"Done. {total_questions} questions across {len(output)} sections -> {json_path}")
     for s in output:
-        print(f"  [{s['sectionId']}] {s['topic']} — {len(s['questions'])} questions (weight {s['weight']})")
+        print(f"  [{s['sectionId']}] {s['category']} — {len(s['questions'])} questions (weight {s['weight']})")
 
 
 if __name__ == "__main__":
