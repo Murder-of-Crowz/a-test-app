@@ -71,6 +71,17 @@ export default function ExamScreen() {
     [submitted]
   );
 
+  const breakdown = useMemo(() => {
+    if (!submitted) return [];
+    const map: Record<string, { correct: number, total: number }> = {};
+    exam.forEach((q, i) => {
+      if (!map[q.topic]) map[q.topic] = { correct: 0, total: 0 };
+      map[q.topic].total++;
+      if (selected[i] === q.answerIndex) map[q.topic].correct++;
+    });
+    return Object.entries(map).map(([topic, stats]) => ({ topic, ...stats }))
+  }, [submitted]);
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.header}>
@@ -87,6 +98,18 @@ export default function ExamScreen() {
             <Text style={styles.resultText}>
               {score} / {TOTAL} = {Math.round((score / TOTAL) * 100)}%
             </Text>
+
+            <View style={styles.breakdown}>
+              {breakdown.map(({ topic, correct, total }) => (
+                <View key={topic} style={styles.breakdownRow}>
+                  <Text style={styles.breakdownTopic}>{topic}</Text>
+                  <Text style={styles.breakdownScore}>{correct} / {total}</Text>
+                  <View style={styles.breakdownBarBg}>
+                    <View style={[styles.breakdownBarFill, { width: `${Math.round((correct / total) * 100)}%` as any}]} />
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
         )}
 
@@ -180,6 +203,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   resultText: { color: "#fff", fontSize: 20, fontWeight: "800" },
+
+  breakdown: { width: "100%", marginTop: 16, gap: 10 },
+  breakdownRow: { gap: 4 },
+  breakdownTopic: { 
+    color: "#93c5fd",
+    fontSize: 12,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.4,
+  },
+  breakdownScore: { color: "#fff", fontSize: 14, fontWeight: "700" },
+  breakdownBarBg: { height: 4, backgroundColor: "rgba(255,255,255,0.2", borderRadius: 2 },
+  breakdownBarFill: { height: 4, backgroundColor: "#fff", borderRadius: 2 },
 
   card: {
     backgroundColor: "#fff",
