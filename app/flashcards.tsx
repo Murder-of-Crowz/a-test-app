@@ -4,6 +4,7 @@ import {
   Animated,
   Pressable,
   StyleSheet,
+  Switch,
   Text,
   View,
 } from "react-native";
@@ -50,12 +51,30 @@ function FlashCard({ card }: { card: Card }) {
   );
 }
 
+function shuffleDeck<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export default function FlashcardsScreen() {
   const router = useRouter();
   const [index, setIndex] = useState(0);
 
-  const current = allCards[index];
-  const total = allCards.length;
+  const [shuffleOn, setShuffleOn] = useState(false);
+  const [deck, setDeck] = useState(allCards);
+
+  const toggleShuffle = (val: boolean) => {
+    setShuffleOn(val);
+    setDeck(val ? shuffleDeck(allCards) : allCards);
+    setIndex(0);
+  }
+
+  const current = deck[index];
+  const total = deck.length;
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -68,7 +87,20 @@ export default function FlashcardsScreen() {
       </View>
 
       <View style={styles.body}>
-        <Text style={styles.chapterLabel}>{current.topic}</Text>
+        <View style={styles.shuffleBody}>
+          <Text style={styles.chapterLabel}>{current.topic}</Text>
+
+          <View style={styles.shuffleRow}>
+            <Text style={styles.shuffleLabel}>Shuffle</Text>
+            <Switch
+              value={shuffleOn}
+              onValueChange={toggleShuffle}
+              trackColor={{ false: "cbd5e1", true: ACCENT }}
+              thumbColor="#fff"
+            />
+          </View>
+        </View>
+
         <FlashCard key={index} card={current} />
 
         <View style={styles.nav}>
@@ -111,6 +143,10 @@ const styles = StyleSheet.create({
 
   body:         { flex: 1, padding: 20, gap: 12 },
   chapterLabel: { color: "#64748b", fontSize: 13, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
+
+  shuffleBody: { flexDirection: "row", justifyContent: "space-between"},
+  shuffleRow: { flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: 8 },
+  shuffleLabel: { color: "#64748b", fontSize: 13, fontWeight: "600" },
 
   card: {
     backgroundColor: "#fff",
