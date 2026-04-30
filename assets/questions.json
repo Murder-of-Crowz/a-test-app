@@ -8,38 +8,38 @@
         "id": 1,
         "question": "What is sanitation?",
         "answers": [
-          "Cleaning process that removes debris and reduces microorganisms",
-          "Complete destruction of all microorganisms",
-          "Use of heat to kill bacteria",
-          "Process of drying tools"
+          "The cleaning process that removes visible debris and reduces microorganisms",
+          "Complete destruction of microorganisms",
+          "Heating tools",
+          "Air drying tools"
         ],
         "answerIndex": 0
       },
       {
         "id": 2,
-        "question": "What is disinfection",
+        "question": "What is disinfection?",
         "answers": [
-          "Use of chemicals to destroy most microorganisms on non-porous surfaces",
-          "Removal of visible dirt only",
-          "Air drying contamited tools",
-          "Sterilizing with steam"
+          "The use of chemicals to destroy most microorganisms on non-porous surfaces",
+          "Removing dirt only",
+          "Sterilizing skin",
+          "Air drying"
         ],
         "answerIndex": 0
       },
       {
         "id": 3,
-        "question": "What is sterilization",
+        "question": "What is sterilization?",
         "answers": [
-          "Complete destruction of all microorganisms including spores",
-          "Cleaning visible debris",
-          "Reducing bacteria levels",
-          "Using soap and water"
+          "The complete destruction of all microorganisms including spores",
+          "Cleaning debris",
+          "Reducing bacteria",
+          "Using soap"
         ],
         "answerIndex": 0
       },
       {
         "id": 4,
-        "question": "Which process kills spores?",
+        "question": "Which level kills spores?",
         "answers": [
           "Sterilization",
           "Disinfection",
@@ -52,7 +52,7 @@
         "id": 5,
         "question": "What type of items must be sterilized?",
         "answers": [
-          "Critical items that penetrate the skin",
+          "Critical items that penetrate skin (rare in esthetics)",
           "Reusable towels",
           "Non-porous tools only",
           "Disposable items"
@@ -64,7 +64,7 @@
         "question": "What is PPE?",
         "answers": [
           "Personal Protective Equipment",
-          "Personal Product Equipment",
+          "Professional Product Equipment",
           "Protective Practice Essentials",
           "Personal Prevention Elements"
         ],
@@ -74,7 +74,7 @@
         "id": 7,
         "question": "Example of PPE?",
         "answers": [
-          "Gloves, mask, and eye protection",
+          "Gloves masks eye protection",
           "Towels",
           "Cotton pads",
           "Wax sticks"
@@ -118,7 +118,7 @@
         "id": 11,
         "question": "What is universal precaution?",
         "answers": [
-          "Treat all bloody/body fluids as infectious",
+          "Treat all blood/body fluids as infectious",
           "Wash hands daily",
           "Use lotion",
           "Clean weekly"
@@ -140,7 +140,7 @@
         "id": 13,
         "question": "What is bacteria?",
         "answers": [
-          "Single-celled microorganism",
+          "Single-celled microorganisms",
           "Skin cells",
           "Viruses only",
           "Chemicals"
@@ -173,7 +173,7 @@
         "id": 16,
         "question": "What is a disinfectant?",
         "answers": [
-          "Checmical used to kill microbes on surfaces",
+          "Chemical used to kill microbes on surfaces",
           "Skin lotion",
           "Cleanser",
           "Water"
@@ -195,7 +195,7 @@
         "id": 18,
         "question": "What is biohazard waste?",
         "answers": [
-          "Contaminated materials, blood, bodily fluids",
+          "Contaminated materials blood bodily fluids",
           "Paper towels",
           "Water",
           "Clean cotton"
@@ -215,12 +215,12 @@
       },
       {
         "id": 20,
-        "question": "What is a hand hygience standard?",
+        "question": "What is hand hygiene standard?",
         "answers": [
           "Wash 20 seconds minimum",
-          "Wash 5 seconds minimum",
-          "Wash 10 seconds minimum",
-          "Wash 1 minute minimum"
+          "5 seconds",
+          "10 seconds",
+          "1 minute"
         ],
         "answerIndex": 0
       },
@@ -228,7 +228,7 @@
         "id": 21,
         "question": "When should hands be washed?",
         "answers": [
-          "Before and afer each client",
+          "Before and after every client",
           "Once daily",
           "After lunch",
           "End of shift"
@@ -237,12 +237,320 @@
       },
       {
         "id": 22,
-        "question": "What is antiseptic?",
+        "question": "What is an antiseptic?",
         "answers": [
           "Product used on skin to reduce microbes",
           "Tool cleaner",
-          "Laundy soap",
+          "Laundry soap",
           "Toner"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 23,
+        "question": "What is a non-porous surface?",
+        "answers": [
+          "Surface that doesn’t absorb liquids",
+          "Absorbs water",
+          "Soft material",
+          "Fabric"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 24,
+        "question": "Example of non-porous tools?",
+        "answers": [
+          "Metal tweezers",
+          "Sponge",
+          "Cotton",
+          "Tissue"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 25,
+        "question": "What is a porous item?",
+        "answers": [
+          "Absorbs fluids cannot be disinfected",
+          "Metal tool",
+          "Glass jar",
+          "Plastic"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 26,
+        "question": "Example of porous item?",
+        "answers": [
+          "Sponges",
+          "Tweezers",
+          "Glass jar",
+          "Metal spatula"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 27,
+        "question": "What is blood exposure procedure?",
+        "answers": [
+          "Stop service clean disinfect protect",
+          "Continue service",
+          "Ignore incident",
+          "Wash later"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 28,
+        "question": "What is a contamination chain?",
+        "answers": [
+          "Pathway microbes spread through",
+          "Tool cleaning process",
+          "Product layering",
+          "Makeup flow"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 29,
+        "question": "What is the first defense against infection?",
+        "answers": [
+          "Proper hand washing",
+          "Gloves only",
+          "Disinfect tools",
+          "Use masks"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 30,
+        "question": "What is an autoclave?",
+        "answers": [
+          "Sterilization device using steam",
+          "Brush",
+          "UV light",
+          "Towel"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 31,
+        "question": "What is hepatitis?",
+        "answers": [
+          "Liver infection virus",
+          "Skin infection",
+          "Bacterial disease",
+          "Fungal infection"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 32,
+        "question": "What is HIV?",
+        "answers": [
+          "Virus that attacks immune system",
+          "Skin condition",
+          "Hair disease",
+          "Fungal infection"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 33,
+        "question": "What is proper glove use?",
+        "answers": [
+          "Single-use discard after service",
+          "Reuse gloves",
+          "Wash and reuse",
+          "Optional use"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 34,
+        "question": "What is cleaning order?",
+        "answers": [
+          "Clean disinfect store",
+          "Disinfect clean store",
+          "Store clean disinfect",
+          "Wash only"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 35,
+        "question": "What is contamination risk in double dipping?",
+        "answers": [
+          "Spreads bacteria",
+          "Improves hygiene",
+          "Saves time",
+          "No effect"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 36,
+        "question": "What is proper storage?",
+        "answers": [
+          "Clean closed containers",
+          "Open shelves",
+          "Floor storage",
+          "Wet containers"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 37,
+        "question": "What is infection control goal?",
+        "answers": [
+          "Prevent disease spread",
+          "Improve appearance",
+          "Speed service",
+          "Reduce cost"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 38,
+        "question": "What is a clean environment?",
+        "answers": [
+          "Free of debris and contaminants",
+          "Messy",
+          "Sterile only",
+          "Wet"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 39,
+        "question": "What is the difference between cleaning and disinfecting?",
+        "answers": [
+          "Cleaning removes debris disinfecting kills microbes",
+          "Same process",
+          "Both remove oil",
+          "Both hydrate skin"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 40,
+        "question": "What is safe chemical handling?",
+        "answers": [
+          "Follow SDS instructions",
+          "Guess usage",
+          "Mix products freely",
+          "Ignore labels"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 41,
+        "question": "What is contact dermatitis risk?",
+        "answers": [
+          "Improper chemical exposure",
+          "Sun exposure",
+          "Cold exposure",
+          "Water exposure"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 42,
+        "question": "What is ventilation importance?",
+        "answers": [
+          "Reduces inhalation hazards",
+          "Adds heat",
+          "Improves lighting",
+          "Adds moisture"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 43,
+        "question": "What is PPE disposal?",
+        "answers": [
+          "After each client",
+          "Weekly",
+          "Monthly",
+          "Reuse"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 44,
+        "question": "What is sanitation frequency?",
+        "answers": [
+          "After every use",
+          "Weekly",
+          "Monthly",
+          "Yearly"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 45,
+        "question": "What is clean towel rule?",
+        "answers": [
+          "One per client",
+          "Reuse towels",
+          "Weekly wash",
+          "Optional use"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 46,
+        "question": "What is contamination prevention?",
+        "answers": [
+          "Avoid cross-contact",
+          "Share tools",
+          "Reuse items",
+          "Skip cleaning"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 47,
+        "question": "What is safety priority?",
+        "answers": [
+          "Client and practitioner protection",
+          "Speed",
+          "Cost",
+          "Style"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 48,
+        "question": "What is exposure incident?",
+        "answers": [
+          "Contact with infectious material",
+          "Cleaning tools",
+          "Applying lotion",
+          "Washing hands"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 49,
+        "question": "What is disinfectant label importance?",
+        "answers": [
+          "Ensures correct usage",
+          "Brand name only",
+          "Color only",
+          "Price only"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 50,
+        "question": "What is infection control system?",
+        "answers": [
+          "Set of procedures to maintain hygiene",
+          "Makeup system",
+          "Hair system",
+          "Product system"
         ],
         "answerIndex": 0
       }
@@ -255,12 +563,441 @@
     "questions": [
       {
         "id": 51,
-        "question": "What is the largen organ",
+        "question": "What is the largest organ?",
         "answers": [
           "Skin",
           "Heart",
           "Liver",
           "Brain"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 52,
+        "question": "What are the 3 skin layers?",
+        "answers": [
+          "Epidermis dermis subcutaneous",
+          "Muscle fat bone",
+          "Outer core tissue",
+          "Surface layer blood"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 53,
+        "question": "What is the epidermis?",
+        "answers": [
+          "Outer protective layer",
+          "Blood layer",
+          "Fat layer",
+          "Nerve layer"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 54,
+        "question": "What is the dermis?",
+        "answers": [
+          "Contains collagen elastin blood vessels",
+          "Dead cells only",
+          "Sweat only",
+          "Air pockets"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 55,
+        "question": "What is subcutaneous layer?",
+        "answers": [
+          "Fat layer for insulation",
+          "Outer layer",
+          "Blood layer",
+          "Nerve layer"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 56,
+        "question": "What is collagen?",
+        "answers": [
+          "Protein for skin strength",
+          "Oil",
+          "Pigment",
+          "Water"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 57,
+        "question": "What is elastin?",
+        "answers": [
+          "Provides elasticity",
+          "Oil control",
+          "Pigment",
+          "Blood"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 58,
+        "question": "What is melanin?",
+        "answers": [
+          "Pigment responsible for skin color",
+          "Oil",
+          "Protein",
+          "Acid"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 59,
+        "question": "What is sebum?",
+        "answers": [
+          "Oil produced by sebaceous glands",
+          "Sweat",
+          "Blood",
+          "Water"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 60,
+        "question": "What is a facial?",
+        "answers": [
+          "Treatment to improve skin health",
+          "Hair removal",
+          "Makeup application",
+          "Massage only"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 61,
+        "question": "What is exfoliation?",
+        "answers": [
+          "Removal of dead skin cells",
+          "Adding oil",
+          "Adding water",
+          "Applying SPF"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 62,
+        "question": "What is hydration?",
+        "answers": [
+          "Moisture retention in skin",
+          "Oil increase",
+          "Heat increase",
+          "Air retention"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 63,
+        "question": "What is toner?",
+        "answers": [
+          "Balances pH after cleansing",
+          "Removes hair",
+          "Moisturizes deeply",
+          "Exfoliates strongly"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 64,
+        "question": "What is cleanser?",
+        "answers": [
+          "Removes dirt oil",
+          "Adds oil",
+          "Hydrates",
+          "Exfoliates"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 65,
+        "question": "What is mask purpose?",
+        "answers": [
+          "Treat specific skin conditions",
+          "Hair removal",
+          "Makeup base",
+          "Clean tools"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 66,
+        "question": "What is moisturizer?",
+        "answers": [
+          "Hydrates skin",
+          "Cleans skin",
+          "Removes oil",
+          "Exfoliates"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 67,
+        "question": "What is SPF?",
+        "answers": [
+          "Sun Protection Factor",
+          "Skin Product Formula",
+          "Sun Power Filter",
+          "Skin Protection Foam"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 68,
+        "question": "What is UVA?",
+        "answers": [
+          "Aging rays",
+          "Burning rays",
+          "Cooling rays",
+          "Healing rays"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 69,
+        "question": "What is UVB?",
+        "answers": [
+          "Burning rays",
+          "Aging rays",
+          "Cooling rays",
+          "Healing rays"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 70,
+        "question": "What is acne?",
+        "answers": [
+          "Inflammatory skin condition",
+          "Dryness",
+          "Burn",
+          "Wrinkle"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 71,
+        "question": "What causes acne?",
+        "answers": [
+          "Oil bacteria clogged pores",
+          "Water dryness",
+          "Sunlight",
+          "Cold air"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 72,
+        "question": "What is comedone?",
+        "answers": [
+          "Clogged pore",
+          "Hair follicle",
+          "Blood vessel",
+          "Nerve"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 73,
+        "question": "What is extraction?",
+        "answers": [
+          "Removing clogged pores",
+          "Adding oil",
+          "Massaging skin",
+          "Applying SPF"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 74,
+        "question": "What is contraindication?",
+        "answers": [
+          "Condition preventing treatment",
+          "Desired result",
+          "Skin type",
+          "Treatment benefit"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 75,
+        "question": "What is facial massage benefit?",
+        "answers": [
+          "Improves circulation",
+          "Dries skin",
+          "Adds oil",
+          "Burns skin"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 76,
+        "question": "What is LED therapy?",
+        "answers": [
+          "Light treatment for skin",
+          "Heat treatment",
+          "Water treatment",
+          "Air treatment"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 77,
+        "question": "What is galvanic current?",
+        "answers": [
+          "Electrical facial treatment",
+          "Heat therapy",
+          "Manual massage",
+          "Cold therapy"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 78,
+        "question": "What is high-frequency?",
+        "answers": [
+          "Acne bacteria treatment",
+          "Hair removal",
+          "Skin hydration",
+          "Makeup tool"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 79,
+        "question": "What is enzyme exfoliation?",
+        "answers": [
+          "Gentle chemical exfoliation",
+          "Physical scrub",
+          "Waxing",
+          "Shaving"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 80,
+        "question": "What is chemical exfoliation?",
+        "answers": [
+          "Acid-based skin resurfacing",
+          "Manual scrub",
+          "Moisturizing",
+          "Steaming"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 81,
+        "question": "What is physical exfoliation?",
+        "answers": [
+          "Scrubs manual removal",
+          "Chemical peel",
+          "LED therapy",
+          "Hydration"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 82,
+        "question": "What is skin barrier?",
+        "answers": [
+          "Protective outer layer",
+          "Inner layer",
+          "Fat layer",
+          "Blood layer"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 83,
+        "question": "What is dehydration?",
+        "answers": [
+          "Lack of water in skin",
+          "Excess oil",
+          "Burned skin",
+          "Infection"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 84,
+        "question": "What is sensitivity?",
+        "answers": [
+          "Skin reacts easily",
+          "Thick skin",
+          "Oily skin",
+          "Normal skin"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 85,
+        "question": "What is aging sign?",
+        "answers": [
+          "Wrinkles loss of elasticity",
+          "Oil increase",
+          "Sweat increase",
+          "Hair growth"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 86,
+        "question": "What is product layering?",
+        "answers": [
+          "Applying products in order",
+          "Mixing products randomly",
+          "Skipping products",
+          "Applying one product only"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 87,
+        "question": "What is serum?",
+        "answers": [
+          "Concentrated treatment product",
+          "Cleanser",
+          "Toner",
+          "Mask"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 88,
+        "question": "What is facial steam benefit?",
+        "answers": [
+          "Opens pores",
+          "Closes pores",
+          "Dries skin",
+          "Burns skin"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 89,
+        "question": "What is mask type for oily skin?",
+        "answers": [
+          "Clay mask",
+          "Hydrating mask",
+          "Oil mask",
+          "Water mask"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 90,
+        "question": "What is mask for dry skin?",
+        "answers": [
+          "Hydrating mask",
+          "Clay mask",
+          "Oil removal mask",
+          "Peel mask"
         ],
         "answerIndex": 0
       }
@@ -275,10 +1012,219 @@
         "id": 91,
         "question": "What are main skin types?",
         "answers": [
-          "Normal, oily, dry, combination",
-          "Light, dark, medium",
-          "Health, unhealty",
-          "Soft, rough"
+          "Normal oily dry combination",
+          "Light dark medium",
+          "Healthy unhealthy",
+          "Soft rough"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 92,
+        "question": "What is normal skin?",
+        "answers": [
+          "Balanced oil and moisture",
+          "Too oily",
+          "Too dry",
+          "Inflamed"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 93,
+        "question": "What is oily skin?",
+        "answers": [
+          "Excess sebum production",
+          "Lack of oil",
+          "Balanced",
+          "Dry patches"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 94,
+        "question": "What is dry skin?",
+        "answers": [
+          "Lack of oil",
+          "Excess oil",
+          "Balanced",
+          "Inflamed"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 95,
+        "question": "What is combination skin?",
+        "answers": [
+          "Oily T zone dry elsewhere",
+          "Fully oily",
+          "Fully dry",
+          "Fully normal"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 96,
+        "question": "What is Fitzpatrick scale?",
+        "answers": [
+          "Skin type classification by sun response",
+          "Acne scale",
+          "Hydration scale",
+          "Aging scale"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 97,
+        "question": "What is type I skin?",
+        "answers": [
+          "Burns easily never tans",
+          "Tans easily",
+          "Never burns",
+          "Always dark"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 98,
+        "question": "What is type VI skin?",
+        "answers": [
+          "Deeply pigmented rarely burns",
+          "Light skin",
+          "Burns easily",
+          "No pigment"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 99,
+        "question": "What is sensitivity sign?",
+        "answers": [
+          "Redness irritation",
+          "Oiliness",
+          "Dryness",
+          "Hair growth"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 100,
+        "question": "What is dehydration sign?",
+        "answers": [
+          "Tightness dullness",
+          "Oiliness",
+          "Redness",
+          "Burning"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 101,
+        "question": "What is acne grade?",
+        "answers": [
+          "Severity level",
+          "Hydration level",
+          "Color level",
+          "Texture level"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 102,
+        "question": "What is hyperpigmentation?",
+        "answers": [
+          "Dark spots",
+          "Light spots",
+          "Wrinkles",
+          "Dryness"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 103,
+        "question": "What is hypopigmentation?",
+        "answers": [
+          "Loss of color",
+          "Dark spots",
+          "Oiliness",
+          "Acne"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 104,
+        "question": "What is rosacea?",
+        "answers": [
+          "Chronic redness condition",
+          "Dryness",
+          "Oiliness",
+          "Wrinkle"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 105,
+        "question": "What is telangiectasia?",
+        "answers": [
+          "Broken capillaries",
+          "Hair growth",
+          "Oil production",
+          "Skin peeling"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 106,
+        "question": "What is skin elasticity test?",
+        "answers": [
+          "Pinch test",
+          "Press test",
+          "Heat test",
+          "Light test"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 107,
+        "question": "What is pore size indicator?",
+        "answers": [
+          "Oil production",
+          "Water content",
+          "Heat level",
+          "Hair density"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 108,
+        "question": "What is skin texture?",
+        "answers": [
+          "Surface feel",
+          "Color only",
+          "Temperature only",
+          "Thickness only"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 109,
+        "question": "What is elasticity loss sign?",
+        "answers": [
+          "Sagging",
+          "Oiliness",
+          "Redness",
+          "Dryness"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 110,
+        "question": "What is analysis tool?",
+        "answers": [
+          "Magnifying lamp",
+          "Brush",
+          "Towel",
+          "Wax stick"
         ],
         "answerIndex": 0
       }
@@ -299,6 +1245,215 @@
           "Bleaching"
         ],
         "answerIndex": 0
+      },
+      {
+        "id": 112,
+        "question": "Types of wax?",
+        "answers": [
+          "Soft and hard",
+          "Liquid and foam",
+          "Gel and paste",
+          "Spray and powder"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 113,
+        "question": "Soft wax use?",
+        "answers": [
+          "Large areas",
+          "Small areas",
+          "Face only",
+          "Eyebrows only"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 114,
+        "question": "Hard wax use?",
+        "answers": [
+          "Sensitive areas",
+          "Large areas",
+          "Legs only",
+          "Arms only"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 115,
+        "question": "What is hair growth cycle?",
+        "answers": [
+          "Anagen catagen telogen",
+          "Grow stop fall",
+          "Short long",
+          "None"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 116,
+        "question": "Best phase to remove hair?",
+        "answers": [
+          "Anagen",
+          "Catagen",
+          "Telogen",
+          "All same"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 117,
+        "question": "What is contraindication for waxing?",
+        "answers": [
+          "Retinol use",
+          "Normal skin",
+          "Oily skin",
+          "Hydrated skin"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 118,
+        "question": "What is tweezing?",
+        "answers": [
+          "Hair removal with tweezers",
+          "Shaving",
+          "Waxing",
+          "Burning"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 119,
+        "question": "What is threading?",
+        "answers": [
+          "Hair removal using thread",
+          "Shaving",
+          "Cutting",
+          "Bleaching"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 120,
+        "question": "What is ingrown hair?",
+        "answers": [
+          "Hair grows under skin",
+          "Hair falls out",
+          "Hair grows faster",
+          "Hair turns gray"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 121,
+        "question": "What is waxing direction?",
+        "answers": [
+          "Apply with growth remove opposite",
+          "Opposite same",
+          "Random",
+          "No rule"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 122,
+        "question": "What is strip use?",
+        "answers": [
+          "Removes soft wax",
+          "Applies wax",
+          "Cleans skin",
+          "Heats wax"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 123,
+        "question": "What is waxing temperature risk?",
+        "answers": [
+          "Burns",
+          "Cooling",
+          "Drying",
+          "Hydration"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 124,
+        "question": "What is sanitation in waxing?",
+        "answers": [
+          "No double dipping",
+          "Reuse sticks",
+          "Skip cleaning",
+          "Share wax"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 125,
+        "question": "What is aftercare?",
+        "answers": [
+          "Soothe and protect skin",
+          "Expose to heat",
+          "Exfoliate immediately",
+          "Ignore skin"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 126,
+        "question": "What is follicle?",
+        "answers": [
+          "Hair root structure",
+          "Skin layer",
+          "Blood vessel",
+          "Nerve"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 127,
+        "question": "What is epilation?",
+        "answers": [
+          "Removing hair from root",
+          "Cutting hair",
+          "Shaving",
+          "Bleaching"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 128,
+        "question": "What is depilation?",
+        "answers": [
+          "Removing surface hair",
+          "Removing root hair",
+          "Hair growth",
+          "Hair coloring"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 129,
+        "question": "What is contraindication?",
+        "answers": [
+          "Skin infection",
+          "Healthy skin",
+          "Oily skin",
+          "Dry skin"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 130,
+        "question": "What is waxing benefit?",
+        "answers": [
+          "Slower regrowth",
+          "Faster regrowth",
+          "Hair thickening",
+          "Hair color change"
+        ],
+        "answerIndex": 0
       }
     ]
   },
@@ -315,6 +1470,83 @@
           "Chemical peel",
           "Waxing",
           "Massage"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 132,
+        "question": "What is chemical peel?",
+        "answers": [
+          "Acid exfoliation",
+          "Scrubbing",
+          "Hydrating",
+          "Steaming"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 133,
+        "question": "Types of peels?",
+        "answers": [
+          "AHA BHA",
+          "Water oil",
+          "Heat cold",
+          "Soft hard"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 134,
+        "question": "What is AHA?",
+        "answers": [
+          "Alpha hydroxy acid",
+          "Anti hair acid",
+          "Heat acid",
+          "Water acid"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 135,
+        "question": "What is BHA?",
+        "answers": [
+          "Beta hydroxy acid",
+          "Basic acid",
+          "Body acid",
+          "Balance acid"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 136,
+        "question": "What is peel depth?",
+        "answers": [
+          "Superficial medium deep",
+          "Light only",
+          "Deep only",
+          "None"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 137,
+        "question": "What is contraindication?",
+        "answers": [
+          "Sensitive skin",
+          "Normal skin",
+          "Oily skin",
+          "Combination skin"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 138,
+        "question": "What is post-care?",
+        "answers": [
+          "Sun protection",
+          "Heat exposure",
+          "Waxing",
+          "Exfoliation"
         ],
         "answerIndex": 0
       }
@@ -335,12 +1567,67 @@
           "Brush"
         ],
         "answerIndex": 0
+      },
+      {
+        "id": 140,
+        "question": "What is concealer?",
+        "answers": [
+          "Covers imperfections",
+          "Adds color",
+          "Cleans skin",
+          "Removes oil"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 141,
+        "question": "What is contouring?",
+        "answers": [
+          "Shaping face with shading",
+          "Cleaning skin",
+          "Hydrating skin",
+          "Exfoliating"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 142,
+        "question": "What is blending?",
+        "answers": [
+          "Smoothing product lines",
+          "Sharpening lines",
+          "Removing makeup",
+          "Adding oil"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 143,
+        "question": "What is color theory?",
+        "answers": [
+          "Matching tones",
+          "Cleaning tools",
+          "Applying SPF",
+          "Waxing hair"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 144,
+        "question": "What is sanitation in makeup?",
+        "answers": [
+          "Clean brushes",
+          "Reuse tools",
+          "Share tools",
+          "Skip cleaning"
+        ],
+        "answerIndex": 0
       }
     ]
   },
   {
     "sectionId": 7,
-    "topic": "Client Consulation",
+    "topic": "Client Consultation",
     "weight": 4,
     "questions": [
       {
@@ -351,6 +1638,61 @@
           "Perform service",
           "Sell product",
           "Clean tools"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 146,
+        "question": "What is intake form?",
+        "answers": [
+          "Client history document",
+          "Receipt",
+          "Schedule",
+          "Menu"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 147,
+        "question": "What is contraindication identification?",
+        "answers": [
+          "Prevent unsafe treatments",
+          "Improve sales",
+          "Speed service",
+          "Add products"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 148,
+        "question": "What is client goal?",
+        "answers": [
+          "Desired outcome",
+          "Product sale",
+          "Tool cleaning",
+          "Schedule"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 149,
+        "question": "What is documentation?",
+        "answers": [
+          "Record of service",
+          "Ignore notes",
+          "Memory only",
+          "Verbal only"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 150,
+        "question": "What is professional communication?",
+        "answers": [
+          "Clear respectful interaction",
+          "Casual slang",
+          "Ignore client",
+          "Rush service"
         ],
         "answerIndex": 0
       }
