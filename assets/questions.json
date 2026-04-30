@@ -1,0 +1,359 @@
+[
+  {
+    "sectionId": 1,
+    "topic": "Safety and Infection Control",
+    "weight": 34,
+    "questions": [
+      {
+        "id": 1,
+        "question": "What is sanitation?",
+        "answers": [
+          "Cleaning process that removes debris and reduces microorganisms",
+          "Complete destruction of all microorganisms",
+          "Use of heat to kill bacteria",
+          "Process of drying tools"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 2,
+        "question": "What is disinfection",
+        "answers": [
+          "Use of chemicals to destroy most microorganisms on non-porous surfaces",
+          "Removal of visible dirt only",
+          "Air drying contamited tools",
+          "Sterilizing with steam"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 3,
+        "question": "What is sterilization",
+        "answers": [
+          "Complete destruction of all microorganisms including spores",
+          "Cleaning visible debris",
+          "Reducing bacteria levels",
+          "Using soap and water"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 4,
+        "question": "Which process kills spores?",
+        "answers": [
+          "Sterilization",
+          "Disinfection",
+          "Sanitation",
+          "Cleaning"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 5,
+        "question": "What type of items must be sterilized?",
+        "answers": [
+          "Critical items that penetrate the skin",
+          "Reusable towels",
+          "Non-porous tools only",
+          "Disposable items"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 6,
+        "question": "What is PPE?",
+        "answers": [
+          "Personal Protective Equipment",
+          "Personal Product Equipment",
+          "Protective Practice Essentials",
+          "Personal Prevention Elements"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 7,
+        "question": "Example of PPE?",
+        "answers": [
+          "Gloves, mask, and eye protection",
+          "Towels",
+          "Cotton pads",
+          "Wax sticks"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 8,
+        "question": "What is OSHA?",
+        "answers": [
+          "Occupational Safety and Health Administration",
+          "Health Beauty Board",
+          "Sanitation Council",
+          "Medical License Agency"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 9,
+        "question": "What is MSDS/SDS?",
+        "answers": [
+          "Safety Data Sheets for chemical handling",
+          "Salon Data Sheets",
+          "Medical Skin Documents",
+          "Sanitation Data System"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 10,
+        "question": "What is cross-contamination?",
+        "answers": [
+          "Transfer of bacteria from one person/object to another",
+          "Tool cleaning",
+          "Using gloves",
+          "Applying lotion"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 11,
+        "question": "What is universal precaution?",
+        "answers": [
+          "Treat all bloody/body fluids as infectious",
+          "Wash hands daily",
+          "Use lotion",
+          "Clean weekly"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 12,
+        "question": "What is a pathogen?",
+        "answers": [
+          "Disease-causing microorganism",
+          "Dead skin cell",
+          "Oil gland",
+          "Sweat"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 13,
+        "question": "What is bacteria?",
+        "answers": [
+          "Single-celled microorganism",
+          "Skin cells",
+          "Viruses only",
+          "Chemicals"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 14,
+        "question": "What are viruses?",
+        "answers": [
+          "Microorganisms that require a host to reproduce",
+          "Harmless bacteria",
+          "Dead cells",
+          "Oils"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 15,
+        "question": "What are fungi?",
+        "answers": [
+          "Organisms like yeast and mold",
+          "Viruses",
+          "Bacteria",
+          "Skin layers"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 16,
+        "question": "What is a disinfectant?",
+        "answers": [
+          "Checmical used to kill microbes on surfaces",
+          "Skin lotion",
+          "Cleanser",
+          "Water"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 17,
+        "question": "What is required for disinfectant effectiveness?",
+        "answers": [
+          "Proper contact time",
+          "Drying time",
+          "Heating time",
+          "Storage time"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 18,
+        "question": "What is biohazard waste?",
+        "answers": [
+          "Contaminated materials, blood, bodily fluids",
+          "Paper towels",
+          "Water",
+          "Clean cotton"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 19,
+        "question": "Where is biohazard waste disposed?",
+        "answers": [
+          "Approved biohazard containers",
+          "Trash",
+          "Sink",
+          "Laundry"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 20,
+        "question": "What is a hand hygience standard?",
+        "answers": [
+          "Wash 20 seconds minimum",
+          "Wash 5 seconds minimum",
+          "Wash 10 seconds minimum",
+          "Wash 1 minute minimum"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 21,
+        "question": "When should hands be washed?",
+        "answers": [
+          "Before and afer each client",
+          "Once daily",
+          "After lunch",
+          "End of shift"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 22,
+        "question": "What is antiseptic?",
+        "answers": [
+          "Product used on skin to reduce microbes",
+          "Tool cleaner",
+          "Laundy soap",
+          "Toner"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+  {
+    "sectionId": 2,
+    "topic": "Skin Care",
+    "weight": 27,
+    "questions": [
+      {
+        "id": 51,
+        "question": "What is the largen organ",
+        "answers": [
+          "Skin",
+          "Heart",
+          "Liver",
+          "Brain"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+  {
+    "sectionId": 3,
+    "topic": "Skin Analysis",
+    "weight": 13,
+    "questions": [
+      {
+        "id": 91,
+        "question": "What are main skin types?",
+        "answers": [
+          "Normal, oily, dry, combination",
+          "Light, dark, medium",
+          "Health, unhealty",
+          "Soft, rough"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+  {
+    "sectionId": 4,
+    "topic": "Hair Removal",
+    "weight": 13,
+    "questions": [
+      {
+        "id": 111,
+        "question": "What is waxing?",
+        "answers": [
+          "Hair removal from root",
+          "Cutting hair",
+          "Shaving",
+          "Bleaching"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+  {
+    "sectionId": 5,
+    "topic": "Advanced Treatments",
+    "weight": 5,
+    "questions": [
+      {
+        "id": 131,
+        "question": "What is microdermabrasion?",
+        "answers": [
+          "Mechanical exfoliation treatment",
+          "Chemical peel",
+          "Waxing",
+          "Massage"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+  {
+    "sectionId": 6,
+    "topic": "Makeup",
+    "weight": 4,
+    "questions": [
+      {
+        "id": 139,
+        "question": "What is foundation?",
+        "answers": [
+          "Base makeup",
+          "Lipstick",
+          "Eye shadow",
+          "Brush"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+  {
+    "sectionId": 7,
+    "topic": "Client Consulation",
+    "weight": 4,
+    "questions": [
+      {
+        "id": 145,
+        "question": "What is consultation?",
+        "answers": [
+          "Client assessment",
+          "Perform service",
+          "Sell product",
+          "Clean tools"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  }
+]
