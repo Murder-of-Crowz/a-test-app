@@ -5,12 +5,16 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { COLORS } from "./theme/colors";
 
 export default function Login() {
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
-        <Text style={styles.title}>Sign in to Test-App</Text>
+        <View style={styles.logoBox}>
+          <Text style={styles.logoText}>SG</Text>
+        </View>
+        <Text style={styles.title}>StudyGuide</Text>
 
         <View style={styles.formContainer}>
           <View style={styles.inputGroup}>
@@ -44,7 +48,7 @@ export default function Login() {
         </TouchableOpacity>
       </View>
       <View style={{ marginTop: 20 }}>
-        <Text style={{ color: "#666", fontFamily: "Inter" }}>
+        <Text style={styles.registrationText}>
           Don't have an account?
           <TouchableOpacity onPress={() => alert("Navigate to Sign Up screen")}>
             <Text style={styles.signUp}> Sign up</Text>
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f4f6f8",
+    backgroundColor: COLORS.brand,
     paddingHorizontal: 20,
   },
 
@@ -71,13 +75,28 @@ const styles = StyleSheet.create({
     maxWidth: 420,
     alignItems: "center",
   },
-
+  logoBox: {
+    width: 88,
+    height: 88,
+    borderRadius: 24,
+    backgroundColor: COLORS.accent,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  logoText: {
+    color: "#fff",
+    fontSize: 32,
+    fontWeight: "800",
+    letterSpacing: 1,
+  },
   // Header / title
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     fontFamily: "Inter",
     marginBottom: 30,
+    color: "#fff",
   },
 
   // Form layout
@@ -91,6 +110,7 @@ const styles = StyleSheet.create({
   },
 
   label: {
+    color: COLORS.accent,
     fontSize: 14,
     fontWeight: "500",
     fontFamily: "Inter",
@@ -112,7 +132,7 @@ const styles = StyleSheet.create({
   // Button
   btn: {
     width: "100%",
-    backgroundColor: "#007AFF",
+    backgroundColor: "#fff",
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
@@ -120,7 +140,7 @@ const styles = StyleSheet.create({
   },
 
   btnText: {
-    color: "#fff",
+    color: "COLORS.brand",
     fontSize: 16,
     fontWeight: "normal",
     fontFamily: "Inter",
@@ -133,10 +153,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 6,
   },
+  registrationText: {
+    color: "#666",
+    fontFamily: "Inter",
+  },
 
   signUp: {
-    color: "#007AFF",
-    fontWeight: "600",
+    color: "#fff",
+    fontWeight: "500",
     textDecorationLine: "underline",
   },
 });
