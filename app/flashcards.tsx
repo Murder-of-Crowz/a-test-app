@@ -21,10 +21,10 @@ type Card = {
   answer: string;
   choices: string[];
   answerIndex: number;
-  topic: string;
+  category: string;
 };
 
-const allCards = data.flatMap(section => section.questions.map(q => ({ ...q, topic: section.topic })));
+const allCards = data.flatMap(section => section.questions.map(q => ({ ...q, category: section.category })));
 
 function FlashCard({ card }: { card: Card }) {
   const [flipped, setFlipped] = useState(false);
@@ -88,7 +88,7 @@ export default function FlashcardsScreen() {
 
       <View style={styles.body}>
         <View style={styles.shuffleBody}>
-          <Text style={styles.chapterLabel}>{current.topic}</Text>
+          <Text style={styles.chapterLabel}>{current.category}</Text>
 
           <View style={styles.shuffleRow}>
             <Text style={styles.shuffleLabel}>Shuffle</Text>

@@ -1,50 +1,136 @@
-# Welcome to your Expo app 👋
+# A StudyGuide App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile exam prep app built using React Native and Expo. Features flashcards and practice exams drawn from a weighted question bank across several exam categories.
 
-## Get started
+## Tech Stack 
+### Current as of 4/30/2026
 
-1. Install dependencies
+|  Layer       |  Library / Tool |
+|--------------|-----------------|
+| Framework    | Expo SDK 55 (React Native 0.83) |
+| Navigation   | Expo Router 55 (file-based, typed routes) |
+| UI           | React Native core component, @expo/vector-icons |
+| Animations   | React Native Animated API, react-native-animated |
+| Safe areas   | react-native-safe-area-context |
+| Language     | TypeScript 5.9 |
 
-   ```bash
-   npm install
-   ```
+### Planned
 
-2. Start the app
+|  Layer       |  Library / Tool |
+|--------------|-----------------|
+| UI Library   | React Native Paper |
+| Auth         | Firebase Auth (JS SDK) |
+| State        | Zustand (session/UI) |
+| Local DB     | expo-sqlite |
+| Storage      | expo-secure-storage, AsyncStorage |
+| DB bootstrap | expo-file-systems, expo-asset |
+| IAP          | react-native-purchases |
+| Checksum     | expo-crypto |
+| Network      | @react-native-community/netinfo |
+| i18n         | react-i18next + i18next |
+| Backend      | TBD |
+| Tests        | Jest + @testing-library/react-native |
 
-   ```bash
-   npx expo start
-   ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+## Project Structure (as of 4/30/2026)
+```
+a-test-app/
+│
+├── app/
+│    ├── _layout.tsx       # Root stack layout (headerShown: false)
+│    ├── index.tsx         # Splash screen with animated logo
+│    ├── login.tsx         # Login / registration screen
+│    ├── dashboard.tsx     # Home screen with navigation cards
+│    ├── flashcards.tsx    # Flashcard study mode
+│    ├── exam.tsx          # Weighted 25-question practice exam
+│    └── settings.tsx      # (in progress)
+│
+├── assets/
+│    ├── questions.csv     # Source of truth — 315 questions, 7 categories
+│    └── questions.json    # Generated from CSV; consumed by app screens
+│
+├── scripts/
+│    └── csv_to_json.py    # CSV → JSON converter with duplicate detection
+│
+├── app.json
+├── eas.json
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Pages
 
-## Learn more
+### Splash (`index.tsx`)
+- Animated logo fade-in with translateY. 
+- "Get Started" button routes to `/dashboard` (placeholder - will route to `/login` once auth is wired)
 
-To learn more about developing your project with Expo, look at the following resources:
+### Login (`login.tsx`)
+- Email/password sign-in form.
+- Firebase auth **soon**.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Dashboard (`dashboard.tsx`)
+- Personalized greeting with settings cog. 
+- Two full-height navigation cards: Flashcards and Exam.
 
-## Join the community
+### Flashcards (`flashcards.tsx`)
+- Browse all 314 questions one at a time.
+- Tap a card to flip between questions and answer. Has optional shuffle toggle to randomize deck order.
 
-Join our community of developers creating universal apps.
+### Pracice Exam (`exam.tsx`)
+- 25 questions selected proportionally by category weight.
+- Answer choices are shuffled per question.
+- Submit is locked until all questions are answered.
+- Results show total score and a per-category breakdown with progress bars.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Question Bank
+314 questions across 7 categories, weighted to match the state board exam distribution:
+
+|  Category                      |  Weight   | No. of Qs |
+|--------------------------------|-----------|-----------|
+| Safety and Infection Control   | 34%       | 90        |
+| Skin Care                      | 27%       | 80        |
+| Skin Analysis                  | 13%       | 40        | 
+| Hair Removal                   | 13%       | 40        |
+| Advanced Treatments            | 5%        | 24        |
+| Makeup                         | 4%        | 18        |
+| Client Consultation            | 4%        | 22        |
+
+### Regenerationmg the JSON
+After editing `assets/questions.csv`, regenerate the JSON:
+
+```sh
+cd scripts
+python csv_to_json.py
+```
+
+Outputs to `asset/questions.json`. The script skips incomplete rows and reports detected duplicates based on question.
+
+### CSV Column Format
+
+```csv
+Category ID, Category, Question, Correct Answer, Wrong Answer 1, Wrong Answer 2, Wrong Answer 3
+```
+
+## Getting Started
+### Prerequisite
+- Node.js 18+
+- Python 3.12.6
+- Expo Go app (iOS or Android) or a simulator
+
+### Install
+```sh
+npm install
+```
+
+### Run
+```sh
+npx expo start
+```
+Scan the QR code with Expo Go, or press `a` for Android simulator, `i` for iOS simulator.
+
+## Brand Colors
+|  **Token**   |  **Hex**  |
+|--------------|-----------|
+| Brand (navy) | `#1e3a5f` |
+| Accent (blue)| `#3b82f6` |

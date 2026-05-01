@@ -20,7 +20,7 @@ type Question = {
   question: string,
   answers: string[],
   answerIndex: number,
-  topic: string;
+  category: string;
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -49,7 +49,7 @@ function buildExam(): Question[] {
       const shuffledAnswer = shuffle(q.answers);
       questions.push({
         ...q,
-        topic: section.category,
+        category: section.category,
         answers: shuffledAnswer,
         answerIndex: shuffledAnswer.indexOf(correct),
       });
@@ -75,11 +75,11 @@ export default function ExamScreen() {
     if (!submitted) return [];
     const map: Record<string, { correct: number, total: number }> = {};
     exam.forEach((q, i) => {
-      if (!map[q.topic]) map[q.topic] = { correct: 0, total: 0 };
-      map[q.topic].total++;
-      if (selected[i] === q.answerIndex) map[q.topic].correct++;
+      if (!map[q.category]) map[q.category] = { correct: 0, total: 0 };
+      map[q.category].total++;
+      if (selected[i] === q.answerIndex) map[q.category].correct++;
     });
-    return Object.entries(map).map(([topic, stats]) => ({ topic, ...stats }))
+    return Object.entries(map).map(([category, stats]) => ({ category, ...stats }))
   }, [submitted]);
 
   return (
@@ -100,9 +100,9 @@ export default function ExamScreen() {
             </Text>
 
             <View style={styles.breakdown}>
-              {breakdown.map(({ topic, correct, total }) => (
-                <View key={topic} style={styles.breakdownRow}>
-                  <Text style={styles.breakdownTopic}>{topic}</Text>
+              {breakdown.map(({ category, correct, total }) => (
+                <View key={category} style={styles.breakdownRow}>
+                  <Text style={styles.breakdownCategory}>{category}</Text>
                   <Text style={styles.breakdownScore}>{correct} / {total}</Text>
                   <View style={styles.breakdownBarBg}>
                     <View style={[styles.breakdownBarFill, { width: `${Math.round((correct / total) * 100)}%` as any}]} />
@@ -117,7 +117,7 @@ export default function ExamScreen() {
           const picked = selected[qi];
           return (
             <View key={qi} style={styles.card}>
-              <Text style={styles.cardTopic}>{q.topic}</Text>
+              <Text style={styles.cardCategory}>{q.category}</Text>
               <Text style={styles.cardQuestion}>{qi + 1}. {q.question}</Text>
 
               {q.answers.map((ans, ai) => {
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
 
   breakdown: { width: "100%", marginTop: 16, gap: 10 },
   breakdownRow: { gap: 4 },
-  breakdownTopic: { 
+  breakdownCategory: { 
     color: "#93c5fd",
     fontSize: 12,
     fontWeight: "800",
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
   },
-  cardTopic: { color: "#94a3b8", fontSize: 11, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
+  cardCategory: { color: "#94a3b8", fontSize: 11, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
   cardQuestion: { color: "#1e293b", fontSize: 15, fontWeight: "600", lineHeight: 22 },
 
   option: {

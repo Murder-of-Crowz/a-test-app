@@ -49,11 +49,12 @@ CATEGORY_META = {
     "Client Consultation":          {"weight": 4},
 }
 
-
 def csv_to_json(csv_path: str, json_path: str) -> None:
     sections: OrderedDict[str, dict] = OrderedDict()
+    seen_questions: dict[str, int] = {}
+    duplicates = 0
     question_id = 1
-
+    
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -69,6 +70,13 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
                 print(f"  WARNING: skipping row {reader.line_num} — missing fields: {row['Question']!r}")
                 continue
 
+            key = question.lower().strip()
+            if key in seen_questions:
+                print(f"  DUPLICATE: row {reader.line_num} matches row {seen_questions[key]} - {question!r}")
+                duplicates += 1
+                continue
+            seen_questions[key] = reader.line_num
+
             if category not in sections:
                 weight = CATEGORY_META.get(category, {}).get("weight", 0)
                 sections[category] = {
@@ -78,19 +86,6 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
                     "questions": [],
                 }
 
-            seen_questions: dict[str, int] = {}
-            duplicates = 0
-
-            key = question.lower().strip()
-            if key in seen_questions:
-                print(f"  DUPLICATE: row {reader.line_num} matches row {seen_questions[key]} - {question!r}")
-                duplicates += 1
-                continue
-            seen_questions[key] = reader.line_num
-
-            if duplicates:
-                print(f"\n  {duplicates} duplicate(s) found and skipped")
-
             sections[category]["questions"].append({
                 "id": question_id,
                 "question": question,
@@ -98,6 +93,9 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
                 "answerIndex": 0,
             })
             question_id += 1
+
+    if duplicates:
+        print(f"\n  {duplicates} duplicate(s) found and skipped")
 
     output = list(sections.values())
 
