@@ -32,7 +32,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 1,Safety and Infection Control,What is hepatitis?,Liver infection virus,Skin infection,Bacterial disease,Fungal infection
 1,Safety and Infection Control,What is HIV?,Virus that attacks immune system,Skin condition,Hair disease,Fungal infection
 1,Safety and Infection Control,What is proper glove use?,Single-use discard after service,Reuse gloves,Wash and reuse,Optional use
-1,Safety and Infection Control,What is cleaning order?,"Clean, disinfect, store",Disinfect clean store,Store clean disinfect,Wash only
+1,Safety and Infection Control,What is cleaning order?,"Clean, disinfect, then store","Disinfect, clean, then store","Store, clean, then disinfect",Wash only
 1,Safety and Infection Control,What is contamination risk in double dipping?,Spreads bacteria,Improves hygiene,Saves time,No effect
 1,Safety and Infection Control,What is proper storage?,Clean closed containers,Open shelves,Floor storage,Wet containers
 1,Safety and Infection Control,What is infection control goal?,Prevent disease spread,Improve appearance,Speed service,Reduce cost
@@ -90,7 +90,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 1,Safety and Infection Control,What is microbial growth?,Rapid reproduction of microbes,Slow drying,Cooling process,Oil buildup
 1,Safety and Infection Control,What is sanitation compliance?,Following regulations,Ignoring rules,Guessing process,Optional cleaning
 2,Skin Care,What is the largest organ?,Skin,Heart,Liver,Brain
-2,Skin Care,What are the 3 skin layers?,"Epidermis, dermis, and subcutaneous",Muscle fat bone,Outer core tissue,Surface layer blood
+2,Skin Care,What are the 3 skin layers?,"Epidermis, dermis, and subcutaneous","Muscle, fat, and bone",Outer core tissue,Surface layer blood
 2,Skin Care,What is the epidermis?,Outer protective layer,Blood layer,Fat layer,Nerve layer
 2,Skin Care,What is the dermis?,"Contains collagen, elastin, and blood vessels",Dead cells only,Sweat only,Air pockets
 2,Skin Care,What is subcutaneous layer?,Fat layer for insulation,Outer layer,Blood layer,Nerve layer
@@ -109,7 +109,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 2,Skin Care,What is UVA?,Aging rays,Burning rays,Cooling rays,Healing rays
 2,Skin Care,What is UVB?,Burning rays,Aging rays,Cooling rays,Healing rays
 2,Skin Care,What is acne?,Inflammatory skin condition,Dryness,Burn,Wrinkle
-2,Skin Care,What causes acne?,"Oil, bacteria, and clogged pores",Water dryness,Sunlight,Cold air
+2,Skin Care,What causes acne?,"Oil, bacteria, and clogged pores",Water and dryness,Sunlight,Cold air
 2,Skin Care,What is comedone?,Clogged pore,Hair follicle,Blood vessel,Nerve
 2,Skin Care,What is extraction?,Removing clogged pores,Adding oil,Massaging skin,Applying SPF
 2,Skin Care,What is a contraindication?,Condition preventing treatment,Desired result,Skin type,Treatment benefit
@@ -169,7 +169,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 2,Skin Care,What is sensitive care?,Gentle products only,Harsh acids,Frequent exfoliation,High heat
 2,Skin Care,What is acne care?,Control oil bacteria,Add oil,Skip cleansing,Use heavy creams
 2,Skin Care,What is SPF reapplication?,Every 2 hours,Once daily,Weekly,Never
-3,Skin Analysis,What are main skin types?,"Normal, oily, dry, and combination",Light dark medium,Healthy unhealthy,Soft rough
+3,Skin Analysis,What are main skin types?,"Normal, oily, dry, and combination","Light, dark, and medium",Healthy and unhealthy,Soft and rough
 3,Skin Analysis,What is normal skin?,Balanced oil and moisture,Too oily,Too dry,Inflamed
 3,Skin Analysis,What is oily skin?,Excess sebum production,Lack of oil,Balanced,Dry patches
 3,Skin Analysis,What is dry skin?,Lack of oil,Excess oil,Balanced,Inflamed
@@ -206,14 +206,14 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 3,Skin Analysis,What is acne analysis?,Type and severity,Hair growth,Color only,Temperature
 3,Skin Analysis,What is pigmentation analysis?,Assess color changes,Check oil only,Check hair only,Check texture only
 3,Skin Analysis,What is redness evaluation?,Check inflammation,Check oil,Check hydration,Check hair
-3,Skin Analysis,What is client skin history?,Past conditions treatments,Only current skin,Only products,Only tools
+3,Skin Analysis,What is client skin history?,Past conditions and treatments,Only current skin,Only products,Only tools
 3,Skin Analysis,What is environmental impact?,Affects skin condition,No effect,Only hair effect,Only nail effect
 3,Skin Analysis,What is lifestyle factor?,"Diet, stress, and sleep",Only water intake,Only exercise,Only products
 4,Hair Removal,What is waxing?,Hair removal from root,Cutting hair,Shaving,Bleaching
 4,Hair Removal,What are the types of wax?,Soft and hard,Liquid and foam,Gel and paste,Spray and powder
 4,Hair Removal,What is soft wax used for?,Large areas,Small areas,Face only,Eyebrows only
 4,Hair Removal,What is hard wax used for?,Sensitive areas,Large areas,Legs only,Arms only
-4,Hair Removal,What is hair growth cycle?,"Anagen, catagen, and telogen",Grow stop fall,Short long,None
+4,Hair Removal,What is hair growth cycle?,"Anagen, catagen, and telogen","Grow, stop, and fall",Short and long,None
 4,Hair Removal,Best phase to remove hair?,Anagen,Catagen,Telogen,All same
 4,Hair Removal,What is contraindication for waxing?,Retinol use,Normal skin,Oily skin,Hydrated skin
 4,Hair Removal,What is tweezing?,Hair removal with tweezers,Shaving,Waxing,Burning
@@ -240,7 +240,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 4,Hair Removal,What is hair removal risk?,Skin irritation,Hydration,Smoothness,Elasticity
 4,Hair Removal,What is waxing contraindication?,Broken skin,Healthy skin,Oily skin,Dry skin
 4,Hair Removal,What is waxing temperature control?,Prevent burns,Increase heat,Ignore temperature,Use cold wax only
-4,Hair Removal,What is pre-wax cleanse?,Remove oil dirt,Add oil,Skip cleaning,Use water only
+4,Hair Removal,What is pre-wax cleanse?,Remove oil and dirt,Add oil,Skip cleaning,Use water only
 4,Hair Removal,What is post-wax soothing?,Reduce irritation,Increase irritation,Add heat,Exfoliate harshly
 4,Hair Removal,What is waxing regrowth?,Slower finer hair,Faster thicker hair,No regrowth,Color change
 4,Hair Removal,What is waxing interval?,3-6 weeks,Daily,Weekly,Yearly
@@ -251,7 +251,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 4,Hair Removal,What is waxing removal angle?,Parallel to skin,Upward pull,Random,No angle
 5,Advanced Treatments,What is microdermabrasion?,Mechanical exfoliation treatment,Chemical peel,Waxing,Massage
 5,Advanced Treatments,What is chemical peel?,Acid exfoliation,Scrubbing,Hydrating,Steaming
-5,Advanced Treatments,What are the types of peels?,"AHA and BHA",Water oil,Heat cold,Soft hard
+5,Advanced Treatments,What are the types of peels?,"AHA and BHA",Water and oil,Heat and cold,Soft and hard
 5,Advanced Treatments,What is AHA?,Alpha hydroxy acid,Anti hair acid,Heat acid,Water acid
 5,Advanced Treatments,What is BHA?,Beta hydroxy acid,Basic acid,Body acid,Balance acid
 5,Advanced Treatments,What is peel depth?,"Superficial, medium, and deep",Light only,Deep only,None
