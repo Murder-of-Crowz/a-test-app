@@ -72,9 +72,9 @@
       },
       {
         "id": 7,
-        "question": "Example of PPE?",
+        "question": "What is an example of PPE?",
         "answers": [
-          "Gloves masks eye protection",
+          "Gloves, masks, and eye protection",
           "Towels",
           "Cotton pads",
           "Wax sticks"
@@ -195,7 +195,7 @@
         "id": 18,
         "question": "What is biohazard waste?",
         "answers": [
-          "Contaminated materials blood bodily fluids",
+          "Contaminated materials, blood, and bodily fluids",
           "Paper towels",
           "Water",
           "Clean cotton"
@@ -259,7 +259,7 @@
       },
       {
         "id": 24,
-        "question": "Example of non-porous tools?",
+        "question": "What is an example of non-porous tools?",
         "answers": [
           "Metal tweezers",
           "Sponge",
@@ -281,7 +281,7 @@
       },
       {
         "id": 26,
-        "question": "Example of porous item?",
+        "question": "What is an example of porous item?",
         "answers": [
           "Sponges",
           "Tweezers",
@@ -294,7 +294,7 @@
         "id": 27,
         "question": "What is blood exposure procedure?",
         "answers": [
-          "Stop service clean disinfect protect",
+          "Stop service, clean, disinfect, and protect",
           "Continue service",
           "Ignore incident",
           "Wash later"
@@ -371,7 +371,7 @@
         "id": 34,
         "question": "What is cleaning order?",
         "answers": [
-          "Clean disinfect store",
+          "Clean, disinfect, store",
           "Disinfect clean store",
           "Store clean disinfect",
           "Wash only"
@@ -426,7 +426,7 @@
         "id": 39,
         "question": "What is the difference between cleaning and disinfecting?",
         "answers": [
-          "Cleaning removes debris disinfecting kills microbes",
+          "Cleaning removes debris; disinfecting kills microbes",
           "Same process",
           "Both remove oil",
           "Both hydrate skin"
@@ -756,7 +756,7 @@
         "id": 69,
         "question": "What is infection sign?",
         "answers": [
-          "Redness swelling pain",
+          "Redness, swelling, and pain",
           "Softness",
           "Smoothness",
           "Coolness"
@@ -1016,7 +1016,7 @@
         "id": 92,
         "question": "What are the 3 skin layers?",
         "answers": [
-          "Epidermis dermis subcutaneous",
+          "Epidermis, dermis, and subcutaneous",
           "Muscle fat bone",
           "Outer core tissue",
           "Surface layer blood"
@@ -1038,7 +1038,7 @@
         "id": 94,
         "question": "What is the dermis?",
         "answers": [
-          "Contains collagen elastin blood vessels",
+          "Contains collagen, elastin, and blood vessels",
           "Dead cells only",
           "Sweat only",
           "Air pockets"
@@ -1225,7 +1225,7 @@
         "id": 111,
         "question": "What causes acne?",
         "answers": [
-          "Oil bacteria clogged pores",
+          "Oil, bacteria, and clogged pores",
           "Water dryness",
           "Sunlight",
           "Cold air"
@@ -1256,7 +1256,7 @@
       },
       {
         "id": 114,
-        "question": "What is contraindication?",
+        "question": "What is a contraindication?",
         "answers": [
           "Condition preventing treatment",
           "Desired result",
@@ -1379,7 +1379,7 @@
         "id": 125,
         "question": "What is aging sign?",
         "answers": [
-          "Wrinkles loss of elasticity",
+          "Wrinkles, and loss of elasticity",
           "Oil increase",
           "Sweat increase",
           "Hair growth"
@@ -1445,7 +1445,7 @@
         "id": 131,
         "question": "What is skin function?",
         "answers": [
-          "Protection regulation sensation",
+          "Protection, regulation, and sensation",
           "Hair growth only",
           "Blood circulation only",
           "Nerve function only"
@@ -1522,7 +1522,7 @@
         "id": 138,
         "question": "What is cleanser type?",
         "answers": [
-          "Gel cream foam",
+          "Gel, cream, and foam",
           "Chemical peel",
           "Wax",
           "Mask"
@@ -1555,7 +1555,7 @@
         "id": 141,
         "question": "What is moisturizer type?",
         "answers": [
-          "Occlusive humectant emollient",
+          "Occlusive, humectant, and emollient",
           "Cleanser",
           "Toner",
           "Mask"
@@ -1753,7 +1753,7 @@
         "id": 159,
         "question": "What is skin inflammation?",
         "answers": [
-          "Redness swelling",
+          "Redness and swelling",
           "Hydration",
           "Elasticity",
           "Oil balance"
@@ -1892,7 +1892,7 @@
         "id": 171,
         "question": "What are main skin types?",
         "answers": [
-          "Normal oily dry combination",
+          "Normal, oily, dry, and combination",
           "Light dark medium",
           "Healthy unhealthy",
           "Soft rough"
@@ -1936,7 +1936,7 @@
         "id": 175,
         "question": "What is combination skin?",
         "answers": [
-          "Oily T zone dry elsewhere",
+          "Oily T-zone, dry elsewhere",
           "Fully oily",
           "Fully dry",
           "Fully normal"
@@ -1980,7 +1980,7 @@
         "id": 179,
         "question": "What is sensitivity sign?",
         "answers": [
-          "Redness irritation",
+          "Redness and irritation",
           "Oiliness",
           "Dryness",
           "Hair growth"
@@ -1991,7 +1991,7 @@
         "id": 180,
         "question": "What is dehydration sign?",
         "answers": [
-          "Tightness dullness",
+          "Tightness and dullness",
           "Oiliness",
           "Redness",
           "Burning"
@@ -2145,7 +2145,7 @@
         "id": 194,
         "question": "What is oily T-zone?",
         "answers": [
-          "Forehead nose chin oil",
+          "Forehead, nose, and chin",
           "Cheeks only",
           "Neck only",
           "Back only"
@@ -2321,7 +2321,7 @@
         "id": 210,
         "question": "What is lifestyle factor?",
         "answers": [
-          "Diet stress sleep",
+          "Diet, stress, and sleep",
           "Only water intake",
           "Only exercise",
           "Only products"
@@ -2348,7 +2348,7 @@
       },
       {
         "id": 212,
-        "question": "Types of wax?",
+        "question": "What are the types of wax?",
         "answers": [
           "Soft and hard",
           "Liquid and foam",
@@ -2359,7 +2359,7 @@
       },
       {
         "id": 213,
-        "question": "Soft wax use?",
+        "question": "What is soft wax used for?",
         "answers": [
           "Large areas",
           "Small areas",
@@ -2370,7 +2370,7 @@
       },
       {
         "id": 214,
-        "question": "Hard wax use?",
+        "question": "What is hard wax used for?",
         "answers": [
           "Sensitive areas",
           "Large areas",
@@ -2383,7 +2383,7 @@
         "id": 215,
         "question": "What is hair growth cycle?",
         "answers": [
-          "Anagen catagen telogen",
+          "Anagen, catagen, and telogen",
           "Grow stop fall",
           "Short long",
           "None"
@@ -2449,7 +2449,7 @@
         "id": 221,
         "question": "What is waxing direction?",
         "answers": [
-          "Apply with growth remove opposite",
+          "Apply with hair growth, remove in opposite direction",
           "Opposite same",
           "Random",
           "No rule"
@@ -2535,7 +2535,7 @@
       },
       {
         "id": 229,
-        "question": "What is contraindication?",
+        "question": "What is contraindication for hair removal?",
         "answers": [
           "Skin infection",
           "Healthy skin",
@@ -2546,7 +2546,7 @@
       },
       {
         "id": 230,
-        "question": "What is waxing benefit?",
+        "question": "What is a primary benefit of waxing?",
         "answers": [
           "Slower regrowth",
           "Faster regrowth",
@@ -2557,7 +2557,7 @@
       },
       {
         "id": 231,
-        "question": "What is waxing benefit?",
+        "question": "What is another benefit of waxing?",
         "answers": [
           "Removes hair longer lasting",
           "Immediate regrowth",
@@ -2806,9 +2806,9 @@
       },
       {
         "id": 253,
-        "question": "Types of peels?",
+        "question": "What are the types of peels?",
         "answers": [
-          "AHA BHA",
+          "AHA and BHA",
           "Water oil",
           "Heat cold",
           "Soft hard"
@@ -2841,7 +2841,7 @@
         "id": 256,
         "question": "What is peel depth?",
         "answers": [
-          "Superficial medium deep",
+          "Superficial, medium, and deep",
           "Light only",
           "Deep only",
           "None"
@@ -2850,7 +2850,7 @@
       },
       {
         "id": 257,
-        "question": "What is contraindication?",
+        "question": "What is contraindication for advanced treatments (e.g., cehmical peels)?",
         "answers": [
           "Sensitive skin",
           "Normal skin",
@@ -2940,7 +2940,7 @@
         "id": 265,
         "question": "What is peel aftercare?",
         "answers": [
-          "SPF hydration",
+          "SPF and hydration",
           "Heat exposure",
           "Waxing",
           "Exfoliating"
@@ -3039,7 +3039,7 @@
         "id": 274,
         "question": "What is treatment risk?",
         "answers": [
-          "Irritation redness burns",
+          "Irritation, redness, and burns",
           "Hydration",
           "Smoothness",
           "Elasticity"
@@ -3222,7 +3222,7 @@
         "id": 290,
         "question": "What is blending tool?",
         "answers": [
-          "Brush sponge",
+          "Brush and sponge",
           "Cotton towel",
           "Wax stick",
           "Metal tool"
