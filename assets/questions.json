@@ -30,7 +30,7 @@
         "id": 3,
         "question": "What is sterilization?",
         "answers": [
-          "The complete destruction of all microorganisms including spores",
+          "The complete destruction of all microorganisms, including spores",
           "Cleaning debris",
           "Reducing bacteria",
           "Using soap"
@@ -107,7 +107,7 @@
         "id": 10,
         "question": "What is cross-contamination?",
         "answers": [
-          "Transfer of bacteria from one person/object to another",
+          "Transfer of bacteria from one person or object to another",
           "Tool cleaning",
           "Using gloves",
           "Applying lotion"
@@ -118,7 +118,7 @@
         "id": 11,
         "question": "What is universal precaution?",
         "answers": [
-          "Treat all blood/body fluids as infectious",
+          "Treat all blood and body fluids as infectious",
           "Wash hands daily",
           "Use lotion",
           "Clean weekly"
@@ -138,7 +138,7 @@
       },
       {
         "id": 13,
-        "question": "What is bacteria?",
+        "question": "What are bacteria?",
         "answers": [
           "Single-celled microorganisms",
           "Skin cells",
@@ -272,7 +272,7 @@
         "id": 25,
         "question": "What is a porous item?",
         "answers": [
-          "Absorbs fluids cannot be disinfected",
+          "Absorbs fluids; cannot be disinfected",
           "Metal tool",
           "Glass jar",
           "Plastic"
@@ -305,7 +305,7 @@
         "id": 28,
         "question": "What is a contamination chain?",
         "answers": [
-          "Pathway microbes spread through",
+          "Pathway through which microbes spread",
           "Tool cleaning process",
           "Product layering",
           "Makeup flow"
@@ -338,7 +338,7 @@
         "id": 31,
         "question": "What is hepatitis?",
         "answers": [
-          "Liver infection virus",
+          "A virus that causes liver infection",
           "Skin infection",
           "Bacterial disease",
           "Fungal infection"
@@ -349,7 +349,7 @@
         "id": 32,
         "question": "What is HIV?",
         "answers": [
-          "Virus that attacks immune system",
+          "A virus that attacks the immune system",
           "Skin condition",
           "Hair disease",
           "Fungal infection"
@@ -360,7 +360,7 @@
         "id": 33,
         "question": "What is proper glove use?",
         "answers": [
-          "Single-use discard after service",
+          "Single-use; discard after service",
           "Reuse gloves",
           "Wash and reuse",
           "Optional use"
@@ -393,7 +393,7 @@
         "id": 36,
         "question": "What is proper storage?",
         "answers": [
-          "Clean closed containers",
+          "Clean, closed containers",
           "Open shelves",
           "Floor storage",
           "Wet containers"
@@ -635,7 +635,7 @@
         "id": 58,
         "question": "What is contamination source?",
         "answers": [
-          "Client tools environment",
+          "Client, tools, and environment",
           "Only tools",
           "Only air",
           "Only skin"
@@ -657,7 +657,7 @@
         "id": 60,
         "question": "What is linen handling?",
         "answers": [
-          "Use clean replace after client",
+          "Use clean; replace after each client",
           "Reuse same towel",
           "Store damp",
           "Share towels"
@@ -668,7 +668,7 @@
         "id": 61,
         "question": "What is clean workstation?",
         "answers": [
-          "Organized sanitized area",
+          "Organized, sanitized area",
           "Messy desk",
           "Wet tools",
           "Open containers"
@@ -800,7 +800,7 @@
         "id": 73,
         "question": "What is sterilization requirement?",
         "answers": [
-          "Destroys all microbes including spores",
+          "Destroys all microbes, including spores",
           "Removes debris only",
           "Reduces oil",
           "Hydrates tools"
@@ -844,7 +844,7 @@
         "id": 77,
         "question": "What is disinfectant storage?",
         "answers": [
-          "Closed labeled container",
+          "Closed, labeled container",
           "Open tray",
           "Wet surface",
           "Floor"
@@ -944,7 +944,7 @@
         "question": "What is glove contamination?",
         "answers": [
           "Touching multiple surfaces",
-          "Single use removal",
+          "Single-use removal",
           "Proper disposal",
           "Hand washing"
         ],
@@ -954,7 +954,7 @@
         "id": 87,
         "question": "What is salon safety?",
         "answers": [
-          "Maintain clean safe environment",
+          "Maintain a clean, safe environment",
           "Focus on speed",
           "Ignore hygiene",
           "Share tools"
@@ -1148,7 +1148,7 @@
         "id": 104,
         "question": "What is cleanser?",
         "answers": [
-          "Removes dirt oil",
+          "Removes dirt and oil",
           "Adds oil",
           "Hydrates",
           "Exfoliates"
@@ -1335,7 +1335,7 @@
         "id": 121,
         "question": "What is physical exfoliation?",
         "answers": [
-          "Scrubs manual removal",
+          "Scrubs and manual removal",
           "Chemical peel",
           "LED therapy",
           "Hydration"
@@ -1379,7 +1379,7 @@
         "id": 125,
         "question": "What is aging sign?",
         "answers": [
-          "Wrinkles, and loss of elasticity",
+          "Wrinkles and loss of elasticity",
           "Oil increase",
           "Sweat increase",
           "Hair growth"
@@ -1467,7 +1467,7 @@
         "id": 133,
         "question": "What is pH level?",
         "answers": [
-          "Measure of acidity/alkalinity",
+          "Measure of acidity and alkalinity",
           "Temperature",
           "Hydration level",
           "Oil level"
@@ -1577,7 +1577,7 @@
         "id": 143,
         "question": "What is UVA damage?",
         "answers": [
-          "Aging wrinkles",
+          "Aging and wrinkles",
           "Burning",
           "Healing",
           "Cooling"
@@ -1652,7 +1652,7 @@
       },
       {
         "id": 150,
-        "question": "What is nodules?",
+        "question": "What are nodules?",
         "answers": [
           "Large deep lesions",
           "Small bumps",
@@ -1863,7 +1863,7 @@
         "id": 169,
         "question": "What is acne care?",
         "answers": [
-          "Control oil bacteria",
+          "Control oil and bacteria",
           "Add oil",
           "Skip cleansing",
           "Use heavy creams"
@@ -1890,7 +1890,7 @@
     "questions": [
       {
         "id": 171,
-        "question": "What are main skin types?",
+        "question": "What are the main skin types?",
         "answers": [
           "Normal, oily, dry, and combination",
           "Light, dark, and medium",
@@ -1958,7 +1958,7 @@
         "id": 177,
         "question": "What is type I skin?",
         "answers": [
-          "Burns easily never tans",
+          "Burns easily, never tans",
           "Tans easily",
           "Never burns",
           "Always dark"
@@ -1969,7 +1969,7 @@
         "id": 178,
         "question": "What is type VI skin?",
         "answers": [
-          "Deeply pigmented rarely burns",
+          "Deeply pigmented, rarely burns",
           "Light skin",
           "Burns easily",
           "No pigment"
@@ -2165,7 +2165,7 @@
       },
       {
         "id": 196,
-        "question": "What is enlarged pores?",
+        "question": "What are enlarged pores?",
         "answers": [
           "Visible pore size increase",
           "Hair follicle growth",
@@ -2178,7 +2178,7 @@
         "id": 197,
         "question": "What is acne severity?",
         "answers": [
-          "Mild moderate severe",
+          "Mild, moderate, and severe",
           "Color level",
           "Hydration level",
           "Thickness"
@@ -2392,7 +2392,7 @@
       },
       {
         "id": 216,
-        "question": "Best phase to remove hair?",
+        "question": "What is the best phase for hair removal?",
         "answers": [
           "Anagen",
           "Catagen",
@@ -2559,7 +2559,7 @@
         "id": 231,
         "question": "What is another benefit of waxing?",
         "answers": [
-          "Removes hair longer lasting",
+          "Longer-lasting hair removal",
           "Immediate regrowth",
           "Hair thickening",
           "Hair bleaching"
@@ -2570,7 +2570,7 @@
         "id": 232,
         "question": "What is waxing prep?",
         "answers": [
-          "Clean dry skin",
+          "Clean, dry skin",
           "Oily skin",
           "Wet skin",
           "Dirty skin"
@@ -2592,7 +2592,7 @@
         "id": 234,
         "question": "What is wax thickness?",
         "answers": [
-          "Even thin layer",
+          "Even, thin layer",
           "Thick layer",
           "No layer",
           "Uneven layer"
@@ -2625,7 +2625,7 @@
         "id": 237,
         "question": "What is waxing hygiene?",
         "answers": [
-          "No reuse sticks",
+          "Do not reuse sticks",
           "Reuse sticks",
           "Share wax",
           "Skip cleaning"
@@ -2702,8 +2702,8 @@
         "id": 244,
         "question": "What is waxing regrowth?",
         "answers": [
-          "Slower finer hair",
-          "Faster thicker hair",
+          "Slower, finer hair",
+          "Faster, thicker hair",
           "No regrowth",
           "Color change"
         ],
@@ -2747,7 +2747,7 @@
         "question": "What is waxing mistake?",
         "answers": [
           "Double dipping",
-          "Single use stick",
+          "Single-use stick",
           "Clean wax",
           "Proper technique"
         ],
@@ -2757,7 +2757,7 @@
         "id": 249,
         "question": "What is waxing skin prep?",
         "answers": [
-          "Dry clean skin",
+          "Dry, clean skin",
           "Oily skin",
           "Wet skin",
           "Dirty skin"
@@ -2850,7 +2850,7 @@
       },
       {
         "id": 257,
-        "question": "What is contraindication for advanced treatments (e.g., cehmical peels)?",
+        "question": "What is contraindication for advanced treatments (e.g., chemical peels)?",
         "answers": [
           "Sensitive skin",
           "Normal skin",
@@ -2918,7 +2918,7 @@
         "id": 263,
         "question": "What is peel risk?",
         "answers": [
-          "Irritation burns",
+          "Irritation and burns",
           "Hydration",
           "Smoothness",
           "Elasticity"
@@ -3028,7 +3028,7 @@
         "id": 273,
         "question": "What is post-treatment care?",
         "answers": [
-          "Protect repair skin",
+          "Protect and repair skin",
           "Expose heat",
           "Exfoliate immediately",
           "Ignore care"
@@ -3200,7 +3200,7 @@
         "id": 288,
         "question": "What is brush cleaning?",
         "answers": [
-          "Remove buildup bacteria",
+          "Remove buildup and bacteria",
           "Add bacteria",
           "Skip cleaning",
           "Use water only"
@@ -3317,7 +3317,7 @@
         "id": 298,
         "question": "What is professional communication?",
         "answers": [
-          "Clear respectful interaction",
+          "Clear, respectful interaction",
           "Casual slang",
           "Ignore client",
           "Rush service"
@@ -3405,7 +3405,7 @@
         "id": 306,
         "question": "What is informed consent?",
         "answers": [
-          "Client understands agrees",
+          "Client understands and agrees",
           "Client refuses",
           "No explanation",
           "Skip consent"
@@ -3460,7 +3460,7 @@
         "id": 311,
         "question": "What is communication tone?",
         "answers": [
-          "Professional respectful",
+          "Professional and respectful",
           "Casual slang",
           "Rushed",
           "Silent"
@@ -3482,7 +3482,7 @@
         "id": 313,
         "question": "What is record accuracy?",
         "answers": [
-          "Correct detailed info",
+          "Correct, detailed info",
           "Guess info",
           "Skip details",
           "Memory only"
