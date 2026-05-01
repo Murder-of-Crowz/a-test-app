@@ -21,14 +21,11 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 | UI Library   | React Native Paper |
 | Auth         | Firebase Auth (JS SDK) |
 | State        | Zustand (session/UI) |
-| Local DB     | expo-sqlite |
+| Local DB     | @op-engineering/op-sqlite (SQLCipher) |
 | Storage      | expo-secure-storage, AsyncStorage |
-| DB bootstrap | expo-file-systems, expo-asset |
 | IAP          | react-native-purchases |
-| Checksum     | expo-crypto |
 | Network      | @react-native-community/netinfo |
 | i18n         | react-i18next + i18next |
-| Backend      | TBD |
 | Tests        | Jest + @testing-library/react-native |
 
 
