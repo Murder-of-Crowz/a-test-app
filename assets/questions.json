@@ -371,9 +371,9 @@
         "id": 34,
         "question": "What is cleaning order?",
         "answers": [
-          "Clean, disinfect, store",
-          "Disinfect clean store",
-          "Store clean disinfect",
+          "Clean, disinfect, then store",
+          "Disinfect, clean, then store",
+          "Store, clean, then disinfect",
           "Wash only"
         ],
         "answerIndex": 0
@@ -1017,7 +1017,7 @@
         "question": "What are the 3 skin layers?",
         "answers": [
           "Epidermis, dermis, and subcutaneous",
-          "Muscle fat bone",
+          "Muscle, fat, and bone",
           "Outer core tissue",
           "Surface layer blood"
         ],
@@ -1226,7 +1226,7 @@
         "question": "What causes acne?",
         "answers": [
           "Oil, bacteria, and clogged pores",
-          "Water dryness",
+          "Water and dryness",
           "Sunlight",
           "Cold air"
         ],
@@ -1893,9 +1893,9 @@
         "question": "What are main skin types?",
         "answers": [
           "Normal, oily, dry, and combination",
-          "Light dark medium",
-          "Healthy unhealthy",
-          "Soft rough"
+          "Light, dark, and medium",
+          "Healthy and unhealthy",
+          "Soft and rough"
         ],
         "answerIndex": 0
       },
@@ -2299,7 +2299,7 @@
         "id": 208,
         "question": "What is client skin history?",
         "answers": [
-          "Past conditions treatments",
+          "Past conditions and treatments",
           "Only current skin",
           "Only products",
           "Only tools"
@@ -2384,8 +2384,8 @@
         "question": "What is hair growth cycle?",
         "answers": [
           "Anagen, catagen, and telogen",
-          "Grow stop fall",
-          "Short long",
+          "Grow, stop, and fall",
+          "Short and long",
           "None"
         ],
         "answerIndex": 0
@@ -2680,7 +2680,7 @@
         "id": 242,
         "question": "What is pre-wax cleanse?",
         "answers": [
-          "Remove oil dirt",
+          "Remove oil and dirt",
           "Add oil",
           "Skip cleaning",
           "Use water only"
@@ -2809,9 +2809,9 @@
         "question": "What are the types of peels?",
         "answers": [
           "AHA and BHA",
-          "Water oil",
-          "Heat cold",
-          "Soft hard"
+          "Water and oil",
+          "Heat and cold",
+          "Soft and hard"
         ],
         "answerIndex": 0
       },
