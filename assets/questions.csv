@@ -1,17 +1,17 @@
 Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong Answer 3
 1,Safety and Infection Control,What is sanitation?,The cleaning process that removes visible debris and reduces microorganisms,Complete destruction of microorganisms,Heating tools,Air drying tools
 1,Safety and Infection Control,What is disinfection?,The use of chemicals to destroy most microorganisms on non-porous surfaces,Removing dirt only,Sterilizing skin,Air drying
-1,Safety and Infection Control,What is sterilization?,The complete destruction of all microorganisms including spores,Cleaning debris,Reducing bacteria,Using soap
+1,Safety and Infection Control,What is sterilization?,"The complete destruction of all microorganisms, including spores",Cleaning debris,Reducing bacteria,Using soap
 1,Safety and Infection Control,Which level kills spores?,Sterilization,Disinfection,Sanitation,Cleaning
 1,Safety and Infection Control,What type of items must be sterilized?,Critical items that penetrate skin (rare in esthetics),Reusable towels,Non-porous tools only,Disposable items
 1,Safety and Infection Control,What is PPE?,Personal Protective Equipment,Professional Product Equipment,Protective Practice Essentials,Personal Prevention Elements
 1,Safety and Infection Control,What is an example of PPE?,"Gloves, masks, and eye protection",Towels,Cotton pads,Wax sticks
 1,Safety and Infection Control,What is OSHA?,Occupational Safety and Health Administration,Health Beauty Board,Sanitation Council,Medical License Agency
 1,Safety and Infection Control,What is MSDS/SDS?,Safety Data Sheets for chemical handling,Salon Data Sheets,Medical Skin Documents,Sanitation Data System
-1,Safety and Infection Control,What is cross-contamination?,Transfer of bacteria from one person/object to another,Tool cleaning,Using gloves,Applying lotion
-1,Safety and Infection Control,What is universal precaution?,Treat all blood/body fluids as infectious,Wash hands daily,Use lotion,Clean weekly
+1,Safety and Infection Control,What is cross-contamination?,Transfer of bacteria from one person or object to another,Tool cleaning,Using gloves,Applying lotion
+1,Safety and Infection Control,What is universal precaution?,Treat all blood and body fluids as infectious,Wash hands daily,Use lotion,Clean weekly
 1,Safety and Infection Control,What is a pathogen?,Disease-causing microorganism,Dead skin cell,Oil gland,Sweat
-1,Safety and Infection Control,What is bacteria?,Single-celled microorganisms,Skin cells,Viruses only,Chemicals
+1,Safety and Infection Control,What are bacteria?,Single-celled microorganisms,Skin cells,Viruses only,Chemicals
 1,Safety and Infection Control,What are viruses?,Microorganisms that require a host to reproduce,Harmless bacteria,Dead cells,Oils
 1,Safety and Infection Control,What are fungi?,Organisms like yeast and mold,Viruses,Bacteria,Skin layers
 1,Safety and Infection Control,What is a disinfectant?,Chemical used to kill microbes on surfaces,Skin lotion,Cleanser,Water
@@ -23,18 +23,18 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 1,Safety and Infection Control,What is an antiseptic?,Product used on skin to reduce microbes,Tool cleaner,Laundry soap,Toner
 1,Safety and Infection Control,What is a non-porous surface?,Surface that doesn’t absorb liquids,Absorbs water,Soft material,Fabric
 1,Safety and Infection Control,What is an example of non-porous tools?,Metal tweezers,Sponge,Cotton,Tissue
-1,Safety and Infection Control,What is a porous item?,Absorbs fluids cannot be disinfected,Metal tool,Glass jar,Plastic
+1,Safety and Infection Control,What is a porous item?,Absorbs fluids; cannot be disinfected,Metal tool,Glass jar,Plastic
 1,Safety and Infection Control,What is an example of porous item?,Sponges,Tweezers,Glass jar,Metal spatula
 1,Safety and Infection Control,What is blood exposure procedure?,"Stop service, clean, disinfect, and protect",Continue service,Ignore incident,Wash later
-1,Safety and Infection Control,What is a contamination chain?,Pathway microbes spread through,Tool cleaning process,Product layering,Makeup flow
+1,Safety and Infection Control,What is a contamination chain?,Pathway through which microbes spread,Tool cleaning process,Product layering,Makeup flow
 1,Safety and Infection Control,What is the first defense against infection?,Proper hand washing,Gloves only,Disinfect tools,Use masks
 1,Safety and Infection Control,What is an autoclave?,Sterilization device using steam,Brush,UV light,Towel
-1,Safety and Infection Control,What is hepatitis?,Liver infection virus,Skin infection,Bacterial disease,Fungal infection
-1,Safety and Infection Control,What is HIV?,Virus that attacks immune system,Skin condition,Hair disease,Fungal infection
-1,Safety and Infection Control,What is proper glove use?,Single-use discard after service,Reuse gloves,Wash and reuse,Optional use
+1,Safety and Infection Control,What is hepatitis?,A virus that causes liver infection,Skin infection,Bacterial disease,Fungal infection
+1,Safety and Infection Control,What is HIV?,A virus that attacks the immune system,Skin condition,Hair disease,Fungal infection
+1,Safety and Infection Control,What is proper glove use?,Single-use; discard after service,Reuse gloves,Wash and reuse,Optional use
 1,Safety and Infection Control,What is cleaning order?,"Clean, disinfect, then store","Disinfect, clean, then store","Store, clean, then disinfect",Wash only
 1,Safety and Infection Control,What is contamination risk in double dipping?,Spreads bacteria,Improves hygiene,Saves time,No effect
-1,Safety and Infection Control,What is proper storage?,Clean closed containers,Open shelves,Floor storage,Wet containers
+1,Safety and Infection Control,What is proper storage?,"Clean, closed containers",Open shelves,Floor storage,Wet containers
 1,Safety and Infection Control,What is infection control goal?,Prevent disease spread,Improve appearance,Speed service,Reduce cost
 1,Safety and Infection Control,What is a clean environment?,Free of debris and contaminants,Messy,Sterile only,Wet
 1,Safety and Infection Control,What is the difference between cleaning and disinfecting?,Cleaning removes debris; disinfecting kills microbes,Same process,Both remove oil,Both hydrate skin
@@ -56,10 +56,10 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 1,Safety and Infection Control,What is disease transmission?,Spread of pathogens,Tool cleaning,Skin hydration,Hair removal
 1,Safety and Infection Control,What is immunity?,Body defense against disease,Skin hydration,Oil production,Hair growth
 1,Safety and Infection Control,What is bacteria reproduction?,Binary fission,Photosynthesis,Evaporation,Absorption
-1,Safety and Infection Control,What is contamination source?,Client tools environment,Only tools,Only air,Only skin
+1,Safety and Infection Control,What is contamination source?,"Client, tools, and environment",Only tools,Only air,Only skin
 1,Safety and Infection Control,What is disposable item?,Single-use item,Reusable tool,Metal instrument,Glass jar
-1,Safety and Infection Control,What is linen handling?,Use clean replace after client,Reuse same towel,Store damp,Share towels
-1,Safety and Infection Control,What is clean workstation?,Organized sanitized area,Messy desk,Wet tools,Open containers
+1,Safety and Infection Control,What is linen handling?,"Use clean; replace after each client",Reuse same towel,Store damp,Share towels
+1,Safety and Infection Control,What is clean workstation?,"Organized, sanitized area",Messy desk,Wet tools,Open containers
 1,Safety and Infection Control,What is disinfectant contact time?,Time required to kill microbes,Drying time,Cooling time,Storage time
 1,Safety and Infection Control,What is cross-infection?,Spread between individuals,Tool cleaning,Product use,Hair removal
 1,Safety and Infection Control,What is sanitation method?,Cleaning and reducing microbes,Sterilizing,Boiling,Heating
@@ -71,11 +71,11 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 1,Safety and Infection Control,What is hygiene practice?,Maintain cleanliness,Apply products,Massage skin,Remove hair
 1,Safety and Infection Control,What is sanitation level classification?,Lowest level of decontamination,Highest level,Medium level,Optional level
 1,Safety and Infection Control,What is disinfection level?,Intermediate level of microbial control,Highest level,Lowest level,No control
-1,Safety and Infection Control,What is sterilization requirement?,Destroys all microbes including spores,Removes debris only,Reduces oil,Hydrates tools
+1,Safety and Infection Control,What is sterilization requirement?,"Destroys all microbes, including spores",Removes debris only,Reduces oil,Hydrates tools
 1,Safety and Infection Control,What is PPE for eye protection?,Safety goggles,Gloves,Towels,Cotton pads
 1,Safety and Infection Control,What is PPE for respiratory safety?,Face mask,Gloves,Brush,Toner
 1,Safety and Infection Control,What is sanitation solution?,Cleaning agent for surfaces,Moisturizer,Toner,Serum
-1,Safety and Infection Control,What is disinfectant storage?,Closed labeled container,Open tray,Wet surface,Floor
+1,Safety and Infection Control,What is disinfectant storage?,"Closed, labeled container",Open tray,Wet surface,Floor
 1,Safety and Infection Control,What is infection source?,Pathogens from environment or client,Only tools,Only air,Only skin
 1,Safety and Infection Control,What is hygiene standard?,Consistent cleaning practices,Occasional cleaning,Monthly cleaning,No cleaning
 1,Safety and Infection Control,What is towel contamination?,Reuse without cleaning,Single-use towel,Proper washing,Closed storage
@@ -84,8 +84,8 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 1,Safety and Infection Control,What is handwashing agent?,Soap and water only,Lotion,Serum,Wax
 1,Safety and Infection Control,What is infection spread prevention?,Use PPE and sanitation,Skip cleaning,Share tools,Reuse items
 1,Safety and Infection Control,What is contamination control?,Limit microbial spread,Increase moisture,Add oil,Remove pigment
-1,Safety and Infection Control,What is glove contamination?,Touching multiple surfaces,Single use removal,Proper disposal,Hand washing
-1,Safety and Infection Control,What is salon safety?,Maintain clean safe environment,Focus on speed,Ignore hygiene,Share tools
+1,Safety and Infection Control,What is glove contamination?,Touching multiple surfaces,Single-use removal,Proper disposal,Hand washing
+1,Safety and Infection Control,What is salon safety?,"Maintain a clean, safe environment",Focus on speed,Ignore hygiene,Share tools
 1,Safety and Infection Control,What is exposure prevention?,Avoid contact with contaminants,Touch freely,Reuse tools,Skip cleaning
 1,Safety and Infection Control,What is microbial growth?,Rapid reproduction of microbes,Slow drying,Cooling process,Oil buildup
 1,Safety and Infection Control,What is sanitation compliance?,Following regulations,Ignoring rules,Guessing process,Optional cleaning
@@ -102,7 +102,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 2,Skin Care,What is exfoliation?,Removal of dead skin cells,Adding oil,Adding water,Applying SPF
 2,Skin Care,What is hydration?,Moisture retention in skin,Oil increase,Heat increase,Air retention
 2,Skin Care,What is toner?,Balances pH after cleansing,Removes hair,Moisturizes deeply,Exfoliates strongly
-2,Skin Care,What is cleanser?,Removes dirt oil,Adds oil,Hydrates,Exfoliates
+2,Skin Care,What is cleanser?,Removes dirt and oil,Adds oil,Hydrates,Exfoliates
 2,Skin Care,What is mask purpose?,Treat specific skin conditions,Hair removal,Makeup base,Clean tools
 2,Skin Care,What is moisturizer?,Hydrates skin,Cleans skin,Removes oil,Exfoliates
 2,Skin Care,What is SPF?,Sun Protection Factor,Skin Product Formula,Sun Power Filter,Skin Protection Foam
@@ -119,11 +119,11 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 2,Skin Care,What is high-frequency?,Acne bacteria treatment,Hair removal,Skin hydration,Makeup tool
 2,Skin Care,What is enzyme exfoliation?,Gentle chemical exfoliation,Physical scrub,Waxing,Shaving
 2,Skin Care,What is chemical exfoliation?,Acid-based skin resurfacing,Manual scrub,Moisturizing,Steaming
-2,Skin Care,What is physical exfoliation?,Scrubs manual removal,Chemical peel,LED therapy,Hydration
+2,Skin Care,What is physical exfoliation?,Scrubs and manual removal,Chemical peel,LED therapy,Hydration
 2,Skin Care,What is skin barrier?,Protective outer layer,Inner layer,Fat layer,Blood layer
 2,Skin Care,What is dehydration?,Lack of water in skin,Excess oil,Burned skin,Infection
 2,Skin Care,What is sensitivity?,Skin reacts easily,Thick skin,Oily skin,Normal skin
-2,Skin Care,What is aging sign?,"Wrinkles, and loss of elasticity",Oil increase,Sweat increase,Hair growth
+2,Skin Care,What is aging sign?,Wrinkles and loss of elasticity,Oil increase,Sweat increase,Hair growth
 2,Skin Care,What is product layering?,Applying products in order,Mixing products randomly,Skipping products,Applying one product only
 2,Skin Care,What is serum?,Concentrated treatment product,Cleanser,Toner,Mask
 2,Skin Care,What is facial steam benefit?,Opens pores,Closes pores,Dries skin,Burns skin
@@ -131,7 +131,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 2,Skin Care,What is mask for dry skin?,Hydrating mask,Clay mask,Oil removal mask,Peel mask
 2,Skin Care,What is skin function?,"Protection, regulation, and sensation",Hair growth only,Blood circulation only,Nerve function only
 2,Skin Care,What is acid mantle?,Protective film on skin,Oil gland,Blood layer,Fat layer
-2,Skin Care,What is pH level?,Measure of acidity/alkalinity,Temperature,Hydration level,Oil level
+2,Skin Care,What is pH level?,Measure of acidity and alkalinity,Temperature,Hydration level,Oil level
 2,Skin Care,What is normal pH?,Around 4.5–5.5,7–8,1–2,10–12
 2,Skin Care,What is dehydration cause?,Lack of water,Excess oil,Sunburn only,Cold weather only
 2,Skin Care,What is barrier damage?,Compromised protection layer,Improved hydration,Increased oil,Hair growth
@@ -141,14 +141,14 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 2,Skin Care,What is serum benefit?,Targeted treatment,Clean skin,Remove oil,Exfoliate
 2,Skin Care,What is moisturizer type?,"Occlusive, humectant, and emollient",Cleanser,Toner,Mask
 2,Skin Care,What is SPF use?,Protect from UV,Clean skin,Hydrate skin,Remove oil
-2,Skin Care,What is UVA damage?,Aging wrinkles,Burning,Healing,Cooling
+2,Skin Care,What is UVA damage?,Aging and wrinkles,Burning,Healing,Cooling
 2,Skin Care,What is UVB damage?,Sunburn,Aging,Cooling,Healing
 2,Skin Care,What is acne lesion?,Inflamed pore,Smooth skin,Healthy tissue,Hair follicle
 2,Skin Care,What is whitehead?,Closed comedone,Open pore,Hair follicle,Blood vessel
 2,Skin Care,What is blackhead?,Open comedone,Closed pore,Hair follicle,Nerve
 2,Skin Care,What is pustule?,Inflamed lesion with pus,Flat skin,Hair growth,Oil gland
 2,Skin Care,What is papule?,Small inflamed bump,Flat skin,Hair growth,Blood vessel
-2,Skin Care,What is nodules?,Large deep lesions,Small bumps,Flat skin,Oil layer
+2,Skin Care,What are nodules?,Large deep lesions,Small bumps,Flat skin,Oil layer
 2,Skin Care,What is transepidermal water loss?,Water loss through skin,Oil production,Hair growth,Blood flow
 2,Skin Care,What is barrier repair?,Restoring skin protection,Removing oil,Adding pigment,Burning skin
 2,Skin Care,What is antioxidant?,Protects from free radicals,Adds oil,Removes water,Burns skin
@@ -167,16 +167,16 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 2,Skin Care,What is dry skin care?,Hydrating products,Remove moisture,Use harsh acids,Skip moisturizer
 2,Skin Care,What is combination care?,Targeted treatment areas,Same product everywhere,Skip care,Use oil only
 2,Skin Care,What is sensitive care?,Gentle products only,Harsh acids,Frequent exfoliation,High heat
-2,Skin Care,What is acne care?,Control oil bacteria,Add oil,Skip cleansing,Use heavy creams
+2,Skin Care,What is acne care?,Control oil and bacteria,Add oil,Skip cleansing,Use heavy creams
 2,Skin Care,What is SPF reapplication?,Every 2 hours,Once daily,Weekly,Never
-3,Skin Analysis,What are main skin types?,"Normal, oily, dry, and combination","Light, dark, and medium",Healthy and unhealthy,Soft and rough
+3,Skin Analysis,What are the main skin types?,"Normal, oily, dry, and combination","Light, dark, and medium",Healthy and unhealthy,Soft and rough
 3,Skin Analysis,What is normal skin?,Balanced oil and moisture,Too oily,Too dry,Inflamed
 3,Skin Analysis,What is oily skin?,Excess sebum production,Lack of oil,Balanced,Dry patches
 3,Skin Analysis,What is dry skin?,Lack of oil,Excess oil,Balanced,Inflamed
 3,Skin Analysis,What is combination skin?,"Oily T-zone, dry elsewhere",Fully oily,Fully dry,Fully normal
 3,Skin Analysis,What is Fitzpatrick scale?,Skin type classification by sun response,Acne scale,Hydration scale,Aging scale
-3,Skin Analysis,What is type I skin?,Burns easily never tans,Tans easily,Never burns,Always dark
-3,Skin Analysis,What is type VI skin?,Deeply pigmented rarely burns,Light skin,Burns easily,No pigment
+3,Skin Analysis,What is type I skin?,"Burns easily, never tans",Tans easily,Never burns,Always dark
+3,Skin Analysis,What is type VI skin?,"Deeply pigmented, rarely burns",Light skin,Burns easily,No pigment
 3,Skin Analysis,What is sensitivity sign?,Redness and irritation,Oiliness,Dryness,Hair growth
 3,Skin Analysis,What is dehydration sign?,Tightness and dullness,Oiliness,Redness,Burning
 3,Skin Analysis,What is acne grade?,Severity level,Hydration level,Color level,Texture level
@@ -194,8 +194,8 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 3,Skin Analysis,What is undertone?,Subtle color beneath skin,Surface color,Hair color,Eye color
 3,Skin Analysis,What is oily T-zone?,"Forehead, nose, and chin",Cheeks only,Neck only,Back only
 3,Skin Analysis,What is dry patch?,Area lacking moisture,Excess oil area,Burn area,Hair growth
-3,Skin Analysis,What is enlarged pores?,Visible pore size increase,Hair follicle growth,Blood vessels,Nerves
-3,Skin Analysis,What is acne severity?,Mild moderate severe,Color level,Hydration level,Thickness
+3,Skin Analysis,What are enlarged pores?,Visible pore size increase,Hair follicle growth,Blood vessels,Nerves
+3,Skin Analysis,What is acne severity?,"Mild, moderate, and severe",Color level,Hydration level,Thickness
 3,Skin Analysis,What is redness cause?,Inflammation,Smooth skin,Healthy skin,Hair growth
 3,Skin Analysis,What is irritation?,Skin reaction,Normal condition,Healthy glow,Hydration
 3,Skin Analysis,What is skin condition?,Current skin state,Skin type only,Hair type,Product type
@@ -214,7 +214,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 4,Hair Removal,What is soft wax used for?,Large areas,Small areas,Face only,Eyebrows only
 4,Hair Removal,What is hard wax used for?,Sensitive areas,Large areas,Legs only,Arms only
 4,Hair Removal,What is hair growth cycle?,"Anagen, catagen, and telogen","Grow, stop, and fall",Short and long,None
-4,Hair Removal,Best phase to remove hair?,Anagen,Catagen,Telogen,All same
+4,Hair Removal,What is the best phase for hair removal?,Anagen,Catagen,Telogen,All same
 4,Hair Removal,What is contraindication for waxing?,Retinol use,Normal skin,Oily skin,Hydrated skin
 4,Hair Removal,What is tweezing?,Hair removal with tweezers,Shaving,Waxing,Burning
 4,Hair Removal,What is threading?,Hair removal using thread,Shaving,Cutting,Bleaching
@@ -229,25 +229,25 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 4,Hair Removal,What is depilation?,Removing surface hair,Removing root hair,Hair growth,Hair coloring
 4,Hair Removal,What is contraindication for hair removal?,Skin infection,Healthy skin,Oily skin,Dry skin
 4,Hair Removal,What is a primary benefit of waxing?,Slower regrowth,Faster regrowth,Hair thickening,Hair color change
-4,Hair Removal,What is another benefit of waxing?,Removes hair longer lasting,Immediate regrowth,Hair thickening,Hair bleaching
-4,Hair Removal,What is waxing prep?,Clean dry skin,Oily skin,Wet skin,Dirty skin
+4,Hair Removal,What is another benefit of waxing?,Longer-lasting hair removal,Immediate regrowth,Hair thickening,Hair bleaching
+4,Hair Removal,What is waxing prep?,"Clean, dry skin",Oily skin,Wet skin,Dirty skin
 4,Hair Removal,What is waxing removal speed?,Quick pull,Slow pull,No pull,Heat removal
-4,Hair Removal,What is wax thickness?,Even thin layer,Thick layer,No layer,Uneven layer
+4,Hair Removal,What is wax thickness?,"Even, thin layer",Thick layer,No layer,Uneven layer
 4,Hair Removal,What is waxing strip?,Removes wax,Applies wax,Cleans skin,Heats wax
 4,Hair Removal,What is waxing stick?,Applies wax,Removes wax,Cleans skin,Stores wax
-4,Hair Removal,What is waxing hygiene?,No reuse sticks,Reuse sticks,Share wax,Skip cleaning
+4,Hair Removal,What is waxing hygiene?,Do not reuse sticks,Reuse sticks,Share wax,Skip cleaning
 4,Hair Removal,What is tweezing angle?,Follow hair growth,Opposite direction,Random angle,No angle
 4,Hair Removal,What is hair removal risk?,Skin irritation,Hydration,Smoothness,Elasticity
 4,Hair Removal,What is waxing contraindication?,Broken skin,Healthy skin,Oily skin,Dry skin
 4,Hair Removal,What is waxing temperature control?,Prevent burns,Increase heat,Ignore temperature,Use cold wax only
 4,Hair Removal,What is pre-wax cleanse?,Remove oil and dirt,Add oil,Skip cleaning,Use water only
 4,Hair Removal,What is post-wax soothing?,Reduce irritation,Increase irritation,Add heat,Exfoliate harshly
-4,Hair Removal,What is waxing regrowth?,Slower finer hair,Faster thicker hair,No regrowth,Color change
+4,Hair Removal,What is waxing regrowth?,"Slower, finer hair","Faster, thicker hair",No regrowth,Color change
 4,Hair Removal,What is waxing interval?,3-6 weeks,Daily,Weekly,Yearly
 4,Hair Removal,What is tweezing precision?,Individual hair removal,Large area removal,No control,Random removal
 4,Hair Removal,What is threading benefit?,Precise hair removal,Remove oil,Hydrate skin,Exfoliate skin
-4,Hair Removal,What is waxing mistake?,Double dipping,Single use stick,Clean wax,Proper technique
-4,Hair Removal,What is waxing skin prep?,Dry clean skin,Oily skin,Wet skin,Dirty skin
+4,Hair Removal,What is waxing mistake?,Double dipping,Single-use stick,Clean wax,Proper technique
+4,Hair Removal,What is waxing skin prep?,"Dry, clean skin",Oily skin,Wet skin,Dirty skin
 4,Hair Removal,What is waxing removal angle?,Parallel to skin,Upward pull,Random,No angle
 5,Advanced Treatments,What is microdermabrasion?,Mechanical exfoliation treatment,Chemical peel,Waxing,Massage
 5,Advanced Treatments,What is chemical peel?,Acid exfoliation,Scrubbing,Hydrating,Steaming
@@ -255,13 +255,13 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 5,Advanced Treatments,What is AHA?,Alpha hydroxy acid,Anti hair acid,Heat acid,Water acid
 5,Advanced Treatments,What is BHA?,Beta hydroxy acid,Basic acid,Body acid,Balance acid
 5,Advanced Treatments,What is peel depth?,"Superficial, medium, and deep",Light only,Deep only,None
-5,Advanced Treatments,"What is contraindication for advanced treatments (e.g., cehmical peels)?",Sensitive skin,Normal skin,Oily skin,Combination skin
+5,Advanced Treatments,"What is contraindication for advanced treatments (e.g., chemical peels)?",Sensitive skin,Normal skin,Oily skin,Combination skin
 5,Advanced Treatments,What is post-care?,Sun protection,Heat exposure,Waxing,Exfoliation
 5,Advanced Treatments,What is peel purpose?,Exfoliate skin,Clean skin,Hydrate skin,Remove hair
 5,Advanced Treatments,What is AHA use?,Surface exfoliation,Deep exfoliation,Hair removal,Hydration
 5,Advanced Treatments,What is BHA use?,Oil penetration exfoliation,Surface only,Hair removal,Hydration
 5,Advanced Treatments,What is microdermabrasion result?,Smooth skin,Burn skin,Oil increase,Dryness
-5,Advanced Treatments,What is peel risk?,Irritation burns,Hydration,Smoothness,Elasticity
+5,Advanced Treatments,What is peel risk?,Irritation and burns,Hydration,Smoothness,Elasticity
 5,Advanced Treatments,What is peel prep?,Clean skin,Oily skin,Wet skin,Dirty skin
 5,Advanced Treatments,What is peel aftercare?,SPF and hydration,Heat exposure,Waxing,Exfoliating
 5,Advanced Treatments,What is treatment frequency?,Based on skin type,Daily always,Weekly always,Never
@@ -271,7 +271,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 5,Advanced Treatments,What is peel consultation?,Assess skin suitability,Skip evaluation,Immediate treatment,Random treatment
 5,Advanced Treatments,What is contraindication check?,Prevent damage,Improve speed,Skip safety,Add product
 5,Advanced Treatments,What is treatment layering?,Correct sequence,Random application,Skip steps,Use one product
-5,Advanced Treatments,What is post-treatment care?,Protect repair skin,Expose heat,Exfoliate immediately,Ignore care
+5,Advanced Treatments,What is post-treatment care?,Protect and repair skin,Expose heat,Exfoliate immediately,Ignore care
 5,Advanced Treatments,What is treatment risk?,"Irritation, redness, and burns",Hydration,Smoothness,Elasticity
 6,Makeup,What is foundation?,Base makeup,Lipstick,Eye shadow,Brush
 6,Makeup,What is concealer?,Covers imperfections,Adds color,Cleans skin,Removes oil
@@ -286,7 +286,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 6,Makeup,What is mascara?,Enhances lashes,Cleans lashes,Removes lashes,Hydrates
 6,Makeup,What is lip color?,Adds color to lips,Cleans lips,Removes oil,Hydrates
 6,Makeup,What is makeup sanitation?,Clean tools regularly,Share tools,Skip cleaning,Reuse without cleaning
-6,Makeup,What is brush cleaning?,Remove buildup bacteria,Add bacteria,Skip cleaning,Use water only
+6,Makeup,What is brush cleaning?,Remove buildup and bacteria,Add bacteria,Skip cleaning,Use water only
 6,Makeup,What is foundation match?,Blend with skin tone,Use darker only,Use lighter only,Random shade
 6,Makeup,What is blending tool?,Brush and sponge,Cotton towel,Wax stick,Metal tool
 6,Makeup,What is eye makeup hygiene?,Avoid contamination,Share products,Reuse mascara,Skip cleaning
@@ -296,7 +296,7 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 7,Client Consultation,What is contraindication identification?,Prevent unsafe treatments,Improve sales,Speed service,Add products
 7,Client Consultation,What is client goal?,Desired outcome,Product sale,Tool cleaning,Schedule
 7,Client Consultation,What is documentation?,Record of service,Ignore notes,Memory only,Verbal only
-7,Client Consultation,What is professional communication?,Clear respectful interaction,Casual slang,Ignore client,Rush service
+7,Client Consultation,What is professional communication?,"Clear, respectful interaction",Casual slang,Ignore client,Rush service
 7,Client Consultation,What is consultation goal?,Understand client needs,Sell products,Clean tools,Schedule only
 7,Client Consultation,What is health history?,Client medical background,Product list,Tool list,Schedule
 7,Client Consultation,What is allergy check?,Identify reactions,Apply products,Clean tools,Remove hair
@@ -304,12 +304,12 @@ Category ID,Category,Question,Correct Answer,Wrong Answer 1,Wrong Answer 2,Wrong
 7,Client Consultation,What is consent?,Client agreement,Client refusal,Tool cleaning,Product sale
 7,Client Consultation,What is follow-up?,Post-service care advice,Product sale,Cleaning,Hair removal
 7,Client Consultation,What is consultation documentation?,Written record,Verbal only,No record,Memory only
-7,Client Consultation,What is informed consent?,Client understands agrees,Client refuses,No explanation,Skip consent
+7,Client Consultation,What is informed consent?,Client understands and agrees,Client refuses,No explanation,Skip consent
 7,Client Consultation,What is contraindication review?,Identify risks,Ignore risks,Skip questions,Assume safe
 7,Client Consultation,What is treatment plan?,Customized service,Random service,Same for all,Skip planning
 7,Client Consultation,What is client education?,Explain care,Ignore client,Skip info,Only sell
 7,Client Consultation,What is follow-up care?,Post-service instructions,Skip care,Ignore skin,Repeat treatment immediately
-7,Client Consultation,What is communication tone?,Professional respectful,Casual slang,Rushed,Silent
+7,Client Consultation,What is communication tone?,Professional and respectful,Casual slang,Rushed,Silent
 7,Client Consultation,What is client expectation?,Desired results,Ignore goals,Random outcome,Product focus
-7,Client Consultation,What is record accuracy?,Correct detailed info,Guess info,Skip details,Memory only
+7,Client Consultation,What is record accuracy?,"Correct, detailed info",Guess info,Skip details,Memory only
 7,Client Consultation,What is client trust?,Built through professionalism,Ignore client,Rush service,Skip hygiene
