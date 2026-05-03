@@ -24,19 +24,12 @@ type QuestionFromJson = {
 };
 
 type QuizSection = {
-  sectionId: number;
-  categoryId?: string;
   category: string;
-  weight: number;
   questions: QuestionFromJson[];
 };
 
-function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
+function normalizeCategory(value: string) {
+  return value.trim().toLowerCase();
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -49,10 +42,6 @@ function shuffle<T>(arr: T[]): T[] {
   }
 
   return a;
-}
-
-function normalizeCategory(value: string) {
-  return value.trim().toLowerCase();
 }
 
 function buildSubjectQuiz(categoryTitle: string): Question[] {
@@ -85,12 +74,13 @@ export default function SubjectQuiz() {
   const router = useRouter();
   const scrollRef = useRef<ScrollView>(null);
 
-  const { subject, title } = useLocalSearchParams<{
-    subject: string;
-    title: string;
+  const { title } = useLocalSearchParams<{
+    title?: string;
   }>();
 
-  const [quiz] = useState<Question[]>(() => buildSubjectQuiz(title));
+  const categoryTitle = title ?? "";
+
+  const [quiz] = useState<Question[]>(() => buildSubjectQuiz(categoryTitle));
   const [selected, setSelected] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -103,20 +93,26 @@ export default function SubjectQuiz() {
     }).length;
   }, [quiz, selected]);
 
-  const quizTitle = quiz[0]?.category ?? "Quiz";
+  const quizTitle = (quiz[0]?.category ?? categoryTitle) || "Quiz";
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} hitSlop={12}>
-          <Ionicons name='arrow-back' size={24} color='#ffffff' />
-        </Pressable>
+        <View style={styles.headerSide}>
+          <Pressable onPress={() => router.back()} hitSlop={12}>
+            <Ionicons name='arrow-back' size={24} color='#ffffff' />
+          </Pressable>
+        </View>
 
-        <Text style={styles.headerTitle}>{quizTitle}</Text>
-
-        <Text style={styles.headerCount}>
-          {answeredCount} / {totalQuestions}
+        <Text style={styles.headerTitle} numberOfLines={1}>
+          {quizTitle}
         </Text>
+
+        <View style={styles.headerSideRight}>
+          <Text style={styles.headerCount}>
+            {answeredCount} / {totalQuestions}
+          </Text>
+        </View>
       </View>
 
       <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
@@ -141,7 +137,7 @@ export default function SubjectQuiz() {
           const pickedAnswer = selected[questionIndex];
 
           return (
-            <View key={question.id} style={styles.card}>
+            <View key={`${question.id}-${questionIndex}`} style={styles.card}>
               <Text style={styles.cardCategory}>{question.category}</Text>
 
               <Text style={styles.cardQuestion}>
@@ -239,10 +235,19 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: BRAND,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 16,
+  },
+
+  headerSide: {
+    width: 56,
+    alignItems: "flex-start",
+  },
+
+  headerSideRight: {
+    width: 56,
+    alignItems: "flex-end",
   },
 
   headerTitle: {
@@ -251,7 +256,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "700",
     textAlign: "center",
-    marginHorizontal: 12,
   },
 
   headerCount: {
