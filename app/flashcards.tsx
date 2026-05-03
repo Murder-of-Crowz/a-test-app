@@ -26,6 +26,7 @@ type Card = {
 };
 
 const allCards: Card[] = data.flatMap(section => section.questions.map(q => ({ ...q, category: section.category })));
+const categoryCounts = Object.fromEntries(data.map(s => [s.category, s.questions.length]));
 const categories = data.map(s => s.category);
 
 function shuffledeck<T>(arr: T[]): T[] {
@@ -108,6 +109,21 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
   const current = deck[index];
   const total = deck.length;
 
+  const uniqueSections = useMemo(() => [...new Set(deck.map(c => c.category))], [deck]);
+  const currentSectionIndex = current ? uniqueSections.indexOf(current.category) : -1;
+  const hasPrevSection = currentSectionIndex > 0;
+  const hasNextSection = currentSectionIndex < uniqueSections.length -1;
+
+  const goToPrevSection = () => {
+    const first = deck.findIndex(c => c.category === uniqueSections[currentSectionIndex - 1]);
+    if (first !== -1) setIndex(first);
+  };
+
+  const goToNextSection = () => {
+    const first = deck.findIndex(c => c.category === uniqueSections[currentSectionIndex + 1]);
+    if (first !== -1) setIndex(first);
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.header}>
@@ -121,7 +137,6 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
           </Pressable>
           <Text style={styles.headerCount}>{index + 1} / {total}</Text>
         </View>
-
       </View>
 
       <View style={styles.body}>
@@ -138,8 +153,6 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
           </View>
         </View>
 
-        
-
         {current && <FlashCard key={index} card={current} />}
 
         <View style={styles.nav}>
@@ -152,6 +165,10 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
             <Text style={[styles.navText, index === 0 && styles.navTextDisabled]}>Prev</Text>
           </Pressable>
 
+          <Pressable style={styles.navBtn} onPress={() => setIndex(0)}>
+            <Ionicons name="refresh-outline" size={20} color={BRAND} />
+          </Pressable>
+
           <Pressable
             style={[styles.navBtn, index === total - 1 && styles.navBtnDisabled]}
             onPress={() => setIndex(i => i + 1)}
@@ -161,6 +178,25 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
             <Ionicons name="chevron-forward" size={22} color={index === total - 1 ? "#cbd5e1" : BRAND} />
           </Pressable>
         </View>
+        <View style={styles.sectionNav}>
+            <Pressable
+              style={[styles.sectionNav, !hasPrevSection && styles.navBtnDisabled]}
+              onPress={goToPrevSection}
+              disabled={!hasPrevSection}
+            >
+              <Ionicons name="chevron-back" size={16} color={!hasPrevSection ? "#cbd5e1" : "#94a3b8"} />
+              <Text style={[styles.sectionNavText, !hasPrevSection && styles.navTextDisabled]}>Prev Section</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.sectionNav, !hasNextSection && styles.navBtnDisabled]}
+              onPress={goToNextSection}
+              disabled={!hasNextSection}
+            >
+              <Text style={[styles.sectionNavText, !hasNextSection && styles.navTextDisabled]}>Next Section</Text>
+              <Ionicons name="chevron-forward" size={16} color={!hasNextSection ? "#cbd5e1" : "#94a3b8"} />
+            </Pressable>
+          </View>
       </View>
 
       <Modal visible={modalVisible} transparent animationType="slide" onRequestClose={() => setModalVisible(false)}>
@@ -182,6 +218,7 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
                       {checked && <Ionicons name="checkmark" size={14} color="#fff" />}
                     </View>
                     <Text style={styles.checkLabel}>{cat}</Text>
+                    <Text style={styles.checkCount}>{categoryCounts[cat]}</Text>
                   </Pressable>
                 )
               })}
@@ -247,6 +284,10 @@ const styles = StyleSheet.create({
   navText:        { color: BRAND, fontWeight: "600", fontSize: 15 },
   navTextDisabled:{ color: "#cbd5e1" },
 
+  sectionNav: { flexDirection: "row", justifyContent: "space-between", marginTop: 4 },
+  sectionNavBtn: { flexDirection: "row", alignItems: "center", gap: 4, padding: 8 },
+  sectionNavText: { color: "#94a3b8", fontWeight: "600", fontSize: 13 },
+
   modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" },
   modalCard: {
     backgroundColor: "#fff",
@@ -279,6 +320,7 @@ const styles = StyleSheet.create({
   },
   checkboxChecked: { backgroundColor: ACCENT, borderColor: ACCENT },
   checkLabel: { color: "#1e293b", fontSize: 15, flex: 1 },
+  checkCount: { color: "#94a3b8", fontSize: 13, fontWeight: "600" },
   applyBtn: { backgroundColor: BRAND, borderRadius: 14, padding: 16, alignItems: "center", marginTop: 4 },
   applyBtnDisabled: { backgroundColor: "#cbd5e1" },
   applyText: { color: "#fff", fontWeight: "700", fontSize: 16 },
