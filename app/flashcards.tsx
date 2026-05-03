@@ -1,8 +1,10 @@
-import { useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "expo-router";
 import {
   Animated,
+  Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Switch,
   Text,
@@ -23,53 +25,84 @@ type Card = {
   category: string;
 };
 
-const allCards = data.flatMap(section => section.questions.map(q => ({ ...q, category: section.category })));
+const allCards: Card[] = data.flatMap(section => section.questions.map(q => ({ ...q, category: section.category })));
+const categories = data.map(s => s.category);
 
-function FlashCard({ card }: { card: Card }) {
-  const [flipped, setFlipped] = useState(false);
-  const anim = useRef(new Animated.Value(1)).current;
-
-  const handleFlip = () => {
-    Animated.sequence([
-      Animated.timing(anim, { toValue: 0.96, duration: 80, useNativeDriver: true }),
-      Animated.timing(anim, { toValue: 1,    duration: 80, useNativeDriver: true }),
-    ]).start(() => setFlipped(f => !f));
-  };
-
-  return (
-    <Pressable onPress={handleFlip}>
-      <Animated.View style={[styles.card, { transform: [{ scale: anim }] }]}>
-        <Text style={styles.cardHint}>{flipped ? "Answer" : "Question — tap to flip"}</Text>
-
-        {flipped
-          ? <Text style={styles.cardQuestion}>{card.answers[card.answerIndex]}</Text>
-          :  <Text style={styles.cardAnswer}>{card.question}</Text>
-        }
-      </Animated.View>
-    </Pressable>
-  );
-}
-
-function shuffleDeck<T>(arr: T[]): T[] {
+function shuffledeck<T>(arr: T[]): T[] {
   const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
+  for (let i = a.length -1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 }
 
-export default function FlashcardsScreen() {
+function FlashCard({ card }: { card: Card }) {
+  const [flipped, setFlipped] = useState(false)
+  const anim = useRef(new Animated.Value(1)).current
+
+  const handleFlip = () => {
+    Animated.sequence([
+      Animated.timing(anim, { toValue: 0.96, duration: 80, useNativeDriver: true }),
+      Animated.timing(anim, { toValue: 1, duration: 80, useNativeDriver: true }),
+    ]).start(() => setFlipped(f => !f));
+  };
+
+  return (
+    <Pressable onPress={handleFlip}>
+      <Animated.View style={[styles.card, { transform: [{ scale: anim }]}]}>
+        <Text style={styles.cardHint}>{flipped ? "Answer" : "Question - tap to flip"}</Text>
+        {flipped
+          ? <Text style={styles.cardQuestion}>{card.answers[card.answerIndex]}</Text>
+          : <Text style={styles.cardAnswer}>{card.question}</Text>
+        }
+      </Animated.View>
+    </Pressable>
+  )
+}
+
+export default function FlashCardsScreen({ card }: { card: Card }) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
-
   const [shuffleOn, setShuffleOn] = useState(false);
-  const [deck, setDeck] = useState(allCards);
+  const [modalVisible, setModalVisible] = useState(true);
+  const [selectedSections, setSelectedSections] = useState<Set<string>>(() => new Set(categories));
+  const [pendingSections, setPendingSections] = useState<Set<string>>(() => new Set(categories));
 
-  const toggleShuffle = (val: boolean) => {
-    setShuffleOn(val);
-    setDeck(val ? shuffleDeck(allCards) : allCards);
-    setIndex(0);
+  const filteredCards = useMemo(
+    () => allCards.filter(c => selectedSections.has(c.category)),
+    [selectedSections]
+  );
+
+  const deck = useMemo(
+    () => shuffleOn ? shuffledeck([...filteredCards]) : filteredCards,
+    [filteredCards, shuffleOn]
+  );
+
+  useEffect(() => { setIndex(0); }, [deck]);
+
+  const togglePending = (category: string) => {
+    setPendingSections(prev => {
+      const next = new Set(prev);
+      if (next.has(category)) {
+        next.delete(category);
+      } else {
+        next.add(category);
+      }
+      return next;
+    });
+  };
+
+  const allSelected = pendingSections.size === categories.length;
+
+  const applySelection = () => {
+    setSelectedSections(new Set(pendingSections));
+    setModalVisible(false);
+  }
+
+  const openModal = () => {
+    setPendingSections(new Set(selectedSections));
+    setModalVisible(true);
   }
 
   const current = deck[index];
@@ -82,25 +115,32 @@ export default function FlashcardsScreen() {
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </Pressable>
         <Text style={styles.headerTitle}>Flashcards</Text>
-        <Text style={styles.headerCount}>{index + 1} / {total}</Text>
+        <View style={styles.headerRight}>
+          <Pressable onPress={openModal} hitSlop={12}>
+            <Ionicons name="options-outline" size={22} color="#93c5fd" />
+          </Pressable>
+          <Text style={styles.headerCount}>{index + 1} / {total}</Text>
+        </View>
+
       </View>
 
       <View style={styles.body}>
         <View style={styles.shuffleBody}>
           <Text style={styles.chapterLabel}>{current.category}</Text>
-
           <View style={styles.shuffleRow}>
             <Text style={styles.shuffleLabel}>Shuffle</Text>
             <Switch
               value={shuffleOn}
-              onValueChange={toggleShuffle}
-              trackColor={{ false: "cbd5e1", true: ACCENT }}
+              onValueChange={setShuffleOn}
+              trackColor={{ false: "#cbd5e1", true: ACCENT }}
               thumbColor="#fff"
             />
           </View>
         </View>
 
-        <FlashCard key={index} card={current} />
+        
+
+        {current && <FlashCard key={index} card={current} />}
 
         <View style={styles.nav}>
           <Pressable
@@ -122,6 +162,41 @@ export default function FlashcardsScreen() {
           </Pressable>
         </View>
       </View>
+
+      <Modal visible={modalVisible} transparent animationType="slide" onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Select Sections</Text>
+            <Text style={styles.modalSub}>{pendingSections.size} of {categories.length} selected</Text>
+
+            <Pressable onPress={() => setPendingSections(allSelected ? new Set() : new Set(categories))}>
+              <Text style={styles.selectAllText}>{allSelected ? "Deselect All" : "Select All"}</Text>
+            </Pressable>
+
+            <ScrollView style={styles.modalList}>
+              {categories.map(cat => {
+                const checked = pendingSections.has(cat);
+                return (
+                  <Pressable key={cat} style={styles.checkRow} onPress={() => togglePending(cat)}>
+                    <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
+                      {checked && <Ionicons name="checkmark" size={14} color="#fff" />}
+                    </View>
+                    <Text style={styles.checkLabel}>{cat}</Text>
+                  </Pressable>
+                )
+              })}
+            </ScrollView>
+
+            <Pressable style={[styles.applyBtn, pendingSections.size === 0 && styles.applyBtnDisabled]}
+              onPress={applySelection}
+              disabled={pendingSections.size === 0}
+            >
+              <Text style={styles.applyText}>Start Studying</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
     </SafeAreaView>
   );
 }
@@ -138,6 +213,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   headerTitle: { color: "#fff", fontSize: 17, fontWeight: "700" },
+  headerRight: { flexDirection: "row", alignItems: "center", gap: 12 },
   headerCount: { color: "#93c5fd", fontSize: 14 },
 
   body:         { flex: 1, padding: 20, gap: 12 },
@@ -170,4 +246,40 @@ const styles = StyleSheet.create({
   navBtnDisabled: { opacity: 0.4 },
   navText:        { color: BRAND, fontWeight: "600", fontSize: 15 },
   navTextDisabled:{ color: "#cbd5e1" },
+
+  modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" },
+  modalCard: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
+    maxHeight: "80%",
+    gap: 12,
+  },
+  modalTitle: { color: "#1e293b", fontSize: 20, fontWeight: "800" },
+  modalSub: { color: "#94a3b8", fontSize: 13 },
+  selectAllText: { color: ACCENT, fontWeight: "600", fontSize: 14 },
+  modalList: { maxHeight: 320 },
+  checkRow: { 
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 13,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+    gap: 14
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: "#cbd5e1",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  checkboxChecked: { backgroundColor: ACCENT, borderColor: ACCENT },
+  checkLabel: { color: "#1e293b", fontSize: 15, flex: 1 },
+  applyBtn: { backgroundColor: BRAND, borderRadius: 14, padding: 16, alignItems: "center", marginTop: 4 },
+  applyBtnDisabled: { backgroundColor: "#cbd5e1" },
+  applyText: { color: "#fff", fontWeight: "700", fontSize: 16 },
 });
