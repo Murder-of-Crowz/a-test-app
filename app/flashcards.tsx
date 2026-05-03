@@ -18,8 +18,7 @@ const ACCENT = "#3b82f6";
 type Card = {
   id: number;
   question: string;
-  answer: string;
-  choices: string[];
+  answers: string[];
   answerIndex: number;
   category: string;
 };
