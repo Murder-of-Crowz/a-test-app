@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "expo-router";
 import {
-  Animated,
   Modal,
   Pressable,
   ScrollView,
@@ -10,9 +9,17 @@ import {
   Text,
   View,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import data from "@/assets/questions.json";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { runOnJS } from "react-native-worklets";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
@@ -38,27 +45,75 @@ function shuffledeck<T>(arr: T[]): T[] {
   return a;
 }
 
-function FlashCard({ card }: { card: Card }) {
-  const [flipped, setFlipped] = useState(false)
-  const anim = useRef(new Animated.Value(1)).current
+function FlashCard({ 
+  card,
+  onNext,
+  onPrev,
+  canGoNext,
+  canGoPrev,
+ }: {
+  card: Card;
+  onNext: () => void;
+  onPrev: () => void;
+  canGoNext: boolean;
+  canGoPrev: boolean;
+ }) {
+  const [flipped, setFlipped] = useState(false);
+  const translateX = useSharedValue(0);
+  const scale = useSharedValue(1);
+  const opacity = useSharedValue(1);
 
-  const handleFlip = () => {
-    Animated.sequence([
-      Animated.timing(anim, { toValue: 0.96, duration: 80, useNativeDriver: true }),
-      Animated.timing(anim, { toValue: 1, duration: 80, useNativeDriver: true }),
-    ]).start(() => setFlipped(f => !f));
-  };
+  const toggleFlipped = () => setFlipped(f => !f);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }, { scale: scale.value }],
+    opacity: opacity.value,
+  }));
+
+  const pan = Gesture.Pan()
+    .activeOffsetX([-10, 10])
+    .failOffsetY([-10, 10])
+    .onUpdate((e) => {
+      translateX.value = e.translationX;
+    })
+    .onEnd((e) => {
+      if (e.translationX < -80 && canGoNext) {
+        opacity.value = withTiming(0, { duration: 150 });
+        translateX.value = withTiming(-500, { duration: 220 }, () => {
+          translateX.value = 0;
+          runOnJS(onNext)();
+          opacity.value = withTiming(1, { duration: 200 });
+        });
+      } else if (e.translationX > 80 && canGoPrev) {
+        opacity.value = withTiming(0, { duration: 150 });
+        translateX.value = withTiming(500, { duration: 220 }, () => {
+          translateX.value = 0;
+          runOnJS(onPrev)();
+          opacity.value = withTiming(1, { duration: 200 });
+        });
+      } else {
+        translateX.value = withSpring(0);
+      }
+    });
+
+    const tap = Gesture.Tap()
+      .onEnd(() => {
+        scale.value = withTiming(0.96, { duration: 80 }, () => {
+          scale.value = withTiming(1, { duration: 80 });
+          runOnJS(toggleFlipped)();
+        });
+      });
 
   return (
-    <Pressable onPress={handleFlip}>
-      <Animated.View style={[styles.card, { transform: [{ scale: anim }]}]}>
+    <GestureDetector gesture={Gesture.Race(pan, tap)}>
+      <Animated.View style={[styles.card, animatedStyle]}>
         <Text style={styles.cardHint}>{flipped ? "Answer" : "Question - tap to flip"}</Text>
         {flipped
           ? <Text style={styles.cardQuestion}>{card.answers[card.answerIndex]}</Text>
-          : <Text style={styles.cardAnswer}>{card.question}</Text>
+          : <Text style={styles.cardAnswer}>{card.question}   </Text>
         }
       </Animated.View>
-    </Pressable>
+    </GestureDetector>
   )
 }
 
@@ -153,7 +208,16 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
           </View>
         </View>
 
-        {current && <FlashCard key={index} card={current} />}
+        {current && (
+          <FlashCard
+            key={index}
+            card={current}
+            onNext={() => setIndex(i => i + 1)}
+            onPrev={() => setIndex(i => i - 1)}
+            canGoNext={index < total - 1}
+            canGoPrev={index > 0} 
+          />
+        )}
 
         <View style={styles.nav}>
           <Pressable
@@ -239,7 +303,7 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
 }
 
 const styles = StyleSheet.create({
-  safe:  { flex: 1, backgroundColor: "#f1f5f9" },
+  safe: { flex: 1, backgroundColor: "#f1f5f9" },
 
   header: {
     backgroundColor: BRAND,
@@ -256,8 +320,8 @@ const styles = StyleSheet.create({
   body:         { flex: 1, padding: 20, gap: 12 },
   chapterLabel: { color: "#64748b", fontSize: 13, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
 
-  shuffleBody: { flexDirection: "row", justifyContent: "space-between"},
-  shuffleRow: { flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: 8 },
+  shuffleBody:  { flexDirection: "row", justifyContent: "space-between"},
+  shuffleRow:   { flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: 8 },
   shuffleLabel: { color: "#64748b", fontSize: 13, fontWeight: "600" },
 
   card: {
@@ -284,8 +348,8 @@ const styles = StyleSheet.create({
   navText:        { color: BRAND, fontWeight: "600", fontSize: 15 },
   navTextDisabled:{ color: "#cbd5e1" },
 
-  sectionNav: { flexDirection: "row", justifyContent: "space-between", marginTop: 4 },
-  sectionNavBtn: { flexDirection: "row", alignItems: "center", gap: 4, padding: 8 },
+  sectionNav:     { flexDirection: "row", justifyContent: "space-between", marginTop: 4 },
+  sectionNavBtn:  { flexDirection: "row", alignItems: "center", gap: 4, padding: 8 },
   sectionNavText: { color: "#94a3b8", fontWeight: "600", fontSize: 13 },
 
   modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" },
@@ -297,10 +361,10 @@ const styles = StyleSheet.create({
     maxHeight: "80%",
     gap: 12,
   },
-  modalTitle: { color: "#1e293b", fontSize: 20, fontWeight: "800" },
-  modalSub: { color: "#94a3b8", fontSize: 13 },
+  modalTitle:    { color: "#1e293b", fontSize: 20, fontWeight: "800" },
+  modalSub:      { color: "#94a3b8", fontSize: 13 },
   selectAllText: { color: ACCENT, fontWeight: "600", fontSize: 14 },
-  modalList: { maxHeight: 320 },
+  modalList:     { maxHeight: 320 },
   checkRow: { 
     flexDirection: "row",
     alignItems: "center",
@@ -318,10 +382,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  checkboxChecked: { backgroundColor: ACCENT, borderColor: ACCENT },
-  checkLabel: { color: "#1e293b", fontSize: 15, flex: 1 },
-  checkCount: { color: "#94a3b8", fontSize: 13, fontWeight: "600" },
-  applyBtn: { backgroundColor: BRAND, borderRadius: 14, padding: 16, alignItems: "center", marginTop: 4 },
+  checkboxChecked:  { backgroundColor: ACCENT, borderColor: ACCENT },
+  checkLabel:       { color: "#1e293b", fontSize: 15, flex: 1 },
+  checkCount:       { color: "#94a3b8", fontSize: 13, fontWeight: "600" },
+  applyBtn:         { backgroundColor: BRAND, borderRadius: 14, padding: 16, alignItems: "center", marginTop: 4 },
   applyBtnDisabled: { backgroundColor: "#cbd5e1" },
-  applyText: { color: "#fff", fontWeight: "700", fontSize: 16 },
+  applyText:        { color: "#fff", fontWeight: "700", fontSize: 16 },
 });
