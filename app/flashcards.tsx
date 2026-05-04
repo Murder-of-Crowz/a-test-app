@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import { forwardRef, useEffect, useMemo, useState, useRef, useImperativeHandle } from "react";
 import { useRouter } from "expo-router";
 import {
   Modal,
@@ -34,11 +34,16 @@ type Card = {
 
 type CardState = "known" | "learning";
 
+type FlashCardRef = {
+  animateForward: (cb: () => void) => void;
+  animateBackward: (cb: () => void) => void;
+};
+
 const allCards: Card[] = data.flatMap(section => section.questions.map(q => ({ ...q, category: section.category })));
 const categoryCounts = Object.fromEntries(data.map(s => [s.category, s.questions.length]));
 const categories = data.map(s => s.category);
 
-function shuffledeck<T>(arr: T[]): T[] {
+function shuffleDeck<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length -1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -47,25 +52,46 @@ function shuffledeck<T>(arr: T[]): T[] {
   return a;
 }
 
-function FlashCard({ 
-  card,
-  onNext,
-  onPrev,
-  canGoNext,
-  canGoPrev,
- }: {
+const FlashCard = forwardRef<FlashCardRef, {
   card: Card;
   onNext: () => void;
   onPrev: () => void;
   canGoNext: boolean;
   canGoPrev: boolean;
- }) {
+}>(function FlashCard({ card, onNext, onPrev, canGoNext, canGoPrev }, ref) {
   const [flipped, setFlipped] = useState(false);
   const translateX = useSharedValue(0);
   const scale = useSharedValue(1);
-  const opacity = useSharedValue(1);
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    opacity.value = withTiming(1, { duration: 200 });
+  }, []);
 
   const toggleFlipped = () => setFlipped(f => !f);
+
+  const runForward = (cb: () => void) => {
+    opacity.value = withTiming(0, { duration: 150 });
+    translateX.value = withTiming(-500, { duration: 220 }, () => {
+      translateX.value = 0;
+      runOnJS(cb)();
+      opacity.value = withTiming(1, { duration: 200 });
+    })
+  };
+
+  const runBackward = (cb: () => void) => {
+    opacity.value = withTiming(0, { duration: 150 });
+    translateX.value = withTiming(500, { duration: 220 }, () => {
+      translateX.value = 0;
+      runOnJS(cb)();
+      opacity.value = withTiming(1, { duration: 200 });
+    })
+  };
+
+  useImperativeHandle(ref, () => ({
+    animateForward: runForward,
+    animateBackward: runBackward,
+  }));
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }, { scale: scale.value }],
@@ -73,36 +99,22 @@ function FlashCard({
   }));
 
   const pan = Gesture.Pan()
-    .activeOffsetX([-10, 10])
-    .failOffsetY([-10, 10])
-    .onUpdate((e) => { translateX.value = e.translationX; })
-    .onEnd((e) => {
-      if (e.translationX < -80 && canGoNext) {
-        opacity.value = withTiming(0, { duration: 150 });
-        translateX.value = withTiming(-500, { duration: 220 }, () => {
-          translateX.value = 0;
-          runOnJS(onNext)();
-          opacity.value = withTiming(1, { duration: 200 });
-        });
-      } else if (e.translationX > 80 && canGoPrev) {
-        opacity.value = withTiming(0, { duration: 150 });
-        translateX.value = withTiming(500, { duration: 220 }, () => {
-          translateX.value = 0;
-          runOnJS(onPrev)();
-          opacity.value = withTiming(1, { duration: 200 });
-        });
-      } else {
-        translateX.value = withSpring(0);
-      }
-    });
+  .activeOffsetX([-10, 10])
+  .failOffsetY([-10, 10])
+  .onUpdate((e) => { translateX.value = e.translationX; })
+  .onEnd((e) => {
+    if (e.translationX < -80 && canGoNext) runForward(onNext);
+    else if (e.translationX > 80 && canGoPrev) runBackward(onPrev);
+    else translateX.value = withSpring(0);
+  });
 
-    const tap = Gesture.Tap()
-      .onEnd(() => {
-        scale.value = withTiming(0.96, { duration: 80 }, () => {
-          scale.value = withTiming(1, { duration: 80 });
-          runOnJS(toggleFlipped)();
-        });
+  const tap = Gesture.Tap()
+    .onEnd(() => {
+      scale.value = withTiming(0.96, { duration: 80 }, () => {
+        scale.value = withTiming(1, { duration: 80 });
+        runOnJS(toggleFlipped)();
       });
+    })
 
   return (
     <GestureDetector gesture={Gesture.Race(pan, tap)}>
@@ -114,11 +126,12 @@ function FlashCard({
         }
       </Animated.View>
     </GestureDetector>
-  )
-}
+  );
+});
 
-export default function FlashCardsScreen({ card }: { card: Card }) {
+export default function FlashCardsScreen() {
   const router = useRouter();
+  const flashCardRef = useRef<FlashCardRef>(null)
   const [index, setIndex] = useState(0);
   const [shuffleOn, setShuffleOn] = useState(false);
   const [modalVisible, setModalVisible] = useState(true);
@@ -126,16 +139,17 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
   const [selectedSections, setSelectedSections] = useState<Set<string>>(() => new Set(categories));
   const [pendingSections, setPendingSections] = useState<Set<string>>(() => new Set(categories));
   const [cardStates, setCardStates] = useState<Record<number, CardState>>({});
+  const [reviewDeck, setReviewDeck] = useState<Card[] | null>(null);
 
   const filteredCards = useMemo(
     () => allCards.filter(c => selectedSections.has(c.category)),
     [selectedSections]
   );
 
-  const deck = useMemo(
-    () => shuffleOn ? shuffledeck([...filteredCards]) : filteredCards,
-    [filteredCards, shuffleOn]
-  );
+  const deck = useMemo(() => {
+    if (reviewDeck !== null ) return shuffleOn ? shuffleDeck([...reviewDeck]) : reviewDeck;
+    return shuffleOn ? shuffleDeck([...filteredCards]) : filteredCards;
+  }, [reviewDeck, filteredCards, shuffleOn]);
 
   useEffect(() => { setIndex(0); }, [deck]);
 
@@ -146,7 +160,21 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
   const markCard = (id: number, state: CardState) => {
     const alreadyMarked = cardStates[id] !== undefined;
     setCardStates(prev => ({ ...prev, [id]: state }));
-    if (!alreadyMarked && index < total - 1) setIndex(i => i + 1);
+    if (!alreadyMarked && index < total - 1) flashCardRef.current?.animateForward(() => setIndex(i => i + 1));
+  };
+
+  const enterReviewMode = () => {
+    const missed = allCards.filter(c =>
+      selectedSections.has(c.category) && cardStates[c.id] === "learning"
+    );
+    setReviewDeck(missed);
+    setIndex(0);
+    setStatsVisible(false);
+  };
+
+  const exitReviewMode = () => {
+    setReviewDeck(null);
+    setIndex(0);
   };
 
   const sectionStats = useMemo(() => {
@@ -189,14 +217,23 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
   const hasPrevSection = currentSectionIndex > 0;
   const hasNextSection = currentSectionIndex < uniqueSections.length -1;
 
+  const handlePrev = () =>
+    flashCardRef.current?.animateBackward(() => setIndex(i => i - 1));
+
+  const handleNext = () =>
+    flashCardRef.current?.animateForward(() => setIndex(i => i + 1));  
+
+  const handleRestart = () =>
+    flashCardRef.current?.animateBackward(() => setIndex(0));
+
   const goToPrevSection = () => {
     const first = deck.findIndex(c => c.category === uniqueSections[currentSectionIndex - 1]);
-    if (first !== -1) setIndex(first);
+    if (first !== -1) flashCardRef.current?.animateBackward(() => setIndex(first));
   };
 
   const goToNextSection = () => {
     const first = deck.findIndex(c => c.category === uniqueSections[currentSectionIndex + 1]);
-    if (first !== -1) setIndex(first);
+    if (first !== -1) flashCardRef.current?.animateForward(() => setIndex(first));
   };
 
   return (
@@ -224,6 +261,19 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
         <View style={[styles.progressFill, { width: `${(reviewedCount / total) * 100}%` as any }]} />
       </View>
 
+      {/* Review Mode */}
+      {reviewDeck !== null && (
+        <View style={styles.reviewBanner}>
+          <Ionicons name="refresh-circle-outline" size={16} color="#fff" />
+          <Text style={styles.reviewBannerText}>
+            Reviewing {reviewDeck.length} missed card{reviewDeck.length !== 1 ? "s" : ""}
+          </Text>
+          <Pressable onPress={exitReviewMode} hitSlop={12}>
+            <Text style={styles.reviewBannerExit}>Exit</Text>
+          </Pressable>
+        </View>
+      )}
+
       {/* Body */}
       <View style={styles.body}>
         <View style={styles.shuffleBody}>
@@ -241,6 +291,7 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
 
         {current && (
           <FlashCard
+            ref={flashCardRef}
             key={index}
             card={current}
             onNext={() => setIndex(i => i + 1)}
@@ -279,20 +330,20 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
         <View style={styles.nav}>
           <Pressable
             style={[styles.navBtn, index === 0 && styles.navBtnDisabled]}
-            onPress={() => setIndex(i => i - 1)}
+            onPress={handlePrev}
             disabled={index === 0}
           >
             <Ionicons name="chevron-back" size={22} color={index === 0 ? "#cbd5e1" : BRAND} />
             <Text style={[styles.navText, index === 0 && styles.navTextDisabled]}>Prev</Text>
           </Pressable>
 
-          <Pressable style={styles.navBtn} onPress={() => setIndex(0)}>
+          <Pressable style={styles.navBtn} onPress={handleRestart}>
             <Ionicons name="refresh-outline" size={20} color={BRAND} />
           </Pressable>
 
           <Pressable
             style={[styles.navBtn, index === total - 1 && styles.navBtnDisabled]}
-            onPress={() => setIndex(i => i + 1)}
+            onPress={handleNext}
             disabled={index === total - 1}
           >
             <Text style={[styles.navText, index === total - 1 && styles.navTextDisabled]}>Next</Text>
@@ -303,7 +354,7 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
         {/* Section Nav */}
         <View style={styles.sectionNav}>
             <Pressable
-              style={[styles.sectionNav, !hasPrevSection && styles.navBtnDisabled]}
+              style={[styles.sectionNavBtn, !hasPrevSection && styles.navBtnDisabled]}
               onPress={goToPrevSection}
               disabled={!hasPrevSection}
             >
@@ -312,7 +363,7 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
             </Pressable>
 
             <Pressable
-              style={[styles.sectionNav, !hasNextSection && styles.navBtnDisabled]}
+              style={[styles.sectionNavBtn, !hasNextSection && styles.navBtnDisabled]}
               onPress={goToNextSection}
               disabled={!hasNextSection}
             >
@@ -372,14 +423,21 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
             {/* Overall summary */}
             <View style={styles.overallRow}>
               <View style={styles.overallBadge}>
-                <Text style={styles.overallNum}>{Object.values(cardStates).filter(s => s === "known").length}</Text>
+                <Text style={styles.overallNum}>
+                  {Object.values(cardStates).filter(s => s === "known").length}
+                </Text>
                 <Text style={styles.overallLabel}>Know It</Text>
               </View>
               <View style={styles.overallBadge}>
-                <Text style={[styles.overallNum, { color: "#dc2626" }]}>{Object.values(cardStates).filter(s => s === "learning").length}</Text>
+                <Text style={[styles.overallNum, { color: "#dc2626" }]}>
+                  {Object.values(cardStates).filter(s => s === "learning").length}
+                </Text>
+                <Text style={styles.overallLabel}>Still Learning</Text>
               </View>
               <View style={styles.overallBadge}>
-                <Text style={[styles.overallNum, { color: "#94a3b8" }]}>{deck.filter(c => cardStates[c.id] === undefined).length}</Text>
+                <Text style={[styles.overallNum, { color: "#94a3b8" }]}>
+                  {deck.filter(c => cardStates[c.id] === undefined).length}
+                </Text>
                 <Text style={styles.overallLabel}>Unreviewed</Text>
               </View>
             </View>
@@ -390,9 +448,9 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
                 <View key={category} style={styles.statRow}>
                   <Text style={styles.statCategory}>{category}</Text>
                   <View style={styles.statBarBg}>
-                    <View style={[styles.statBarSegmet, { flex: known, backgroundColor: "#16a34a "}]} />
-                    <View style={[styles.statBarSegmet, { flex: learning, backgroundColor: "#dc2626 "}]} />
-                    <View style={[styles.statBarSegmet, { flex: unreviewed, backgroundColor: "#e2e8f0 "}]} />
+                    <View style={[styles.statBarSegment, { flex: known, backgroundColor: "#16a34a" }]} />
+                    <View style={[styles.statBarSegment, { flex: learning, backgroundColor: "#dc2626" }]} />
+                    <View style={[styles.statBarSegment, { flex: unreviewed, backgroundColor: "#e2e8f0" }]} />
                   </View>
                   <View style={styles.statCounts}>
                     <Text style={[styles.statCount, { color: "#16a34a" }]}>{known} known</Text>
@@ -402,6 +460,14 @@ export default function FlashCardsScreen({ card }: { card: Card }) {
                 </View>
               ))}
             </ScrollView>
+
+            {Object.values(cardStates).some(s => s === "learning") && (
+              <Pressable style={styles.applyBtn} onPress={enterReviewMode}>
+                <Text style={styles.applyText}>
+                  Review Missed Cards ({Object.values(cardStates).filter(s => s === "learning").length})
+                </Text>
+              </Pressable>
+            )}
 
             <Pressable
               style={styles.applyBtn}
@@ -434,6 +500,17 @@ const styles = StyleSheet.create({
 
   progressBg:   { height: 3, backgroundColor: "#e2e8f0" },
   progressFill: { height: 3, backgroundColor: ACCENT },
+
+  reviewBanner: {
+    backgroundColor: "#f59e0b",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    gap: 8,
+  },
+  reviewBannerText: { flex: 1, color: "#fff", fontSize: 13, fontWeight: "600" },
+  reviewBannerExit: { color: "#fff", fontSize: 13, fontWeight: "700", textDecorationLine: "underline" },
 
   body:         { flex: 1, padding: 20, gap: 12 },
   chapterLabel: { color: "#64748b", fontSize: 13, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
@@ -534,7 +611,7 @@ const styles = StyleSheet.create({
   statRow:      { paddingVertical: 12, gap: 6, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" },
   statCategory: { color: "#1e293b", fontSize: 13, fontWeight: "700" },
   statBarBg:    { flexDirection: "row", height: 6, borderRadius: 3, overflow: "hidden", backgroundColor: "#e2e8f0" },
-  statBarSegmet: { height: 6 },
+  statBarSegment: { height: 6 },
   statCounts:   { flexDirection: "row", gap: 12 },
   statCount:    { fontSize: 11, fontWeight: "600" },
 });
