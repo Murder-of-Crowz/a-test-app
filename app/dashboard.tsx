@@ -1,5 +1,12 @@
 import { useRouter } from "expo-router";
-import { Pressable, Settings, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  Settings,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -9,11 +16,11 @@ const ACCENT = "#3b82f6";
 const USER_NAME = "Joe";
 
 export default function DashboardScreen() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
-      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
+      <StatusBar barStyle='light-content' backgroundColor={BRAND} />
 
       {/* Header */}
       <View style={styles.header}>
@@ -22,16 +29,19 @@ export default function DashboardScreen() {
           <Text style={styles.sub}>What would you like to do today?</Text>
         </View>
         <Pressable onPress={() => router.push("/settings")} hitSlop={12}>
-          <Ionicons name="settings-outline" size={26} color="#93c5fd" />
+          <Ionicons name='settings-outline' size={26} color='#93c5fd' />
         </Pressable>
       </View>
-      
 
       {/* Buttons */}
       <View style={styles.body}>
         {/* Flashcards */}
         <Pressable
-          style={({ pressed }) => [styles.card, styles.cardBlue, pressed && styles.pressed]}
+          style={({ pressed }) => [
+            styles.card,
+            styles.cardBlue,
+            pressed && styles.pressed,
+          ]}
           onPress={() => router.push("/flashcards")} // Need this changed once flashcard page done
         >
           <Text style={styles.cardIcon}>~</Text>
@@ -39,9 +49,27 @@ export default function DashboardScreen() {
           <Text style={styles.cardSub}>Start your studying!</Text>
         </Pressable>
 
+        {/* Practice Quiz */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.card,
+            styles.cardBlue,
+            pressed && styles.pressed,
+          ]}
+          onPress={() => router.push("/quizSelection")} // Need this changed once quiz page done
+        >
+          <Text style={styles.cardIcon}>~</Text>
+          <Text style={styles.cardTitle}>Quiz</Text>
+          <Text style={styles.cardSub}>You ready to take a practice quiz?</Text>
+        </Pressable>
+
         {/* Practice Exam */}
         <Pressable
-          style={({ pressed }) => [styles.card, styles.cardBlue, pressed && styles.pressed]}
+          style={({ pressed }) => [
+            styles.card,
+            styles.cardBlue,
+            pressed && styles.pressed,
+          ]}
           onPress={() => router.push("/exam")} // Need this changed once exam page done
         >
           <Text style={styles.cardIcon}>~</Text>
@@ -54,7 +82,7 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9"},
+  safe: { flex: 1, backgroundColor: "#f1f5f9" },
 
   header: {
     backgroundColor: BRAND,
@@ -66,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   greeting: { color: "#fff", fontSize: 26, fontWeight: "800" },
-  sub:      { color: "#93c5fd", fontSize: 14, marginTop: 4 },
+  sub: { color: "#93c5fd", fontSize: 14, marginTop: 4 },
 
   body: { flex: 1, padding: 20, gap: 16 },
 
@@ -79,9 +107,9 @@ const styles = StyleSheet.create({
 
   cardBlue: { backgroundColor: ACCENT },
   cardDark: { backgroundColor: BRAND },
-  pressed:   { opacity: 0.85 },
+  pressed: { opacity: 0.85 },
 
-  cardIcon:   { fontSize: 40, marginBottom: 12 },
-  cardTitle:  { color: "#fff", fontSize: 22, fontWeight: "800" },
-  cardSub:    { color: "rgba(255,255,255,0.7", fontSize: 14, marginTop: 4}
+  cardIcon: { fontSize: 40, marginBottom: 12 },
+  cardTitle: { color: "#fff", fontSize: 22, fontWeight: "800" },
+  cardSub: { color: "rgba(255,255,255,0.7", fontSize: 14, marginTop: 4 },
 });
