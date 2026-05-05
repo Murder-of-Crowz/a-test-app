@@ -8,6 +8,7 @@ import { getQuestionBank } from "../questionData";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
+const QUIZ_QUESTION_LIMIT = 20;
 
 type QuestionFromJson = {
   id: number;
@@ -36,13 +37,15 @@ function shuffle<T>(items: T[]): T[] {
 }
 
 function buildQuiz(index: number, title: string): QuizQuestion[] {
-  const questionBank = getQuestionBank(index) as QuestionFromJson[];
+  const questionBank = getQuestionBank(index) as QuestionFromJson[] | undefined;
 
-  if (!questionBank) {
+  if (!questionBank || questionBank.length === 0) {
     return [];
   }
 
-  return shuffle(questionBank).map((question) => {
+  const selectedQuestions = shuffle(questionBank).slice(0, QUIZ_QUESTION_LIMIT);
+
+  return selectedQuestions.map((question) => {
     const correctAnswer = question.answers[question.answerIndex];
     const shuffledAnswers = shuffle(question.answers);
 
@@ -69,7 +72,7 @@ export default function SubjectQuiz() {
 
   const questionBankIndex = Number(index ?? subjectId);
 
-  const [quiz] = useState<QuizQuestion[]>(() => {
+  const [quiz, setQuiz] = useState<QuizQuestion[]>(() => {
     if (Number.isNaN(questionBankIndex)) {
       return [];
     }
@@ -92,11 +95,33 @@ export default function SubjectQuiz() {
   const scorePercent =
     totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
 
+  const handleRetakeQuiz = () => {
+    if (!Number.isNaN(questionBankIndex)) {
+      setQuiz(buildQuiz(questionBankIndex, quizTitle));
+    }
+
+    setSelected({});
+    setSubmitted(false);
+    scrollRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
+  const handleNewQuiz = () => {
+    router.push("/quizSelection");
+  };
+
+  const handleGoHome = () => {
+    router.push("/dashboard");
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.header}>
         <View style={styles.headerSide}>
-          <Pressable onPress={() => router.back()} hitSlop={12}>
+          <Pressable
+            onPress={() => {
+              router.push("/dashboard");
+            }}
+            hitSlop={12}>
             <Ionicons name='arrow-back' size={24} color='#ffffff' />
           </Pressable>
         </View>
@@ -126,6 +151,24 @@ export default function SubjectQuiz() {
             <Text style={styles.resultText}>
               {score} / {totalQuestions} = {scorePercent}%
             </Text>
+            <View style={styles.breakdownBtnOptions}>
+              <Pressable
+                style={styles.resultBtnOptions}
+                onPress={handleRetakeQuiz}>
+                <Ionicons name='refresh' size={16} color={BRAND} />
+                <Text>Retake Quiz</Text>
+              </Pressable>
+              <Pressable
+                style={styles.resultBtnOptions}
+                onPress={handleNewQuiz}>
+                <Ionicons name='newspaper' size={16} color={BRAND} />
+                <Text>New Quiz</Text>
+              </Pressable>
+              <Pressable style={styles.resultBtnOptions} onPress={handleGoHome}>
+                <Ionicons name='home' size={16} color={BRAND} />
+                <Text>Home</Text>
+              </Pressable>
+            </View>
           </View>
         )}
 
@@ -382,5 +425,24 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
     fontWeight: "700",
+  },
+  resultBtnOptions: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingVertical: 8,
+    borderRadius: 12,
+    backgroundColor: "#ffffff",
+    width: "100%",
+    paddingHorizontal: 24,
+  },
+  breakdownBtnOptions: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 12,
+    width: "100%",
+    marginTop: 12,
   },
 });
