@@ -3,18 +3,11 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import data from "@/assets/questions.json";
+
+import { getQuestionBank } from "../questionData";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
-
-type Question = {
-  id: number;
-  question: string;
-  answers: string[];
-  answerIndex: number;
-  category: string;
-};
 
 type QuestionFromJson = {
   id: number;
@@ -23,47 +16,39 @@ type QuestionFromJson = {
   answerIndex: number;
 };
 
-type QuizSection = {
+type QuizQuestion = QuestionFromJson & {
   category: string;
-  questions: QuestionFromJson[];
 };
 
-function normalizeCategory(value: string) {
-  return value.trim().toLowerCase();
-}
+function shuffle<T>(items: T[]): T[] {
+  const shuffledItems = [...items];
 
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
+  for (let i = shuffledItems.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
 
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-
-    [a[i], a[j]] = [a[j], a[i]];
+    [shuffledItems[i], shuffledItems[randomIndex]] = [
+      shuffledItems[randomIndex],
+      shuffledItems[i],
+    ];
   }
 
-  return a;
+  return shuffledItems;
 }
 
-function buildSubjectQuiz(categoryTitle: string): Question[] {
-  const sections = data as QuizSection[];
+function buildQuiz(index: number, title: string): QuizQuestion[] {
+  const questionBank = getQuestionBank(index) as QuestionFromJson[];
 
-  const selectedSection = sections.find((section) => {
-    return (
-      normalizeCategory(section.category) === normalizeCategory(categoryTitle)
-    );
-  });
-
-  if (!selectedSection) {
+  if (!questionBank) {
     return [];
   }
 
-  return shuffle(selectedSection.questions).map((question) => {
+  return shuffle(questionBank).map((question) => {
     const correctAnswer = question.answers[question.answerIndex];
     const shuffledAnswers = shuffle(question.answers);
 
     return {
       ...question,
-      category: selectedSection.category,
+      category: title,
       answers: shuffledAnswers,
       answerIndex: shuffledAnswers.indexOf(correctAnswer),
     };
@@ -74,13 +59,24 @@ export default function SubjectQuiz() {
   const router = useRouter();
   const scrollRef = useRef<ScrollView>(null);
 
-  const { title } = useLocalSearchParams<{
+  const { title, index, subjectId } = useLocalSearchParams<{
     title?: string;
+    index?: string;
+    subjectId?: string;
   }>();
 
-  const categoryTitle = title ?? "";
+  const quizTitle = title ?? "Quiz";
 
-  const [quiz] = useState<Question[]>(() => buildSubjectQuiz(categoryTitle));
+  const questionBankIndex = Number(index ?? subjectId);
+
+  const [quiz] = useState<QuizQuestion[]>(() => {
+    if (Number.isNaN(questionBankIndex)) {
+      return [];
+    }
+
+    return buildQuiz(questionBankIndex, quizTitle);
+  });
+
   const [selected, setSelected] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -88,12 +84,13 @@ export default function SubjectQuiz() {
   const totalQuestions = quiz.length;
 
   const score = useMemo(() => {
-    return quiz.filter((question, index) => {
-      return selected[index] === question.answerIndex;
+    return quiz.filter((question, questionIndex) => {
+      return selected[questionIndex] === question.answerIndex;
     }).length;
   }, [quiz, selected]);
 
-  const quizTitle = (quiz[0]?.category ?? categoryTitle) || "Quiz";
+  const scorePercent =
+    totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -127,8 +124,7 @@ export default function SubjectQuiz() {
         {submitted && totalQuestions > 0 && (
           <View style={styles.resultBanner}>
             <Text style={styles.resultText}>
-              {score} / {totalQuestions} ={" "}
-              {Math.round((score / totalQuestions) * 100)}%
+              {score} / {totalQuestions} = {scorePercent}%
             </Text>
           </View>
         )}
@@ -149,7 +145,7 @@ export default function SubjectQuiz() {
                 const isCorrect = answerIndex === question.answerIndex;
 
                 let optionStyle = {};
-                let icon = <View style={{ width: 20 }} />;
+                let icon = <View style={styles.iconPlaceholder} />;
 
                 if (submitted) {
                   if (isCorrect) {
@@ -171,7 +167,7 @@ export default function SubjectQuiz() {
 
                 return (
                   <Pressable
-                    key={answerIndex}
+                    key={`${question.id}-${answerIndex}`}
                     style={[styles.option, optionStyle]}
                     disabled={submitted}
                     onPress={() =>
@@ -364,6 +360,10 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: ACCENT,
+  },
+
+  iconPlaceholder: {
+    width: 20,
   },
 
   submitBtn: {
