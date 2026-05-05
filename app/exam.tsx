@@ -87,6 +87,7 @@ export default function ExamScreen() {
     setExam(buildExam());
     setSelected({});
     setSubmitted(false);
+    setShowMissedOnly(false);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
   }
 
