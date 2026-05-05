@@ -25,12 +25,9 @@ export function getQuizSubjects() {
   });
   return categories;
 }
-// console.log(getQuizSubjects());
 
 export function getQuestionBank(index: number) {
   const questionBank = data[index];
 
   return questionBank.questions;
 }
-
-// console.log(getQuestionBank(0));
