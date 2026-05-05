@@ -3,75 +3,31 @@ import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-type QuizSubject = {
-  id: string;
-  title: string;
-  description: string;
-};
 
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
+import { getQuizSubjects } from "./questionData";
 
-const quizSubjects: QuizSubject[] = [
-  {
-    id: "safety-infection-control",
-    title: "Safety and Infection Control",
-    description:
-      "Sanitation, disinfection, sterilization, and safety procedures.",
-  },
-  {
-    id: "skin-care",
-    title: "Skin Care",
-    description: "Skin analysis, facials, products, and equipment.",
-  },
-  {
-    id: "skin-analysis",
-    title: "Skin Analysis",
-    description: "Identifying skin types and conditions.",
-  },
-  {
-    id: "hair-removal",
-    title: "Hair Removal",
-    description: "Waxing and tweezers techniques.",
-  },
-  {
-    id: "advanced-treatments",
-    title: "Advanced Treatments",
-    description: "Microdermabrasion and chemical peels.",
-  },
-  {
-    id: "makeup",
-    title: "Makeup",
-    description: "Application techniques.",
-  },
-  {
-    id: "client-consultation",
-    title: "Client Consultation",
-    description: "Consultation and documentation.",
-  },
-];
+const quizSubjects = getQuizSubjects();
 
-export default function Quiz() {
+type QuizSubject = (typeof quizSubjects)[number];
+
+export default function QuizSelection() {
   const router = useRouter();
 
-  const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(
+  const [selectedSubject, setSelectedSubject] = useState<QuizSubject | null>(
     null,
   );
 
-  const selectedSubject = quizSubjects.find(
-    (subject) => subject.id === selectedSubjectId,
-  );
-
   const handleStartQuiz = () => {
-    if (!selectedSubjectId || !selectedSubject) {
+    if (!selectedSubject) {
       return;
     }
 
     router.push({
       pathname: "/quiz/[subjectId]",
       params: {
-        subjectId: selectedSubjectId,
+        subjectId: String(selectedSubject.index),
         title: selectedSubject.title,
+        index: String(selectedSubject.index),
       },
     });
   };
@@ -91,79 +47,81 @@ export default function Quiz() {
       </View>
 
       <View style={styles.screen}>
-        <View style={styles.screen}>
-          <Text style={styles.subtitle}>
-            Choose a subject to start your quiz.
-          </Text>
+        <Text style={styles.subtitle}>
+          Choose a subject to start your quiz.
+        </Text>
 
-          <FlatList
-            data={quizSubjects}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.listContainer}
-            renderItem={({ item }) => {
-              const isSelected = selectedSubjectId === item.id;
+        <FlatList
+          data={quizSubjects}
+          keyExtractor={(item) => String(item.id)}
+          contentContainerStyle={styles.listContainer}
+          renderItem={({ item }) => {
+            const isSelected = selectedSubject?.index === item.index;
 
-              return (
-                <Pressable
-                  style={[styles.card, isSelected && styles.selectedCard]}
-                  onPress={() => setSelectedSubjectId(item.id)}>
-                  <View style={styles.cardHeader}>
-                    <Text
-                      style={[
-                        styles.title,
-                        isSelected && styles.selectedTitle,
-                      ]}>
-                      {item.title}
-                    </Text>
-                  </View>
+            return (
+              <Pressable
+                style={[styles.card, isSelected && styles.selectedCard]}
+                onPress={() => setSelectedSubject(item)}>
+                <Text
+                  style={[styles.title, isSelected && styles.selectedTitle]}>
+                  {item.title}
+                </Text>
+              </Pressable>
+            );
+          }}
+        />
 
-                  <Text style={styles.description}>{item.description}</Text>
-                </Pressable>
-              );
-            }}
-          />
-
-          <Pressable
-            style={[
-              styles.startButton,
-              !selectedSubjectId && styles.disabledButton,
-            ]}
-            disabled={!selectedSubjectId}
-            onPress={handleStartQuiz}>
-            <Text style={styles.startButtonText}>Start Quiz</Text>
-          </Pressable>
-        </View>
+        <Pressable
+          style={[
+            styles.startButton,
+            !selectedSubject && styles.disabledButton,
+          ]}
+          disabled={!selectedSubject}
+          onPress={handleStartQuiz}>
+          <Text style={styles.startButtonText}>Start Quiz</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: "#f1f5f9",
+  },
+
+  header: {
+    backgroundColor: "#1e3a5f",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+
+  headerSide: {
+    width: 40,
+    alignItems: "flex-start",
+  },
+
+  headerTitle: {
+    flex: 1,
+    color: "#ffffff",
+    fontSize: 20,
+    fontWeight: "800",
+    textAlign: "center",
+  },
+
   screen: {
     flex: 1,
     padding: 24,
     backgroundColor: "#f8fafc",
   },
 
-  pageTitle: {
-    fontSize: 32,
-    fontWeight: "800",
-    color: "#fff",
-    marginBottom: 6,
-    textAlign: "center",
-  },
-
   subtitle: {
     fontSize: 20,
     color: "#64748b",
     marginBottom: 16,
-  },
-
-  selectionText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: "#3b82f6",
-    marginBottom: 12,
   },
 
   listContainer: {
@@ -192,17 +150,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#eff6ff",
   },
 
-  cardHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-
   title: {
-    flex: 1,
     fontSize: 18,
     fontWeight: "700",
     color: "#111827",
+    marginBottom: 8,
   },
 
   selectedTitle: {
@@ -232,29 +184,5 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
     fontWeight: "700",
-  },
-  safe: {
-    flex: 1,
-    backgroundColor: "#f1f5f9",
-  },
-  header: {
-    backgroundColor: "#1e3a5f",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-
-  headerSide: {
-    width: 40,
-    alignItems: "flex-start",
-  },
-
-  headerTitle: {
-    flex: 1,
-    color: "#ffffff",
-    fontSize: 20,
-    fontWeight: "800",
-    textAlign: "center",
   },
 });
