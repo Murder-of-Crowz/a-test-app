@@ -60,10 +60,11 @@ function buildExam(): Question[] {
 
 export default function ExamScreen() {
   const router = useRouter();
-  const [exam] = useState<Question[]>(() => buildExam());
+  const [exam, setExam] = useState<Question[]>(() => buildExam())
   const [selected, setSelected] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
+  const [showMissedOnly, setShowMissedOnly] = useState(false);
 
   const answeredCount = Object.keys(selected).length;
   const score = useMemo(
@@ -82,8 +83,18 @@ export default function ExamScreen() {
     return Object.entries(map).map(([category, stats]) => ({ category, ...stats }))
   }, [submitted]);
 
+  function handleNewExam() {
+    setExam(buildExam());
+    setSelected({});
+    setSubmitted(false);
+    setShowMissedOnly(false);
+    scrollRef.current?.scrollTo({ y: 0, animated: false });
+  }
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+
+      {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -92,6 +103,7 @@ export default function ExamScreen() {
         <Text style={styles.headerCount}>{answeredCount} / {TOTAL}</Text>
       </View>
 
+      {/* Results banner */}
       <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
         {submitted && (
           <View style={styles.resultBanner}>
@@ -109,11 +121,32 @@ export default function ExamScreen() {
                   </View>
                 </View>
               ))}
+              {submitted && (
+                <Pressable
+                  style={[styles.missedToggle, showMissedOnly && styles.missedToggleActive]}
+                  onPress={() => setShowMissedOnly(v => !v)}  
+                >
+                  <Ionicons
+                    name={showMissedOnly ? "eye-off-outline" : "eye-outline"}
+                    size={16}
+                    color={showMissedOnly ? BRAND : "#fff"}
+                  />
+                  <Text style={[styles.missedtoggleText, showMissedOnly && styles.missedToggleTextActive]}>
+                    {showMissedOnly ? "Show All": `Show Missed Only (${TOTAL - score})`}
+                  </Text>
+                </Pressable>
+              )}
+              <Pressable style={styles.newExamBtn} onPress={handleNewExam}>
+                <Ionicons name="refresh" size={18} color={BRAND} />
+                <Text style={styles.newExamText}>New Exam</Text>
+              </Pressable>
             </View>
           </View>
         )}
 
+        {/* Exam */}
         {exam.map((q, qi) => {
+          if (showMissedOnly && selected[qi] === q.answerIndex) return null;
           const picked = selected[qi];
           return (
             <View key={qi} style={styles.card}>
@@ -159,6 +192,7 @@ export default function ExamScreen() {
           )
         })}
 
+        {/* Submit Btn */}
         {!submitted && (
           <Pressable
             style={[styles.submitBtn, answeredCount < TOTAL && styles.submitBtnDisabled]}
@@ -216,6 +250,33 @@ const styles = StyleSheet.create({
   breakdownScore: { color: "#fff", fontSize: 14, fontWeight: "700" },
   breakdownBarBg: { height: 4, backgroundColor: "rgba(255,255,255,0.2", borderRadius: 2 },
   breakdownBarFill: { height: 4, backgroundColor: "#fff", borderRadius: 2 },
+
+  missedToggle: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 11,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: "rbga(255,255,255,0.4)",
+  },
+  missedToggleActive: { backgroundColor: "#fff" },
+  missedtoggleText: { color: "#fff", fontSize: 14, fontWeight: "600" },
+  missedToggleTextActive: { color: BRAND },
+
+  newExamBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    marginTop: 20,
+  },
+  newExamText: { color: BRAND, fontSize: 15, fontWeight: "700" },
 
   card: {
     backgroundColor: "#fff",
