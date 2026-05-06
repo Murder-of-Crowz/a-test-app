@@ -41,3 +41,6 @@ app-example
 # generated native folders
 /ios
 /android
+
+# question bank .csv
+assets/*.csv
