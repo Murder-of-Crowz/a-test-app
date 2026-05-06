@@ -5,23 +5,24 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 ## Tech Stack 
 ### Current as of 4/30/2026
 
-|  Layer       |  Library / Tool |
-|--------------|-----------------|
-| Framework    | Expo SDK 55 (React Native 0.83) |
-| Navigation   | Expo Router 55 (file-based, typed routes) |
-| UI           | React Native core component, @expo/vector-icons |
-| Animations   | React Native Animated API, react-native-animated |
-| Safe areas   | react-native-safe-area-context |
-| Language     | TypeScript 5.9 |
+|  Layer        |  Library / Tool |
+|---------------|-----------------|
+| Framework     | Expo SDK 55 (React Native 0.83) |
+| Navigation    | Expo Router 55 (file-based, typed routes) |
+| UI            | React Native core component, @expo/vector-icons |
+| Animations    | React Native Animated API, react-native-animated |
+| File System   | expo-file-system, expo-asset |
+| Gestures      | react-native-gesture-handler |
+| Animations    | react-native-reanimated |
+| Local DB      | @op-engineering/op-sqlite (SQLCipher) |
+| Safe areas    | react-native-safe-area-context |
+| Language      | TypeScript 5.9 |
 
 ### Planned
 
 |  Layer       |  Library / Tool |
 |--------------|-----------------|
 | UI Library   | React Native Paper |
-| Auth         | Firebase Auth (JS SDK) |
-| State        | Zustand (session/UI) |
-| Local DB     | @op-engineering/op-sqlite (SQLCipher) |
 | Storage      | expo-secure-storage, AsyncStorage |
 | IAP          | react-native-purchases |
 | Network      | @react-native-community/netinfo |
@@ -34,21 +35,29 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 a-test-app/
 │
 ├── app/
-│    ├── _layout.tsx       # Root stack layout (headerShown: false)
-│    ├── index.tsx         # Splash screen with animated logo
-│    ├── login.tsx         # Login / registration screen
-│    ├── dashboard.tsx     # Home screen with navigation cards
-│    ├── flashcards.tsx    # Flashcard study mode
-│    ├── exam.tsx          # Weighted 25-question practice exam
-│    └── settings.tsx      # (in progress)
+│    ├── _layout.tsx        # Root stack layout (headerShown: false)
+│    ├── index.tsx          # Splash screen with animated logo
+│    ├── login.tsx          # Login / registration screen
+│    ├── dashboard.tsx      # Home screen with navigation cards
+│    ├── flashcards.tsx     # Flashcard study mode
+│    ├── exam.tsx           # Weighted 25-question practice exam
+│    └── settings.tsx       # (in progress)
 │
 ├── assets/
-│    ├── questions.csv     # Source of truth — 315 questions, 7 categories
-│    └── questions.json    # Generated from CSV; consumed by app screens
+│    ├── premQ.db           # Premium question bank (SQLite)
+│    ├── premQ.version      # Version file for DB update detection
+│    ├── questions.csv      # Source of truth — 315 questions, 7 categories
+│    └── questions.json     # Generated from CSV; consumed by app screens
 │
 ├── scripts/
-│    └── csv_to_json.py    # CSV → JSON converter with duplicate detection
+│    ├── csv_to_db.py       # CSV → SQLite converter
+│    └── csv_to_json.py     # CSV → JSON converter with duplicate detection
 │
+├── src/
+│    ├── premDB.native.ts   # SQLite DB init, version check, question reader
+│    └── premDB.web.ts      # Stub for web builds
+│
+├── metro.config js         # Asset extensions + module resolver override
 ├── app.json
 ├── eas.json
 ├── package.json
@@ -57,6 +66,10 @@ a-test-app/
 ```
 
 ## Pages
+
+## Layout (`_layout.tsx`)
+- `GestureHandlerRootView` wrapper
+- `initPrem()` on launch
 
 ### Splash (`index.tsx`)
 - Animated logo fade-in with translateY. 
@@ -73,12 +86,23 @@ a-test-app/
 ### Flashcards (`flashcards.tsx`)
 - Browse all 314 questions one at a time.
 - Tap a card to flip between questions and answer. Has optional shuffle toggle to randomize deck order.
+- Section selector modal
+- Swipe gestures
+- Know It/Still Learning rating
+- Progress bar
+- Stats modal
+- Review missed cards mode
+- Animated navigation
+- Premium DB merge functionality
 
 ### Pracice Exam (`exam.tsx`)
 - 25 questions selected proportionally by category weight.
 - Answer choices are shuffled per question.
 - Submit is locked until all questions are answered.
 - Results show total score and a per-category breakdown with progress bars.
+- New Exam button
+- Show Missed Only toggle
+- Premium DB merge into weighted pool functionality
 
 ## Question Bank
 314 questions across 7 categories, weighted to match the state board exam distribution:
