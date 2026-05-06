@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "expo-router";
 import { 
   Pressable,
@@ -10,6 +10,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import data from "@/assets/questions.json"
+// @ts-ignore
+import { getPremQuestions, type PremQuestion } from "@/src/premDB";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
@@ -32,7 +34,7 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-function buildExam(): Question[] {
+function buildExam(PremQuestion: Question[] = []): Question[] {
   const totalWeight = data.reduce((sum, s) => sum + s.weight, 0);
   const counts = data.map(s => ({
     section: s,
@@ -44,15 +46,12 @@ function buildExam(): Question[] {
 
   const questions: Question[] = [];
   for (const { section, count } of counts) {
-    shuffle(section.questions).slice(0, count).forEach(q => {
+    const premForSection = PremQuestion.filter(q => q.category === section.category);
+    const pool = shuffle([...section.questions.map(q => ({ ...q, category: section.category})), ...premForSection]);
+    pool.slice(0, count).forEach(q => {
       const correct = q.answers[q.answerIndex];
-      const shuffledAnswer = shuffle(q.answers);
-      questions.push({
-        ...q,
-        category: section.category,
-        answers: shuffledAnswer,
-        answerIndex: shuffledAnswer.indexOf(correct),
-      });
+      const shuffledAnswers = shuffle(q.answers);
+      questions.push({ ...q, answers: shuffledAnswers, answerIndex: shuffledAnswers.indexOf(correct) });
     });
   }
   return shuffle(questions)
@@ -60,11 +59,22 @@ function buildExam(): Question[] {
 
 export default function ExamScreen() {
   const router = useRouter();
-  const [exam, setExam] = useState<Question[]>(() => buildExam())
+  const [exam, setExam] = useState<Question[]>([]);
+  const [premCards, setPremCards] = useState<Question[]>([]);
   const [selected, setSelected] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
   const [showMissedOnly, setShowMissedOnly] = useState(false);
+
+  useEffect(() => {
+    try {
+      const prem = getPremQuestions() as Question[];
+      setPremCards(prem);
+      setExam(buildExam(prem));
+    } catch {
+      setExam(buildExam());
+    }
+  }, []);
 
   const answeredCount = Object.keys(selected).length;
   const score = useMemo(
@@ -84,7 +94,7 @@ export default function ExamScreen() {
   }, [submitted]);
 
   function handleNewExam() {
-    setExam(buildExam());
+    setExam(buildExam(premCards));
     setSelected({});
     setSubmitted(false);
     setShowMissedOnly(false);
