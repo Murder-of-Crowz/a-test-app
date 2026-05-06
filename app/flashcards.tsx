@@ -20,6 +20,8 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import data from "@/assets/questions.json";
+// @ts-ignore
+import { PremQuestion, getPremQuestions } from "@/src/premDB";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
@@ -39,9 +41,10 @@ type FlashCardRef = {
   animateBackward: (cb: () => void) => void;
 };
 
-const allCards: Card[] = data.flatMap(section => section.questions.map(q => ({ ...q, category: section.category })));
-const categoryCounts = Object.fromEntries(data.map(s => [s.category, s.questions.length]));
-const categories = data.map(s => s.category);
+const freeCards: Card[] = data.flatMap(section =>
+  section.questions.map(q => ({ ...q, category: section.category }))
+);
+const freeCategories = data.map(s => s.category);
 
 function shuffleDeck<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -71,8 +74,10 @@ const FlashCard = forwardRef<FlashCardRef, {
   const toggleFlipped = () => setFlipped(f => !f);
 
   const runForward = (cb: () => void) => {
+    'worklet';
     opacity.value = withTiming(0, { duration: 150 });
     translateX.value = withTiming(-500, { duration: 220 }, () => {
+      'worklet';
       translateX.value = 0;
       runOnJS(cb)();
       opacity.value = withTiming(1, { duration: 200 });
@@ -80,8 +85,10 @@ const FlashCard = forwardRef<FlashCardRef, {
   };
 
   const runBackward = (cb: () => void) => {
+    'worklet';
     opacity.value = withTiming(0, { duration: 150 });
     translateX.value = withTiming(500, { duration: 220 }, () => {
+      'worklet';
       translateX.value = 0;
       runOnJS(cb)();
       opacity.value = withTiming(1, { duration: 200 });
@@ -136,10 +143,35 @@ export default function FlashCardsScreen() {
   const [shuffleOn, setShuffleOn] = useState(false);
   const [modalVisible, setModalVisible] = useState(true);
   const [statsVisible, setStatsVisible] = useState(false);
-  const [selectedSections, setSelectedSections] = useState<Set<string>>(() => new Set(categories));
-  const [pendingSections, setPendingSections] = useState<Set<string>>(() => new Set(categories));
+  const [selectedSections, setSelectedSections] = useState<Set<string>>(() => new Set(freeCategories));
+  const [pendingSections, setPendingSections] = useState<Set<string>>(() => new Set(freeCategories));
   const [cardStates, setCardStates] = useState<Record<number, CardState>>({});
   const [reviewDeck, setReviewDeck] = useState<Card[] | null>(null);
+  const [premCards, setPremCards] = useState<Card[]>([]);
+
+  useEffect(() => {
+    try { 
+      const prem = getPremQuestions();
+      setPremCards(prem);
+      const premCats= [...new Set(prem.map((c: PremQuestion) => c.category))] as string[];
+      setSelectedSections(prev => new Set<string>([...prev, ...premCats]));
+      setPendingSections(prev => new Set<string>([...prev, ...premCats]));
+    } catch {}
+  }, []);
+
+  const allCards = useMemo(() => {
+    const combined = [...freeCards, ...premCards];
+    const categoryOrder = [...new Set(combined.map(c => c.category))];
+    return combined.sort((a, b) =>
+      categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category)
+    );
+  }, [premCards]);
+
+  const categories = useMemo(() => [...new Set(allCards.map(c => c.category))], [allCards])
+  const categoryCounts = useMemo(
+    () => Object.fromEntries(categories.map(cat => [cat, allCards.filter(c => c.category === cat).length])),
+    [allCards, categories]
+  );
 
   const filteredCards = useMemo(
     () => allCards.filter(c => selectedSections.has(c.category)),
