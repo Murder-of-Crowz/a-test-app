@@ -1,10 +1,11 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-
-import { getQuestionBank } from "../questionData";
+import { getQuestionBank, type PremQuestion } from "../questionData";
+// @ts-ignore
+import { getPremQuestions } from "@/src/premDB";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
@@ -36,8 +37,8 @@ function shuffle<T>(items: T[]): T[] {
   return shuffledItems;
 }
 
-function buildQuiz(index: number, title: string): QuizQuestion[] {
-  const questionBank = getQuestionBank(index) as QuestionFromJson[] | undefined;
+function buildQuiz(index: number, title: string, premQuestions: PremQuestion[] = []): QuizQuestion[] {
+  const questionBank = getQuestionBank(index, premQuestions) as QuestionFromJson[] | undefined;
 
   if (!questionBank || questionBank.length === 0) {
     return [];
@@ -82,6 +83,7 @@ export default function SubjectQuiz() {
 
   const [selected, setSelected] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [premQuestions, setPremQuestions] = useState<PremQuestion[]>([]);
 
   const answeredCount = Object.keys(selected).length;
   const totalQuestions = quiz.length;
@@ -92,14 +94,26 @@ export default function SubjectQuiz() {
     }).length;
   }, [quiz, selected]);
 
+  useEffect(() => {
+    try {
+      const prem = getPremQuestions() as PremQuestion[];
+      setPremQuestions(prem);
+      if (!Number.isNaN(questionBankIndex)) {
+        setQuiz(buildQuiz(questionBankIndex, quizTitle, prem));
+      }
+    } catch {
+
+    }
+  }, [])
+
   const scorePercent =
     totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
 
   const handleRetakeQuiz = () => {
     if (!Number.isNaN(questionBankIndex)) {
-      setQuiz(buildQuiz(questionBankIndex, quizTitle));
+      setQuiz(buildQuiz(questionBankIndex, quizTitle, premQuestions));
     }
-
+  
     setSelected({});
     setSubmitted(false);
     scrollRef.current?.scrollTo({ y: 0, animated: true });
