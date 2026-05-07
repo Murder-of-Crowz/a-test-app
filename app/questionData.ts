@@ -1,5 +1,13 @@
 import data from "../assets/questions.json";
 
+export type PremQuestion = {
+  id: number;
+  question: string;
+  answers: string[];
+  answerIndex: number;
+  category: string;
+}
+
 export function getQuizSubjects() {
   type Category = {
     id: number;
@@ -26,8 +34,8 @@ export function getQuizSubjects() {
   return categories;
 }
 
-export function getQuestionBank(index: number) {
-  const questionBank = data[index];
-
-  return questionBank.questions;
+export function getQuestionBank(index: number, premQuestions: PremQuestion[] = []) {
+  const section = data[index];
+  const premForCategory = premQuestions.filter(q => q.category === section.category);
+  return [...section.questions, ...premForCategory]
 }
