@@ -3,7 +3,7 @@
 A mobile exam prep app built using React Native and Expo. Features flashcards and practice exams drawn from a weighted question bank across several exam categories.
 
 ## Tech Stack 
-### Current as of 4/30/2026
+### Current as of 5/6/2026
 
 |  Layer        |  Library / Tool |
 |---------------|-----------------|
@@ -30,7 +30,7 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 | Tests        | Jest + @testing-library/react-native |
 
 
-## Project Structure (as of 4/30/2026)
+## Project Structure (as of 5/6/2026)
 ```
 a-test-app/
 │
@@ -57,7 +57,7 @@ a-test-app/
 │    ├── premDB.native.ts   # SQLite DB init, version check, question reader
 │    └── premDB.web.ts      # Stub for web builds
 │
-├── metro.config js         # Asset extensions + module resolver override
+├── metro.config.js         # Asset extensions + module resolver override
 ├── app.json
 ├── eas.json
 ├── package.json
@@ -67,9 +67,9 @@ a-test-app/
 
 ## Pages
 
-## Layout (`_layout.tsx`)
+### Layout (`_layout.tsx`)
 - `GestureHandlerRootView` wrapper
-- `initPrem()` on launch
+- `initPremDB()` on launch
 
 ### Splash (`index.tsx`)
 - Animated logo fade-in with translateY. 
