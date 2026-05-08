@@ -147,7 +147,7 @@ export default function FlashCardsScreen() {
   const [statsVisible, setStatsVisible] = useState(false);
   const [selectedSections, setSelectedSections] = useState<Set<string>>(() => new Set(freeCategories));
   const [pendingSections, setPendingSections] = useState<Set<string>>(() => new Set(freeCategories));
-  const [cardStates, setCardStates] = useState<Record<number, CardState>>({});
+  const flashcardRatings = useStatsStore((s) => s.flashcardRatings);
   const [reviewDeck, setReviewDeck] = useState<Card[] | null>(null);
   const [premCards, setPremCards] = useState<Card[]>([]);
 
@@ -192,18 +192,18 @@ export default function FlashCardsScreen() {
 
   const current = deck[index];
   const total = deck.length;
-  const reviewedCount = deck.filter(c => cardStates[c.id] !== undefined).length;
+  const reviewedCount = deck.filter(c => flashcardRatings[`${c.source}_${c.id}`] !== undefined).length;
 
   const markCard = (id: number, source: "free" | "prem", state: CardState) => {
-    const alreadyMarked = cardStates[id] !== undefined;
-    setCardStates(prev => ({ ...prev, [id]: state }));
+    const key = `${source}_${id}`;
+    const alreadyMarked = flashcardRatings[key] !== undefined;
     storeMarkCard(source, id, state === "known" ? "know" : "learning");
-    if (!alreadyMarked && index < total - 1) flashCardRef.current?.animateForward(() => setIndex(i => i + 1));
+    if (!alreadyMarked && index < total - 1) flashCardRef.current?.animateForward(() => setIndex(i => i + 1))
   };
 
   const enterReviewMode = () => {
     const missed = allCards.filter(c =>
-      selectedSections.has(c.category) && cardStates[c.id] === "learning"
+      selectedSections.has(c.category) && flashcardRatings[`${c.source}_${c.id}`] === "learning"
     );
     setReviewDeck(missed);
     setIndex(0);
@@ -220,11 +220,11 @@ export default function FlashCardsScreen() {
       .filter(cat => selectedSections.has(cat))
       .map(cat => {
         const cards = allCards.filter(c => c.category === cat);
-        const known = cards.filter(c => cardStates[c.id] === "known").length;
-        const learning = cards.filter(c => cardStates[c.id] === "learning").length;
+        const known = cards.filter(c => flashcardRatings[`${c.source}_${c.id}`] === "know").length;
+        const learning = cards.filter(c => flashcardRatings[`${c.source}_${c.id}`] === "learning").length;
         return { category: cat, known, learning, unreviewed: cards.length - known - learning, total: cards.length };
       });
-  }, [cardStates, selectedSections]);
+  }, [flashcardRatings, selectedSections]);
 
   const togglePending = (category: string) => {
     setPendingSections(prev => {
@@ -343,21 +343,21 @@ export default function FlashCardsScreen() {
         {current && (
           <View style={styles.ratingRow}>
             <Pressable
-              style={[styles.ratingBtn, styles.ratingLearning, cardStates[current.id] === "learning" && styles.ratingLearningActive]}
+              style={[styles.ratingBtn, styles.ratingLearning, flashcardRatings[`${current.source}_${current.id}`] === "learning" && styles.ratingLearningActive]}
               onPress={() => markCard(current.id, current.source, "learning")}
             >
-              <Ionicons name="close" size={18} color={cardStates[current.id] === "learning" ? "#fff" : "#dc2626"} />
-              <Text style={[styles.ratingText, cardStates[current.id] === "learning" && styles.ratingTextActive]}>
+              <Ionicons name="close" size={18} color={flashcardRatings[`${current.source}_${current.id}`] === "learning" ? "#fff" : "#dc2626"} />
+              <Text style={[styles.ratingText, flashcardRatings[`${current.source}_${current.id}`] === "learning" && styles.ratingTextActive]}>
                 Still Learning
               </Text>
             </Pressable>
 
             <Pressable
-              style={[styles.ratingBtn, styles.ratingKnown, cardStates[current.id] === "known" && styles.ratingKnownActive]}
+              style={[styles.ratingBtn, styles.ratingKnown, flashcardRatings[`${current.source}_${current.id}`] === "know" && styles.ratingKnownActive]}
               onPress={() => markCard(current.id, current.source, "known")}
             >
-              <Ionicons name="checkmark" size={18} color={cardStates[current.id] === "known" ? "#fff" : "#16a34a"} />
-              <Text style={[styles.ratingText, cardStates[current.id] === "known" && styles.ratingTextActive]}>
+              <Ionicons name="checkmark" size={18} color={flashcardRatings[`${current.source}_${current.id}`] === "know" ? "#fff" : "#16a34a"} />
+              <Text style={[styles.ratingText, flashcardRatings[`${current.source}_${current.id}`] === "know" && styles.ratingTextActive]}>
                 Know it
               </Text>
             </Pressable>
@@ -462,19 +462,19 @@ export default function FlashCardsScreen() {
             <View style={styles.overallRow}>
               <View style={styles.overallBadge}>
                 <Text style={styles.overallNum}>
-                  {Object.values(cardStates).filter(s => s === "known").length}
+                  {Object.values(flashcardRatings).filter(s => s === "know").length}
                 </Text>
                 <Text style={styles.overallLabel}>Know It</Text>
               </View>
               <View style={styles.overallBadge}>
                 <Text style={[styles.overallNum, { color: "#dc2626" }]}>
-                  {Object.values(cardStates).filter(s => s === "learning").length}
+                  {Object.values(flashcardRatings).filter(s => s === "learning").length}
                 </Text>
                 <Text style={styles.overallLabel}>Still Learning</Text>
               </View>
               <View style={styles.overallBadge}>
                 <Text style={[styles.overallNum, { color: "#94a3b8" }]}>
-                  {deck.filter(c => cardStates[c.id] === undefined).length}
+                  {deck.filter(c => flashcardRatings[`${c.source}_${c.id}`] === undefined).length}
                 </Text>
                 <Text style={styles.overallLabel}>Unreviewed</Text>
               </View>
@@ -499,17 +499,17 @@ export default function FlashCardsScreen() {
               ))}
             </ScrollView>
 
-            {Object.values(cardStates).some(s => s === "learning") && (
+            {Object.values(flashcardRatings).some(s => s === "learning") && (
               <Pressable style={styles.applyBtn} onPress={enterReviewMode}>
                 <Text style={styles.applyText}>
-                  Review Missed Cards ({Object.values(cardStates).filter(s => s === "learning").length})
+                  Review Missed Cards ({Object.values(flashcardRatings).filter(s => s === "learning").length})
                 </Text>
               </Pressable>
             )}
 
             <Pressable
               style={styles.applyBtn}
-              onPress={() => { setCardStates({}); resetFlashcardRatings(), setStatsVisible(false); }}
+              onPress={() => { resetFlashcardRatings(), setStatsVisible(false); }}
             >
               <Text style={styles.applyText}>Reset Progress</Text>
             </Pressable>
