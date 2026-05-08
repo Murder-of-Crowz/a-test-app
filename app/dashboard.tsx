@@ -76,6 +76,20 @@ export default function DashboardScreen() {
           <Text style={styles.cardTitle}>Exam</Text>
           <Text style={styles.cardSub}>You ready to take a practice exam?</Text>
         </Pressable>
+
+        {/* Stats */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.card,
+            styles.cardDark,
+            pressed && styles.pressed,
+          ]}
+          onPress={() => router.push("/stats")} // Need this changed once exam page done
+        >
+          <Text style={styles.cardIcon}>~</Text>
+          <Text style={styles.cardTitle}>Stats</Text>
+          <Text style={styles.cardSub}>See how far you&apos;ve gone</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
