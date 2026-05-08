@@ -1,0 +1,436 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "expo-router";
+import { 
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { useStatsStore } from "@/src/statsStore";
+import data from "@/assets/questions.json";
+// @ts-ignore
+import { getPremQuestions, PremQuestion } from "@/src/premDB";
+
+const BRAND = "#1e3a5f";
+const ACCENT = "#3b62f6";
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
+const TABS = ["Flashcards", "Quiz", "Exam" ] as const;
+
+function formatDate(ts: number) {
+  return new Date(ts).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export default function StatsScreen() {
+  const router = useRouter();
+  const scrollRef = useRef<ScrollView>(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const [premCards, setPremCards] = useState<PremQuestion[]>([]);
+  const [expandedExam, setExpandedExam] = useState<Set<string>>(new Set());
+  const [expandedQuizSections, setExpandedQuizSections] = useState<Set<string>>(new Set());
+  const [resetConfirm, setResetConfirm] = useState<number | null>(null);
+
+  const flashcardRatings = useStatsStore((s) => s.flashcardRatings);
+  const examHistory = useStatsStore((s) => s.examHistory);
+  const quizHistory = useStatsStore((s) => s.quizHistory);
+  const resetFlashcardRatings = useStatsStore((s) => s.resetFlashcardRatings);
+  const resetExamHistory = useStatsStore((s) => s.resetExamHistory);
+  const resetQuizHistory = useStatsStore((s) => s.resetQuizHistory);
+  const resetStats = useStatsStore((s) => s.resetStats);
+
+  useEffect(() => {
+    try { setPremCards(getPremQuestions()); } catch {}
+  }, []);
+
+  const idToCategoryLookup = useMemo(() => {
+    const lookup: Record<string, string> = {};
+    data.forEach(section => {
+      section.questions.forEach(q => {
+        lookup[`free_${q.id}`] = section.category;
+      });
+    });
+    premCards.forEach(q => {
+      lookup[`prem_${q.id}`] = q.category
+    });
+    return lookup;
+  }, [premCards]);
+
+  const flashcardSectionStats = useMemo(() => {
+    const categoryTotals: Record<string, number> = {};
+    data.forEach(s => { categoryTotals[s.category] = s.questions.length; });
+    premCards.forEach(q => {
+      categoryTotals[q.category] = (categoryTotals[q.category] || 0) + 1;
+    });
+
+    const categoryRatings: Record<string, { known: number, learning: number }> = {};
+    Object.entries(flashcardRatings).forEach(([key, rating]) => {
+      const category = idToCategoryLookup[key];
+      if (!category) return;
+
+      if (!categoryRatings[category]) categoryRatings[category] = { known: 0, learning: 0 };
+      if (rating === "know") categoryRatings[category].known++;
+      else categoryRatings[category].learning++;
+    });
+
+    return Object.entries(categoryTotals).map(([category, total]) => ({
+      category,
+      total,
+      known: categoryRatings[category]?.known ?? 0,
+      learning: categoryRatings[category]?.learning ?? 0,
+      unreviewed: total - (categoryRatings[category]?.known ?? 0) - (categoryRatings[category]?.learning ?? 0),
+    }));
+  }, [flashcardRatings, idToCategoryLookup, premCards])
+
+  const totalKnown = Object.values(flashcardRatings).filter(r => r === "know").length;
+  const totalLearning = Object.values(flashcardRatings).filter(r => r === "learning").length;
+  const totalCards = data.reduce((sum, s) => sum + s.questions.length, 0) + premCards.length;
+  const totalUnreviewed = totalCards - totalKnown - totalLearning
+
+  const quizBySection = useMemo(() => {
+    const map: Record<string, typeof quizHistory> = {};
+    quizHistory.forEach(q => {
+      if (!map[q.section]) map[q.section] = [];
+      map[q.section].push(q);
+    });
+    return map;
+  }, [quizHistory]);
+
+  const goToTab = (i: number) => {
+    setActiveTab(i);
+    setResetConfirm(null);
+    scrollRef.current?.scrollTo({ x: i * SCREEN_WIDTH, animated: true });
+  };
+
+  const handleReset = (tabIndex: number) => {
+    if (resetConfirm === tabIndex) {
+      if (tabIndex === 0) resetFlashcardRatings();
+      else if (tabIndex === 1) resetQuizHistory();
+      else resetExamHistory;
+      setResetConfirm(null);
+    } else {
+      setResetConfirm(tabIndex);
+    }
+  };
+
+  const toggleExam = (id: string) => {
+    setExpandedExam(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const toggleQuizSection = (section: string) => {
+    setExpandedQuizSections(prev => {
+      const next = new Set(prev);
+      next.has(section) ? next.delete(section) : next.add(section);
+      return next;
+    });
+  };
+
+  return (
+    <SafeAreaView style={styles.safe} edges={["top"]}>
+
+      {/* Header */}
+      <View style={styles.header}>
+        <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </Pressable>
+        <Text style={styles.headerTitle}>Stats</Text>
+        <Text style={{ width: 24 }} />
+      </View>
+
+      {/* Tab bar */}
+      <View style={styles.tabBar}>
+        {TABS.map((tab, i) => (
+          <Pressable
+            key={tab}
+            style={[styles.tabBtn, activeTab === i && styles.tabBtnActive]}
+            onPress={() => goToTab(i)}
+          >
+            <Text style={[styles.tabText, activeTab === i && styles.tabTextActive]}>
+              {tab}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
+      {/* Pages */}
+      <ScrollView
+        ref={scrollRef}
+        horizontal
+        pagingEnabled
+        scrollEventThrottle={16}
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1 }}
+        onMomentumScrollEnd={(e) => {
+          const page = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+          setActiveTab(page);
+          setResetConfirm(null);
+        }}
+      >
+
+        {/* Flashcards tab */}
+        <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
+          <View style={styles.overallRow}>
+            <View style={styles.overallBadge}>
+              <Text style={[styles.overallNum, { color: "#16a34a" }]}>{totalKnown}</Text>
+              <Text style={styles.overallLabel}>Know It</Text>
+            </View>
+            <View style={styles.overallBadge}>
+              <Text style={[styles.overallNum, { color: "#dc2626" }]}>{totalLearning}</Text>
+              <Text style={styles.overallLabel}>Still Learning</Text>
+            </View>
+            <View style={styles.overallBadge}>
+              <Text style={[styles.overallNum, { color: "#94a3b8" }]}>{totalUnreviewed}</Text>
+              <Text style={styles.overallLabel}>Unreviewed</Text>
+            </View>
+          </View>
+
+          {flashcardSectionStats.map(({ category, known, learning, unreviewed }) => (
+            <View key={category} style={styles.statRow}>
+              <Text style={styles.statCategory}>{category}</Text>
+              <View style={styles.statBarBg}>
+                <View style={[styles.statBarSegment, { flex: known, backgroundColor: "#16a34a"}]} />
+                <View style={[styles.statBarSegment, { flex: learning, backgroundColor: "#dc2626"}]} />
+                <View style={[styles.statBarSegment, { flex: unreviewed, backgroundColor: "#94a3b8"}]} />
+              </View>
+              <View style={styles.statCounts}>
+                <Text style={[styles.statCount, { color: "#16a34a" }]}>{known} known</Text>
+                <Text style={[styles.statCount, { color: "#dc2626" }]}>{learning} learning</Text>
+                <Text style={[styles.statCount, { color: "#94a3b8" }]}>{unreviewed} left</Text>
+              </View>
+            </View>
+          ))}
+
+          <Pressable style={styles.resetBtn} onPress={() => handleReset(0)}>
+            <Text style={styles.resetText}>
+              {resetConfirm === 0 ? "Tap again to confirm reset" : "Reset Flashcard Progress"}
+            </Text>
+          </Pressable>
+        </ScrollView>
+
+        {/* Quiz tab */}
+        <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
+          {Object.keys(quizBySection).length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No quizzes taken yet</Text>
+            </View>
+          ) : (
+            Object.entries(quizBySection).map(([section, attempts]) => {
+              const isOpen = expandedQuizSections.has(section);
+              return (
+                <View key={section} style={styles.collapseCard}>
+                  <Pressable style={styles.collapseHeader} onPress={() => toggleQuizSection(section)}>
+                    <View style={styles.collapseHeaderLeft}>
+                      <Text style={styles.collapseTitle}>{section}</Text>
+                      <Text style={styles.collapseScore}>
+                        {attempts.length} attempt{attempts.length !== 1 ? "s" : ""}
+                      </Text>
+                    </View>
+                    <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color="#94a3b8" />
+                  </Pressable>
+                  {isOpen && (
+                    <View style={styles.collapseBody}>
+                      {attempts.map((attempt) => {
+                        const pct = Math.round((attempt.score / attempt.total) * 100);
+                        return (
+                          <View key={attempt.id} style={styles.quizAttemptRow}>
+                            <Text style={styles.quizAttemptDate}>{formatDate(attempt.timestamp)}</Text>
+                            <Text style={styles.quizAttemptScore}>{attempt.score}/{attempt.total} - {pct}%</Text>
+                          </View>
+                        );
+                      })}
+                    </View>
+                  )}
+                </View>
+              );
+            })
+          )}
+          <Pressable style={styles.resetBtn} onPress={() => handleReset(1)}>
+            <Text style={styles.resetText}>
+              {resetConfirm === 1 ? "Tap again to confirm reset" : "Reset Quiz History"}
+            </Text>
+          </Pressable>
+        </ScrollView>
+
+        {/* Exam tab */}
+        <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
+          {examHistory.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No exams taken yet</Text>
+            </View>
+          ) : (
+            examHistory.map((exam) => {
+              const isOpen = expandedExam.has(exam.id);
+              const pct = Math.round((exam.score / exam.total) * 100);
+              return (
+                <View key={exam.id} style={styles.collapseCard}>
+                  <Pressable style={styles.collapseHeader} onPress={() => toggleExam(exam.id)}>
+                    <View style={styles.collapseHeaderLeft}>
+                      <Text style={styles.collapseTitle}>{formatDate(exam.timestamp)}</Text>
+                      <Text style={styles.collapseScore}>{exam.score}/{exam.total} - {pct}%</Text>
+                    </View>
+                    <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color="#94a3b8" />
+                  </Pressable>
+                  {isOpen && (
+                    <View style={styles.collapseBody}>
+                      {exam.breakdown.map(({ category, correct, total }) => (
+                        <View key={category} style={styles.breakdownRow}>
+                          <Text style={styles.breakdownCategory}>{category}</Text>
+                          <Text style={styles.breakdownScore}>{correct}/{total}</Text>
+                          <View style={styles.breakdownBarBg}>
+                            <View style={[styles.breakdownBarFill, { width: `${Math.round((correct / total) * 100)}%` as any}]} />
+                          </View>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              );
+            })
+          )}
+          <Pressable style={styles.resetBtn} onPress={() => handleReset(2)}>
+            <Text style={styles.resetText}>
+              {resetConfirm === 2 ? "Tap again to confirm reset" : "Reset Exam History"}
+            </Text>
+          </Pressable>
+        </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
+  )
+}
+
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: "#f1f5f9" },
+
+  header: {
+    backgroundColor: BRAND,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  headerTitle: { color: "#fff", fontSize: 17, fontWeight: "700" },
+
+  page: { padding: 20, gap: 12, paddingBottom: 40 },
+
+  tabBar: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e2e8f0",
+  },
+  tabBtn: {
+    flex: 1,
+    paddingVertical: 14,
+    alignItems: "center",
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent"
+  },
+  tabBtnActive: { borderBottomColor: BRAND },
+  tabText: { color: "#94a3b8", fontSize: 14, fontWeight: "800" },
+  tabTextActive: { color: BRAND },
+
+  overallRow: { flexDirection: "row", gap: 8, marginBottom: 4 },
+  overallBadge: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 12,
+    alignItems: "center",
+    gap: 4,
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+  },
+  overallNum: { fontSize: 22, fontWeight: "800" },
+  overallLabel: { fontSize: 11, color: "#94a3b8", fontWeight: "600", textAlign: "center" },
+
+  statRow: { backgroundColor: "#fff", borderRadius: 12, padding: 14, gap: 6 },
+  statCategory: { color: "#1e293b", fontSize: 13, fontWeight: "700" },
+  statBarBg: {
+    flexDirection: "row",
+    height: 6,
+    borderRadius: 3,
+    overflow: "hidden",
+    backgroundColor: "#e2e8f0",
+  },
+  statBarSegment: { height: 6 },
+  statCounts: { flexDirection: "row", gap: 12 },
+  statCount: { fontSize: 11, fontWeight: "600" },
+
+  collapseCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    overflow: "hidden",
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+  },
+  collapseHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 16,
+  },
+  collapseHeaderLeft: { gap: 2 },
+  collapseTitle: { color: "#1e293b", fontSize: 14, fontWeight: "700" },
+  collapseScore: { color: "#64748b", fontSize: 13 },
+  collapseBody: {
+    borderTopWidth: 1,
+    borderTopColor: "#f1f5f9",
+    padding: 16,
+    gap: 10,
+  },
+
+  breakdownRow: { gap: 4 },
+  breakdownCategory: {
+    color: "#64748b",
+    fontSize: 12,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.4,
+  },
+  breakdownScore: { color: "#1e293b", fontSize: 13, fontWeight: "700" },
+  breakdownBarBg: { height: 4, backgroundColor: "#e2e8f0", borderRadius: 2 },
+  breakdownBarFill: { height: 4, backgroundColor: ACCENT, borderRadius: 2 },
+
+  quizAttemptRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+  },
+  quizAttemptDate: { color: "#64748b", fontSize: 13 },
+  quizAttemptScore: { color: "#1e293b", fontSize: 13, fontWeight: "700" },
+
+  emptyState: { alignItems: "center", paddingVertical: 60 },
+  emptyText: { color: "#94a3b8", fontSize: 15, fontWeight: "600" },
+
+  resetBtn: {
+    marginTop: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#dc2626",
+    padding: 14,
+    alignItems: "center",
+  },
+  resetText: { color: "#dc2626", fontSize: 14, fontWeight: "600" },
+});
