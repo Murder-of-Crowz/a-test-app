@@ -22,6 +22,7 @@ import { Ionicons } from "@expo/vector-icons";
 import data from "@/assets/questions.json";
 // @ts-ignore
 import { PremQuestion, getPremQuestions } from "@/src/premDB";
+import { useStatsStore } from "@/src/statsStore";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
@@ -32,6 +33,7 @@ type Card = {
   answers: string[];
   answerIndex: number;
   category: string;
+  source: "free" | "prem"
 };
 
 type CardState = "known" | "learning";
@@ -42,7 +44,7 @@ type FlashCardRef = {
 };
 
 const freeCards: Card[] = data.flatMap(section =>
-  section.questions.map(q => ({ ...q, category: section.category }))
+  section.questions.map(q => ({ ...q, category: section.category, source: "free" as const }))
 );
 const freeCategories = data.map(s => s.category);
 
@@ -152,12 +154,15 @@ export default function FlashCardsScreen() {
   useEffect(() => {
     try { 
       const prem = getPremQuestions();
-      setPremCards(prem);
-      const premCats= [...new Set(prem.map((c: PremQuestion) => c.category))] as string[];
+      setPremCards(prem.map((q: PremQuestion) => ({ ...q, source: "prem" as const })));
+      const premCats = [...new Set(prem.map((c: PremQuestion) => c.category))] as string[];
       setSelectedSections(prev => new Set<string>([...prev, ...premCats]));
       setPendingSections(prev => new Set<string>([...prev, ...premCats]));
     } catch {}
   }, []);
+
+  const storeMarkCard = useStatsStore((s) => s.markCard);
+  const resetFlashcardRatings = useStatsStore((s) => s.resetFlashcardRatings);
 
   const allCards = useMemo(() => {
     const combined = [...freeCards, ...premCards];
@@ -189,9 +194,10 @@ export default function FlashCardsScreen() {
   const total = deck.length;
   const reviewedCount = deck.filter(c => cardStates[c.id] !== undefined).length;
 
-  const markCard = (id: number, state: CardState) => {
+  const markCard = (id: number, source: "free" | "prem", state: CardState) => {
     const alreadyMarked = cardStates[id] !== undefined;
     setCardStates(prev => ({ ...prev, [id]: state }));
+    storeMarkCard(source, id, state === "known" ? "know" : "learning");
     if (!alreadyMarked && index < total - 1) flashCardRef.current?.animateForward(() => setIndex(i => i + 1));
   };
 
@@ -338,7 +344,7 @@ export default function FlashCardsScreen() {
           <View style={styles.ratingRow}>
             <Pressable
               style={[styles.ratingBtn, styles.ratingLearning, cardStates[current.id] === "learning" && styles.ratingLearningActive]}
-              onPress={() => markCard(current.id, "learning")}
+              onPress={() => markCard(current.id, current.source, "learning")}
             >
               <Ionicons name="close" size={18} color={cardStates[current.id] === "learning" ? "#fff" : "#dc2626"} />
               <Text style={[styles.ratingText, cardStates[current.id] === "learning" && styles.ratingTextActive]}>
@@ -348,7 +354,7 @@ export default function FlashCardsScreen() {
 
             <Pressable
               style={[styles.ratingBtn, styles.ratingKnown, cardStates[current.id] === "known" && styles.ratingKnownActive]}
-              onPress={() => markCard(current.id, "known")}
+              onPress={() => markCard(current.id, current.source, "known")}
             >
               <Ionicons name="checkmark" size={18} color={cardStates[current.id] === "known" ? "#fff" : "#16a34a"} />
               <Text style={[styles.ratingText, cardStates[current.id] === "known" && styles.ratingTextActive]}>
@@ -503,7 +509,7 @@ export default function FlashCardsScreen() {
 
             <Pressable
               style={styles.applyBtn}
-              onPress={() => { setCardStates({}); setStatsVisible(false); }}
+              onPress={() => { setCardStates({}); resetFlashcardRatings(), setStatsVisible(false); }}
             >
               <Text style={styles.applyText}>Reset Progress</Text>
             </Pressable>
