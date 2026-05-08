@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { getQuestionBank, type PremQuestion } from "../questionData";
 // @ts-ignore
 import { getPremQuestions } from "@/src/premDB";
+import { useStatsStore } from "@/src/statsStore";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
@@ -105,6 +106,18 @@ export default function SubjectQuiz() {
 
     }
   }, [])
+
+  const addQuizResult = useStatsStore((s) => s.addQuizResult);
+
+  useEffect(() => {
+    if (!submitted) return;
+    addQuizResult({
+      timestamp: Date.now(),
+      section: quizTitle,
+      score,
+      total: totalQuestions,
+    });
+  }, [submitted]);
 
   const scorePercent =
     totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
