@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import data from "@/assets/questions.json"
 // @ts-ignore
 import { getPremQuestions, type PremQuestion } from "@/src/premDB";
+import { useStatsStore } from "@/src/statsStore";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
@@ -75,6 +76,18 @@ export default function ExamScreen() {
       setExam(buildExam());
     }
   }, []);
+
+  const addExamResult = useStatsStore((s) => s.addExamResult);
+
+  useEffect(() => {
+    if (!submitted) return;
+    addExamResult({
+      timestamp: Date.now(),
+      score,
+      total: TOTAL,
+      breakdown,
+    });
+  }, [submitted])
 
   const answeredCount = Object.keys(selected).length;
   const score = useMemo(
