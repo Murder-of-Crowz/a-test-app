@@ -3,7 +3,7 @@
 A mobile exam prep app built using React Native and Expo. Features flashcards and practice exams drawn from a weighted question bank across several exam categories.
 
 ## Tech Stack 
-### Current as of 5/6/2026
+### Current as of 5/7/2026
 
 |  Layer        |  Library / Tool |
 |---------------|-----------------|
@@ -15,6 +15,7 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 | Gestures      | react-native-gesture-handler |
 | Animations    | react-native-reanimated |
 | Local DB      | @op-engineering/op-sqlite (SQLCipher) |
+| State         | Zustand + AsyncStorage |
 | Safe areas    | react-native-safe-area-context |
 | Language      | TypeScript 5.9 |
 
@@ -30,34 +31,39 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 | Tests        | Jest + @testing-library/react-native |
 
 
-## Project Structure (as of 5/6/2026)
+## Project Structure (as of 5/7/2026)
 ```
 a-test-app/
 │
 ├── app/
-│    ├── _layout.tsx        # Root stack layout (headerShown: false)
-│    ├── index.tsx          # Splash screen with animated logo
-│    ├── login.tsx          # Login / registration screen
-│    ├── dashboard.tsx      # Home screen with navigation cards
-│    ├── flashcards.tsx     # Flashcard study mode
-│    ├── exam.tsx           # Weighted 25-question practice exam
-│    └── settings.tsx       # (in progress)
+│    ├── _layout.tsx            # Root stack layout (headerShown: false)
+│    ├── index.tsx              # Splash screen with animated logo
+│    ├── login.tsx              # Login / registration screen
+│    ├── dashboard.tsx          # Home screen with navigation cards
+│    ├── flashcards.tsx         # Flashcard study mode
+│    ├── exam.tsx               # Weighted 25-question practice exam
+│    ├── quizSelection.tsx      # Category picker for quiz mode
+│    ├── questionData.ts        # Quiz subject/question bank helpers
+│    ├── settings.tsx           # (in progress)
+│    └── quiz/
+│         └── [subjectId].tsx   # Per-category 20-question quiz
 │
 ├── assets/
-│    ├── premQ.db           # Premium question bank (SQLite)
-│    ├── premQ.version      # Version file for DB update detection
-│    ├── questions.csv      # Source of truth — 315 questions, 7 categories
-│    └── questions.json     # Generated from CSV; consumed by app screens
+│    ├── premQ.db               # Premium question bank (SQLite)
+│    ├── premQ.version          # Version file for DB update detection
+│    ├── questions.csv          # Source of truth — 315 questions, 7 categories
+│    └── questions.json         # Generated from CSV; consumed by app screens
 │
 ├── scripts/
-│    ├── csv_to_db.py       # CSV → SQLite converter
-│    └── csv_to_json.py     # CSV → JSON converter with duplicate detection
+│    ├── csv_to_db.py           # CSV → SQLite converter
+│    └── csv_to_json.py         # CSV → JSON converter with duplicate detection
 │
 ├── src/
-│    ├── premDB.native.ts   # SQLite DB init, version check, question reader
-│    └── premDB.web.ts      # Stub for web builds
+│    ├── premDB.native.ts       # SQLite DB init, version check, question reader
+│    ├── premDB.web.ts          # Stub for web builds
+│    └── statsStore.ts          # Zustand store - flashcard ratings, exam/quiz history
 │
-├── metro.config.js         # Asset extensions + module resolver override
+├── metro.config.js             # Asset extensions + module resolver override
 ├── app.json
 ├── eas.json
 ├── package.json
@@ -81,7 +87,7 @@ a-test-app/
 
 ### Dashboard (`dashboard.tsx`)
 - Personalized greeting with settings cog. 
-- Two full-height navigation cards: Flashcards and Exam.
+- Four full-height navigation cards: Flashcards, Quiz, Exam, and.
 
 ### Flashcards (`flashcards.tsx`)
 - Browse all 314 questions one at a time.
@@ -95,7 +101,17 @@ a-test-app/
 - Animated navigation
 - Premium DB merge functionality
 
-### Pracice Exam (`exam.tsx`)
+### Quiz Selection (`quizSelection.tsx`)
+- Category list with question count and weight per section.
+- Navigates to per-category quiz with section index and title.
+
+### Quiz (`quiz/[subjectId].tsx`)
+- 20 questions from the selected category, drawn from free + premium pool
+- Answer choices shuffled per question.
+- Submit locked until all questions answered.
+- Results show score with Retake, New Quiz, and Home options
+
+### Practice Exam (`exam.tsx`)
 - 25 questions selected proportionally by category weight.
 - Answer choices are shuffled per question.
 - Submit is locked until all questions are answered.
@@ -103,6 +119,14 @@ a-test-app/
 - New Exam button
 - Show Missed Only toggle
 - Premium DB merge into weighted pool functionality
+
+### Stats (`stats.tsx`)
+- Three-tab layout: Flashcards, Exam, Quiz - swipeable or tap to switch.
+- Flashcard tab: overall Know It / Still Learning / Unreviewed badges with per-category progress bars.
+- Quiz tab: collapsible sections grouped by topic, each showing past attempt scores and timestamps.
+- Exam tab: collapsible past exam entries by timestamp, expands to show per-category breakdown.
+- Per-tab reset with double-tap confirmation.
+- Data persists via Zustand + AsyncStorage across sessions.
 
 ## Question Bank
 314 questions across 7 categories, weighted to match the state board exam distribution:
