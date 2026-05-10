@@ -9,6 +9,7 @@ type QuestionResult = {
   source: "free" | "prem";
   correct: boolean;
   category: string;
+  selectedIndex: number;
 };
 
 type ExamResult = {
