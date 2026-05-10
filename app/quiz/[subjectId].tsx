@@ -124,6 +124,7 @@ export default function SubjectQuiz() {
         source: q.source,
         correct: selected[i] === q.answerIndex,
         category: q.category,
+        selectedIndex: selected[i],
       })),
     });
   }, [submitted]);
