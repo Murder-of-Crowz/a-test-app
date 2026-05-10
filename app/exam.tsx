@@ -109,6 +109,7 @@ export default function ExamScreen() {
         source: q.source,
         correct: selected[i] === q.answerIndex,
         category: q.category,
+        selectedIndex: selected[i]
       })),
     });
   }, [submitted])
