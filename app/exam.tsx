@@ -24,6 +24,7 @@ type Question = {
   answers: string[],
   answerIndex: number,
   category: string;
+  source: "free" | "prem";
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -48,7 +49,10 @@ function buildExam(PremQuestion: Question[] = []): Question[] {
   const questions: Question[] = [];
   for (const { section, count } of counts) {
     const premForSection = PremQuestion.filter(q => q.category === section.category);
-    const pool = shuffle([...section.questions.map(q => ({ ...q, category: section.category})), ...premForSection]);
+    const pool = shuffle([
+      ...section.questions.map(q => ({ ...q, category: section.category, source: "free" as const})),
+      ...premForSection.map(q => ({ ...q, source: "prem" as const})),
+    ]);
     pool.slice(0, count).forEach(q => {
       const correct = q.answers[q.answerIndex];
       const shuffledAnswers = shuffle(q.answers);
@@ -66,14 +70,28 @@ export default function ExamScreen() {
   const [submitted, setSubmitted] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
   const [showMissedOnly, setShowMissedOnly] = useState(false);
+  const savedExam = useStatsStore((s) => s.savedExam);
+  const savedExamProgress = useStatsStore((s) => s.saveExamProgress);
+  const clearSavedExam = useStatsStore((s) => s.clearSavedExam);
 
   useEffect(() => {
     try {
       const prem = getPremQuestions() as Question[];
       setPremCards(prem);
       setExam(buildExam(prem));
+      if (savedExam && savedExam.questions.length > 0) {
+        setExam(savedExam.questions);
+        setSelected(savedExam.answers);
+      } else {
+        setExam(buildExam(prem))
+      }
     } catch {
+      if (savedExam && savedExam.questions.length > 0) {
+        setExam(savedExam.questions);
+        setSelected(savedExam.answers);
+      } else {
       setExam(buildExam());
+      }
     }
   }, []);
 
@@ -86,6 +104,12 @@ export default function ExamScreen() {
       score,
       total: TOTAL,
       breakdown,
+      questions: exam.map((q, i) => ({
+        questionId: q.id,
+        source: q.source,
+        correct: selected[i] === q.answerIndex,
+        category: q.category,
+      })),
     });
   }, [submitted])
 
@@ -112,6 +136,7 @@ export default function ExamScreen() {
     setSubmitted(false);
     setShowMissedOnly(false);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
+    clearSavedExam();
   }
 
   return (
@@ -197,7 +222,11 @@ export default function ExamScreen() {
                   <Pressable
                     key={ai}
                     style={[styles.option, rowExtra]}
-                    onPress={() => !submitted && setSelected(s => ({ ...s, [qi]: ai}))}
+                    onPress={() => {if (submitted) return;
+                      const next = { ...selected, [qi]: ai};
+                      setSelected(next);
+                      savedExamProgress({ questions: exam, answers: next, startedAt: Date.now() })
+                    }}
                     disabled={submitted}
                   >
                     {submitted ? icon : (
@@ -220,6 +249,7 @@ export default function ExamScreen() {
           <Pressable
             style={[styles.submitBtn, answeredCount < TOTAL && styles.submitBtnDisabled]}
             onPress={() => {
+              clearSavedExam();
               setSubmitted(true);
               scrollRef.current?.scrollTo({ y: 0, animated: true });
             }}
