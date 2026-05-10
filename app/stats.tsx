@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import Animated, { useAnimatedStyle, withTiming, useSharedValue, interpolate } from "react-native-reanimated";
 import { useStatsStore } from "@/src/statsStore";
 import data from "@/assets/questions.json";
 // @ts-ignore
@@ -30,13 +31,28 @@ function formatDate(ts: number) {
   });
 }
 
+function CollapsibleBody({ isOpen, children }: { isOpen: boolean; children: React.ReactNode}) {
+  const maxHeight = useSharedValue(0);
+
+  useEffect(() => {
+    maxHeight.value = withTiming(isOpen ? 600 : 0, { duration: 280 });
+  }, [isOpen]);
+
+  const animStyle = useAnimatedStyle(() => ({
+    maxHeight: maxHeight.value,
+    overflow: "hidden",
+  }));
+
+  return <Animated.View style={animStyle}>{children}</Animated.View>
+}
+
 export default function StatsScreen() {
   const router = useRouter();
   const scrollRef = useRef<ScrollView>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [premCards, setPremCards] = useState<PremQuestion[]>([]);
-  const [expandedExam, setExpandedExam] = useState<Set<string>>(new Set());
-  const [expandedQuizSections, setExpandedQuizSections] = useState<Set<string>>(new Set());
+  const [expandedExam, setExpandedExam] = useState<string | null>(null);
+  const [expandedQuizSections, setExpandedQuizSections] = useState<string | null>(null);
   const [resetConfirm, setResetConfirm] = useState<number | null>(null);
 
   const flashcardRatings = useStatsStore((s) => s.flashcardRatings);
@@ -122,19 +138,11 @@ export default function StatsScreen() {
   };
 
   const toggleExam = (id: string) => {
-    setExpandedExam(prev => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
+    setExpandedExam(prev => prev === id ? null : id);
   };
 
   const toggleQuizSection = (section: string) => {
-    setExpandedQuizSections(prev => {
-      const next = new Set(prev);
-      next.has(section) ? next.delete(section) : next.add(section);
-      return next;
-    });
+    setExpandedQuizSections(prev => prev === section ? null : section);
   };
 
   return (
@@ -227,7 +235,7 @@ export default function StatsScreen() {
             </View>
           ) : (
             Object.entries(quizBySection).map(([section, attempts]) => {
-              const isOpen = expandedQuizSections.has(section);
+              const isOpen = expandedQuizSections === section;
               return (
                 <View key={section} style={styles.collapseCard}>
                   <Pressable style={styles.collapseHeader} onPress={() => toggleQuizSection(section)}>
@@ -239,7 +247,7 @@ export default function StatsScreen() {
                     </View>
                     <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color="#94a3b8" />
                   </Pressable>
-                  {isOpen && (
+                  <CollapsibleBody isOpen={isOpen}>
                     <View style={styles.collapseBody}>
                       {attempts.map((attempt) => {
                         const pct = Math.round((attempt.score / attempt.total) * 100);
@@ -261,7 +269,7 @@ export default function StatsScreen() {
                         )
                       })}
                     </View>
-                  )}
+                  </CollapsibleBody>
                 </View>
               );
             })
@@ -281,7 +289,7 @@ export default function StatsScreen() {
             </View>
           ) : (
             examHistory.map((exam) => {
-              const isOpen = expandedExam.has(exam.id);
+              const isOpen = expandedExam === exam.id;
               const pct = Math.round((exam.score / exam.total) * 100);
               return (
                 <View key={exam.id} style={styles.collapseCard}>
@@ -292,7 +300,7 @@ export default function StatsScreen() {
                     </View>
                     <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color="#94a3b8" />
                   </Pressable>
-                  {isOpen && (
+                  <CollapsibleBody isOpen={isOpen}>
                     <View style={styles.collapseBody}>
                       {exam.breakdown.map(({ category, correct, total }) => (
                         <View key={category} style={styles.breakdownRow}>
@@ -312,7 +320,7 @@ export default function StatsScreen() {
                         </Pressable>
                       )}
                     </View>
-                  )}
+                  </CollapsibleBody>
                 </View>
               );
             })
