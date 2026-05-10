@@ -24,6 +24,7 @@ import data from "@/assets/questions.json";
 import { PremQuestion, getPremQuestions } from "@/src/premDB";
 import { useStatsStore } from "@/src/statsStore";
 import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER, WARNING } from "@/app/theme/colors";
+import { SHADOW_LG } from "./theme/shadows";
 
 const REVIEW_INTERVAL_MS = 24 * 60 * 60 * 1000 // 24-hours
 
@@ -570,11 +571,7 @@ const styles = StyleSheet.create({
     padding: 28,
     minHeight: 280,
     justifyContent: "center",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
+    ...SHADOW_LG,
     gap: 16,
   },
   cardHint:        { color: MUTED, fontSize: 12, textAlign: "center" },

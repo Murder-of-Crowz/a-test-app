@@ -14,6 +14,7 @@ import data from "@/assets/questions.json"
 import { getPremQuestions, type PremQuestion } from "@/src/premDB";
 import { useStatsStore } from "@/src/statsStore";
 import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
+import { SHADOW_MD } from "./theme/shadows";
 
 const TOTAL = 25;
 
@@ -336,11 +337,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     gap: 10,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
+    ...SHADOW_MD,
   },
   cardCategory: { color: MUTED, fontSize: 11, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
   cardQuestion: { color: TEXT, fontSize: 15, fontWeight: "600", lineHeight: 22 },

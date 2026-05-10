@@ -16,6 +16,7 @@ import data from "@/assets/questions.json";
 // @ts-ignore
 import { getPremQuestions, PremQuestion } from "@/src/premDB";
 import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
+import { SHADOW_SM } from "./theme/shadows";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -375,11 +376,7 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: "center",
     gap: 4,
-    elevation: 1,
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 1 },
+    ...SHADOW_SM,
   },
   overallNum: { fontSize: 22, fontWeight: "800" },
   overallLabel: { fontSize: 11, color: MUTED, fontWeight: "600", textAlign: "center" },
@@ -401,11 +398,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
     overflow: "hidden",
-    elevation: 1,
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 1 },
+    ...SHADOW_SM
   },
   collapseHeader: {
     flexDirection: "row",

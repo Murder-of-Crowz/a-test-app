@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, DANGER } from "@/app/theme/colors";
+import { SHADOW_MD } from "./theme/shadows";
 
 /*
 Foundation is set for settings, everything you see here right now is just placeholders as stated below.
@@ -196,11 +197,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 16,
     marginBottom: 8,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
+    ...SHADOW_MD,
   },
   avatar: { width: 52, height: 52, borderRadius: 26, backgroundColor: ACCENT, justifyContent: "center", alignItems: "center" },
   avatarText: { color: "#fff", fontSize: 22, fontWeight: "800" },
@@ -222,11 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 16,
     overflow: "hidden",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
+    ...SHADOW_MD,
   },
 
   row: {
