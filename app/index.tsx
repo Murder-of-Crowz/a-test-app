@@ -9,9 +9,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
+import { BRAND, ACCENT, SUBTLE } from "@/app/theme/colors";
 
 export default function SplashScreen() {
   const router = useRouter();
@@ -92,5 +90,5 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.85 },
   btnText:    { color: BRAND, fontSize: 16, fontWeight: "700" },
-  footnote:   { color: "#64748b", fontSize: 12, textAlign: "center" },
+  footnote:   { color: SUBTLE, fontSize: 12, textAlign: "center" },
 });

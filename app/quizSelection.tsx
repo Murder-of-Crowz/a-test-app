@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
 import { getQuizSubjects } from "./questionData";
 
 const quizSubjects = getQuizSubjects();
@@ -88,11 +88,11 @@ export default function QuizSelection() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: BG,
   },
 
   header: {
-    backgroundColor: "#1e3a5f",
+    backgroundColor: BRAND,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     fontSize: 20,
-    color: "#64748b",
+    color: SUBTLE,
     marginBottom: 16,
   },
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 18,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: BORDER,
     shadowColor: "#000",
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
 
   selectedCard: {
-    borderColor: "#3b82f6",
+    borderColor: ACCENT,
     backgroundColor: "#eff6ff",
   },
 
@@ -158,17 +158,17 @@ const styles = StyleSheet.create({
   },
 
   selectedTitle: {
-    color: "#1e3a5f",
+    color: BRAND,
   },
 
   description: {
     fontSize: 14,
-    color: "#64748b",
+    color: SUBTLE,
     lineHeight: 20,
   },
 
   startButton: {
-    backgroundColor: "#1e3a5f",
+    backgroundColor: BRAND,
     borderRadius: 16,
     paddingVertical: 16,
     alignItems: "center",
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
 
   disabledButton: {
-    backgroundColor: "#94a3b8",
+    backgroundColor: MUTED,
   },
 
   startButtonText: {

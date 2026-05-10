@@ -7,9 +7,8 @@ import { getQuestionBank, type PremQuestion } from "../questionData";
 // @ts-ignore
 import { getPremQuestions } from "@/src/premDB";
 import { useStatsStore } from "@/src/statsStore";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
 
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
 const QUIZ_QUESTION_LIMIT = 20;
 
 type QuestionFromJson = {
@@ -305,7 +304,7 @@ export default function SubjectQuiz() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: BG,
   },
 
   header: {
@@ -375,7 +374,7 @@ const styles = StyleSheet.create({
   },
 
   cardCategory: {
-    color: "#94a3b8",
+    color: MUTED,
     fontSize: 11,
     fontWeight: "700",
     textTransform: "uppercase",
@@ -383,7 +382,7 @@ const styles = StyleSheet.create({
   },
 
   cardQuestion: {
-    color: "#1e293b",
+    color: TEXT,
     fontSize: 15,
     fontWeight: "600",
     lineHeight: 22,
@@ -396,18 +395,18 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: BORDER,
     backgroundColor: "#f8fafc",
   },
 
   optionCorrect: {
     backgroundColor: "#f0fdf4",
-    borderColor: "#16a34a",
+    borderColor: SUCCESS,
   },
 
   optionWrong: {
     backgroundColor: "#fef2f2",
-    borderColor: "#dc2626",
+    borderColor: DANGER,
   },
 
   optionText: {

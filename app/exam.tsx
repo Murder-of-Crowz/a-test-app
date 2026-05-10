@@ -13,9 +13,8 @@ import data from "@/assets/questions.json"
 // @ts-ignore
 import { getPremQuestions, type PremQuestion } from "@/src/premDB";
 import { useStatsStore } from "@/src/statsStore";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
 
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
 const TOTAL = 25;
 
 type Question = {
@@ -212,10 +211,10 @@ export default function ExamScreen() {
                 if (submitted) {
                   if (isCorrect) {
                     rowExtra = styles.optionCorrect;
-                    icon = <Ionicons name="checkmark-circle" size={20} color="#16a34a" />;
+                    icon = <Ionicons name="checkmark-circle" size={20} color={SUCCESS} />;
                   } else if (isPicked) {
                     rowExtra = styles.optionWrong;
-                    icon = <Ionicons name="close-circle" size={20} color="#dc2626" />;
+                    icon = <Ionicons name="close-circle" size={20} color={DANGER} />;
                   }
                 }
 
@@ -269,7 +268,7 @@ export default function ExamScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9"},
+  safe: { flex: 1, backgroundColor: BG},
 
   header: {
     backgroundColor: BRAND,
@@ -343,8 +342,8 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
   },
-  cardCategory: { color: "#94a3b8", fontSize: 11, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
-  cardQuestion: { color: "#1e293b", fontSize: 15, fontWeight: "600", lineHeight: 22 },
+  cardCategory: { color: MUTED, fontSize: 11, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
+  cardQuestion: { color: TEXT, fontSize: 15, fontWeight: "600", lineHeight: 22 },
 
   option: {
     flexDirection: "row",
@@ -353,11 +352,11 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: BORDER,
     backgroundColor: "#f8fafc",
   },
-  optionCorrect: { backgroundColor: "#f0fdf4", borderColor: "#16a34a" },
-  optionWrong: { backgroundColor: "#fef2f2", borderColor: "#dc2626" },
+  optionCorrect: { backgroundColor: "#f0fdf4", borderColor: SUCCESS },
+  optionWrong: { backgroundColor: "#fef2f2", borderColor: DANGER },
   optionText: { flex: 1, color: "#374151", fontSize: 14 },
   optionTextSelected: { color: BRAND, fontWeight: "600" },
 

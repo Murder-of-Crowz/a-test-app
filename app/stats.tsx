@@ -15,9 +15,8 @@ import { useStatsStore } from "@/src/statsStore";
 import data from "@/assets/questions.json";
 // @ts-ignore
 import { getPremQuestions, PremQuestion } from "@/src/premDB";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
 
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b62f6";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const TABS = ["Flashcards", "Quiz", "Exam" ] as const;
@@ -191,15 +190,15 @@ export default function StatsScreen() {
         <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
           <View style={styles.overallRow}>
             <View style={styles.overallBadge}>
-              <Text style={[styles.overallNum, { color: "#16a34a" }]}>{totalKnown}</Text>
+              <Text style={[styles.overallNum, { color: SUCCESS }]}>{totalKnown}</Text>
               <Text style={styles.overallLabel}>Know It</Text>
             </View>
             <View style={styles.overallBadge}>
-              <Text style={[styles.overallNum, { color: "#dc2626" }]}>{totalLearning}</Text>
+              <Text style={[styles.overallNum, { color: DANGER }]}>{totalLearning}</Text>
               <Text style={styles.overallLabel}>Still Learning</Text>
             </View>
             <View style={styles.overallBadge}>
-              <Text style={[styles.overallNum, { color: "#94a3b8" }]}>{totalUnreviewed}</Text>
+              <Text style={[styles.overallNum, { color: MUTED }]}>{totalUnreviewed}</Text>
               <Text style={styles.overallLabel}>Unreviewed</Text>
             </View>
           </View>
@@ -208,14 +207,14 @@ export default function StatsScreen() {
             <View key={category} style={styles.statRow}>
               <Text style={styles.statCategory}>{category}</Text>
               <View style={styles.statBarBg}>
-                <View style={[styles.statBarSegment, { flex: known, backgroundColor: "#16a34a"}]} />
-                <View style={[styles.statBarSegment, { flex: learning, backgroundColor: "#dc2626"}]} />
-                <View style={[styles.statBarSegment, { flex: unreviewed, backgroundColor: "#94a3b8"}]} />
+                <View style={[styles.statBarSegment, { flex: known, backgroundColor: SUCCESS}]} />
+                <View style={[styles.statBarSegment, { flex: learning, backgroundColor: DANGER}]} />
+                <View style={[styles.statBarSegment, { flex: unreviewed, backgroundColor: MUTED}]} />
               </View>
               <View style={styles.statCounts}>
-                <Text style={[styles.statCount, { color: "#16a34a" }]}>{known} known</Text>
-                <Text style={[styles.statCount, { color: "#dc2626" }]}>{learning} learning</Text>
-                <Text style={[styles.statCount, { color: "#94a3b8" }]}>{unreviewed} left</Text>
+                <Text style={[styles.statCount, { color: SUCCESS }]}>{known} known</Text>
+                <Text style={[styles.statCount, { color: DANGER }]}>{learning} learning</Text>
+                <Text style={[styles.statCount, { color: MUTED }]}>{unreviewed} left</Text>
               </View>
             </View>
           ))}
@@ -245,7 +244,7 @@ export default function StatsScreen() {
                         {attempts.length} attempt{attempts.length !== 1 ? "s" : ""}
                       </Text>
                     </View>
-                    <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color="#94a3b8" />
+                    <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color={MUTED} />
                   </Pressable>
                   <CollapsibleBody isOpen={isOpen}>
                     <View style={styles.collapseBody}>
@@ -298,7 +297,7 @@ export default function StatsScreen() {
                       <Text style={styles.collapseTitle}>{formatDate(exam.timestamp)}</Text>
                       <Text style={styles.collapseScore}>{exam.score}/{exam.total} - {pct}%</Text>
                     </View>
-                    <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color="#94a3b8" />
+                    <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color={MUTED} />
                   </Pressable>
                   <CollapsibleBody isOpen={isOpen}>
                     <View style={styles.collapseBody}>
@@ -337,7 +336,7 @@ export default function StatsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9" },
+  safe: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
@@ -355,7 +354,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
+    borderBottomColor: BORDER,
   },
   tabBtn: {
     flex: 1,
@@ -365,7 +364,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent"
   },
   tabBtnActive: { borderBottomColor: BRAND },
-  tabText: { color: "#94a3b8", fontSize: 14, fontWeight: "800" },
+  tabText: { color: MUTED, fontSize: 14, fontWeight: "800" },
   tabTextActive: { color: BRAND },
 
   overallRow: { flexDirection: "row", gap: 8, marginBottom: 4 },
@@ -383,16 +382,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
   },
   overallNum: { fontSize: 22, fontWeight: "800" },
-  overallLabel: { fontSize: 11, color: "#94a3b8", fontWeight: "600", textAlign: "center" },
+  overallLabel: { fontSize: 11, color: MUTED, fontWeight: "600", textAlign: "center" },
 
   statRow: { backgroundColor: "#fff", borderRadius: 12, padding: 14, gap: 6 },
-  statCategory: { color: "#1e293b", fontSize: 13, fontWeight: "700" },
+  statCategory: { color: TEXT, fontSize: 13, fontWeight: "700" },
   statBarBg: {
     flexDirection: "row",
     height: 6,
     borderRadius: 3,
     overflow: "hidden",
-    backgroundColor: "#e2e8f0",
+    backgroundColor: BORDER,
   },
   statBarSegment: { height: 6 },
   statCounts: { flexDirection: "row", gap: 12 },
@@ -415,25 +414,25 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   collapseHeaderLeft: { gap: 2 },
-  collapseTitle: { color: "#1e293b", fontSize: 14, fontWeight: "700" },
-  collapseScore: { color: "#64748b", fontSize: 13 },
+  collapseTitle: { color: TEXT, fontSize: 14, fontWeight: "700" },
+  collapseScore: { color: SUBTLE, fontSize: 13 },
   collapseBody: {
     borderTopWidth: 1,
-    borderTopColor: "#f1f5f9",
+    borderTopColor: BG,
     padding: 16,
     gap: 10,
   },
 
   breakdownRow: { gap: 4 },
   breakdownCategory: {
-    color: "#64748b",
+    color: SUBTLE,
     fontSize: 12,
     fontWeight: "700",
     textTransform: "uppercase",
     letterSpacing: 0.4,
   },
-  breakdownScore: { color: "#1e293b", fontSize: 13, fontWeight: "700" },
-  breakdownBarBg: { height: 4, backgroundColor: "#e2e8f0", borderRadius: 2 },
+  breakdownScore: { color: TEXT, fontSize: 13, fontWeight: "700" },
+  breakdownBarBg: { height: 4, backgroundColor: BORDER, borderRadius: 2 },
   breakdownBarFill: { height: 4, backgroundColor: ACCENT, borderRadius: 2 },
 
   quizAttemptRow: {
@@ -442,23 +441,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: BG,
   },
-  quizAttemptDate: { color: "#64748b", fontSize: 13 },
-  quizAttemptScore: { color: "#1e293b", fontSize: 13, fontWeight: "700" },
+  quizAttemptDate: { color: SUBTLE, fontSize: 13 },
+  quizAttemptScore: { color: TEXT, fontSize: 13, fontWeight: "700" },
 
   emptyState: { alignItems: "center", paddingVertical: 60 },
-  emptyText: { color: "#94a3b8", fontSize: 15, fontWeight: "600" },
+  emptyText: { color: MUTED, fontSize: 15, fontWeight: "600" },
 
   resetBtn: {
     marginTop: 8,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#dc2626",
+    borderColor: DANGER,
     padding: 14,
     alignItems: "center",
   },
-  resetText: { color: "#dc2626", fontSize: 14, fontWeight: "600" },
+  resetText: { color: DANGER, fontSize: 14, fontWeight: "600" },
   
   reviewBtn: {
     backgroundColor: BRAND,

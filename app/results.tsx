@@ -7,8 +7,7 @@ import { useStatsStore } from "@/src/statsStore";
 import data from "@/assets/questions.json";
 // @ts-ignore
 import { getPremQuestions } from "@/src/premDB";
-
-const BRAND = "#1e3a5f";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
 
 type FullQuestion = {
   id: number;
@@ -33,9 +32,9 @@ function QuestionCard({ question, index }: { question: FullQuestion; index: numb
         return (
           <View key={ai} style={[styles.answer, isCorrect && styles.answerCorrect, isSelected && !isCorrect && styles.answerWrong]}>
             {isCorrect
-            ? <Ionicons name="checkmark-circle" size={16} color="#16a34a" />
+            ? <Ionicons name="checkmark-circle" size={16} color={SUCCESS} />
             : isSelected
-              ? <Ionicons name="close-circle" size={16} color="#dc2626" />
+              ? <Ionicons name="close-circle" size={16} color={DANGER} />
               : <View style={styles.answerDot} />
           }
             <Text style={[styles.answerText, isCorrect && styles.answerTextCorrect, isSelected && !isCorrect && styles.answerTextWrong]}>
@@ -124,8 +123,8 @@ export default function ResultsScreen() {
         {missed.length > 0 && (
           <>
             <View style={styles.sectionLabel}>
-              <Ionicons name="close-circle" size={16} color="#dc2626" />
-              <Text style={[styles.sectionLabelText, { color: "#dc2626" }]}>
+              <Ionicons name="close-circle" size={16} color={DANGER} />
+              <Text style={[styles.sectionLabelText, { color: DANGER }]}>
                 Missed ({missed.length})
               </Text>
             </View>
@@ -138,8 +137,8 @@ export default function ResultsScreen() {
         {correct.length > 0 && (
           <>
             <View style={styles.sectionLabel}>
-              <Ionicons name="checkmark-circle" size={16} color="#16a34a" />
-              <Text style={[styles.sectionLabelText, { color: "#16a34a" }]}>
+              <Ionicons name="checkmark-circle" size={16} color={SUCCESS} />
+              <Text style={[styles.sectionLabelText, { color: SUCCESS }]}>
                 Correct ({correct.length})
               </Text>
             </View>
@@ -155,7 +154,7 @@ export default function ResultsScreen() {
 
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9" },
+  safe: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
@@ -184,17 +183,17 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 8,
     borderLeftWidth: 4,
-    borderLeftColor: "#16a34a",
+    borderLeftColor: SUCCESS,
   },
-  cardMissed: { borderLeftColor: "#dc2626" },
+  cardMissed: { borderLeftColor: DANGER },
   cardCategory: {
-    color: "#94a3b8",
+    color: MUTED,
     fontSize: 11,
     fontWeight: "700",
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
-  cardQuestion: { color: "#1e293b", fontSize: 14, fontWeight: "600", lineHeight: 20 },
+  cardQuestion: { color: TEXT, fontSize: 14, fontWeight: "600", lineHeight: 20 },
 
   answer: {
     flexDirection: "row",
@@ -214,9 +213,9 @@ const styles = StyleSheet.create({
     borderColor: "#cdb5e1",
   },
   answerText: { flex: 1, color: "#374151", fontSize: 13 },
-  answerTextCorrect: { color: "#16a34a", fontWeight: "600" },
-  answerTextWrong: { color: "#dc2626", fontWeight: "600" },
+  answerTextCorrect: { color: SUCCESS, fontWeight: "600" },
+  answerTextWrong: { color: DANGER, fontWeight: "600" },
 
   emptyState: { flex: 1, alignItems: "center", justifyContent: "center", paddingTop: 80 },
-  emptyText: { color: "#94a3b8", fontSize: 15, fontWeight: "600" },
+  emptyText: { color: MUTED, fontSize: 15, fontWeight: "600" },
 });

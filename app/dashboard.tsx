@@ -12,9 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useState } from "react";
 import { useStatsStore } from "@/src/statsStore";
-
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
 
 const USER_NAME = "Joe";
 
@@ -131,7 +129,7 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9" },
+  safe: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
@@ -177,12 +175,12 @@ const styles = StyleSheet.create({
     gap: 12,
     width: "100%",
   },
-  modalTitle: { fontSize: 20, fontWeight: "800", color: "#1e293b" },
-  modalSub: { fontSize: 14, color: "#64748b", textAlign: "center", lineHeight: 20 },
+  modalTitle: { fontSize: 20, fontWeight: "800", color: TEXT },
+  modalSub: { fontSize: 14, color: SUBTLE, textAlign: "center", lineHeight: 20 },
   modalBtns: { width: "100%", gap: 10, marginTop: 8 },
   modalBtn: { borderRadius: 14, padding: 16, alignItems: "center" },
   modalBtnPrimary: { backgroundColor: BRAND },
-  modalBtnSecondary: { backgroundColor: "#f1f5f9", borderWidth: 1, borderColor: "#e2e8f0" },
+  modalBtnSecondary: { backgroundColor: BG, borderWidth: 1, borderColor: BORDER },
   modalBtnTextPrimary: { color: "#fff", fontWeight: "700", fontSize: 15 },
-  modalBtnTextSecondary: { color: "#64748b", fontWeight: "600", fontSize: 15 },
+  modalBtnTextSecondary: { color: SUBTLE, fontWeight: "600", fontSize: 15 },
 });
