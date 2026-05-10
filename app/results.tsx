@@ -18,17 +18,18 @@ type FullQuestion = {
   category: string;
   source: "free" | "prem";
   correct: boolean;
-  selectedIndex: number;
+  selectedAnswer: string;
 };
 
 function QuestionCard({ question, index }: { question: FullQuestion; index: number }) {
+  const selectedIdx = question.answers.indexOf(question.selectedAnswer);
   return (
     <View style={[styles.card, !question.correct && styles.cardMissed]}>
       <Text style={styles.cardCategory}>{question.category}</Text>
       <Text style={styles.cardQuestion}>{index}. {question.question}</Text>
       {question.answers.map((ans, ai) => {
         const isCorrect = ai === question.answerIndex;
-        const isSelected = ai === question.selectedIndex;
+        const isSelected = ai === selectedIdx;
         return (
           <View key={ai} style={[styles.answer, isCorrect && styles.answerCorrect, isSelected && !isCorrect && styles.answerWrong]}>
             {isCorrect
@@ -83,7 +84,7 @@ export default function ResultsScreen() {
       .map(qr => {
         const full = questionLookup[`${qr.source}_${qr.questionId}`];
         if (!full) return null;
-        return { ...full, id: qr.questionId, source: qr.source, correct: qr.correct, selectedIndex: qr.selectedIndex };
+        return { ...full, id: qr.questionId, source: qr.source, correct: qr.correct, selectedAnswer: qr.selectedAnswer };
       })
       .filter(Boolean) as FullQuestion[];
   }, [result, questionLookup]);

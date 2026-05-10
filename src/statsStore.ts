@@ -9,7 +9,7 @@ type QuestionResult = {
   source: "free" | "prem";
   correct: boolean;
   category: string;
-  selectedIndex: number;
+  selectedAnswer: string;
 };
 
 type ExamResult = {
