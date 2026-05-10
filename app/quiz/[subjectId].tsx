@@ -21,6 +21,7 @@ type QuestionFromJson = {
 
 type QuizQuestion = QuestionFromJson & {
   category: string;
+  source: "free" | "prem"
 };
 
 function shuffle<T>(items: T[]): T[] {
@@ -50,10 +51,12 @@ function buildQuiz(index: number, title: string, premQuestions: PremQuestion[] =
   return selectedQuestions.map((question) => {
     const correctAnswer = question.answers[question.answerIndex];
     const shuffledAnswers = shuffle(question.answers);
+    const isPrem = premQuestions.some(p => p.id === question.id);
 
     return {
       ...question,
       category: title,
+      source: isPrem ? "prem" as const : "free" as const,
       answers: shuffledAnswers,
       answerIndex: shuffledAnswers.indexOf(correctAnswer),
     };
@@ -116,6 +119,12 @@ export default function SubjectQuiz() {
       section: quizTitle,
       score,
       total: totalQuestions,
+      questions: quiz.map((q, i) => ({
+        questionId: q.id,
+        source: q.source,
+        correct: selected[i] === q.answerIndex,
+        category: q.category,
+      })),
     });
   }, [submitted]);
 
