@@ -26,6 +26,7 @@ import { useStatsStore } from "@/src/statsStore";
 
 const BRAND = "#1e3a5f";
 const ACCENT = "#3b82f6";
+const REVIEW_INTERVAL_MS = 24 * 60 * 60 * 1000 // 24-hours
 
 type Card = {
   id: number;
@@ -150,6 +151,8 @@ export default function FlashCardsScreen() {
   const flashcardRatings = useStatsStore((s) => s.flashcardRatings);
   const [reviewDeck, setReviewDeck] = useState<Card[] | null>(null);
   const [premCards, setPremCards] = useState<Card[]>([]);
+  const flashcardNextReview = useStatsStore((s) => s.flashcardNextReview);
+  const setNextReview = useStatsStore((s) => s.setNextReview);
 
   useEffect(() => {
     try { 
@@ -178,10 +181,13 @@ export default function FlashCardsScreen() {
     [allCards, categories]
   );
 
-  const filteredCards = useMemo(
-    () => allCards.filter(c => selectedSections.has(c.category)),
-    [selectedSections]
-  );
+  const filteredCards = useMemo(() => {
+    const now = Date.now();
+    return allCards.filter(c =>
+      selectedSections.has(c.category) &&
+      (flashcardNextReview[`${c.source}_${c.id}`] ?? 0) <= now
+    );
+  }, [selectedSections, allCards, flashcardNextReview])
 
   const deck = useMemo(() => {
     if (reviewDeck !== null ) return shuffleOn ? shuffleDeck([...reviewDeck]) : reviewDeck;
@@ -198,7 +204,10 @@ export default function FlashCardsScreen() {
     const key = `${source}_${id}`;
     const alreadyMarked = flashcardRatings[key] !== undefined;
     storeMarkCard(source, id, state === "known" ? "know" : "learning");
-    if (!alreadyMarked && index < total - 1) flashCardRef.current?.animateForward(() => setIndex(i => i + 1))
+    if (state === "known") {
+      setNextReview(source, id, Date.now() + REVIEW_INTERVAL_MS);
+    }
+    if (!alreadyMarked && index < total - 1) flashCardRef.current?.animateForward(() => setIndex(i => i + 1));
   };
 
   const enterReviewMode = () => {
