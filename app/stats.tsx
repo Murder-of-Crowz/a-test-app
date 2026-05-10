@@ -245,10 +245,20 @@ export default function StatsScreen() {
                         const pct = Math.round((attempt.score / attempt.total) * 100);
                         return (
                           <View key={attempt.id} style={styles.quizAttemptRow}>
-                            <Text style={styles.quizAttemptDate}>{formatDate(attempt.timestamp)}</Text>
-                            <Text style={styles.quizAttemptScore}>{attempt.score}/{attempt.total} - {pct}%</Text>
+                            <View style={{ gap: 2 }}>
+                              <Text style={styles.quizAttemptDate}>{formatDate(attempt.timestamp)}</Text>
+                              <Text style={styles.quizAttemptScore}>{attempt.score}/{attempt.total} - {pct}%</Text>
+                            </View>
+                            {attempt.questions?.length > 0 && (
+                              <Pressable
+                                onPress={() => router.push({ pathname: "/results", params: { type: "quiz", id: attempt.id } })}
+                                style={styles.reviewBtn}
+                              >
+                                <Text style={styles.reviewBtnText}>Review</Text>
+                              </Pressable>
+                            )}
                           </View>
-                        );
+                        )
                       })}
                     </View>
                   )}
@@ -293,6 +303,14 @@ export default function StatsScreen() {
                           </View>
                         </View>
                       ))}
+                      {exam.questions?.length > 0 && (
+                        <Pressable
+                          onPress={() => router.push({ pathname: "/results", params: { type: "exam", id: exam.id } })}
+                          style={styles.reviewBtn}
+                        >
+                          <Text style={styles.reviewBtnText}>Review Questions</Text>
+                        </Pressable>
+                      )}
                     </View>
                   )}
                 </View>
@@ -433,4 +451,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   resetText: { color: "#dc2626", fontSize: 14, fontWeight: "600" },
+  
+  reviewBtn: {
+    backgroundColor: BRAND,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  reviewBtnText: { color: "#fff", fontSize: 12, fontWeight: "700" },
 });
