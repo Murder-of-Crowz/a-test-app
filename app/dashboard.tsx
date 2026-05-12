@@ -1,5 +1,6 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import {
+  Modal,
   Pressable,
   Settings,
   StatusBar,
@@ -9,14 +10,21 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
+import { useCallback, useState } from "react";
+import { useStatsStore } from "@/src/statsStore";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
 
 const USER_NAME = "Joe";
 
 export default function DashboardScreen() {
   const router = useRouter();
+  const savedExam = useStatsStore((s) => s.savedExam);
+  const clearSavedExam = useStatsStore((s) => s.clearSavedExam);
+  const [resumeVisible, setResumeVisible] = useState(false);
+
+  useFocusEffect(useCallback(() => {
+    if (savedExam) setResumeVisible(true);
+  }, [savedExam]))
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -76,13 +84,52 @@ export default function DashboardScreen() {
           <Text style={styles.cardTitle}>Exam</Text>
           <Text style={styles.cardSub}>You ready to take a practice exam?</Text>
         </Pressable>
+
+        {/* Stats */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.card,
+            styles.cardDark,
+            pressed && styles.pressed,
+          ]}
+          onPress={() => router.push("/stats")} // Need this changed once exam page done
+        >
+          <Text style={styles.cardIcon}>~</Text>
+          <Text style={styles.cardTitle}>Stats</Text>
+          <Text style={styles.cardSub}>See how far you&apos;ve gone</Text>
+        </Pressable>
       </View>
+
+      {/* Modal for Saved Exam prompt */}
+      <Modal visible={resumeVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Ionicons name="warning-outline" size={32} color="#f58e0b" />
+            <Text style={styles.modalTitle}>Exam Interrupted</Text>
+            <Text style={styles.modalSub}>
+              You have an unfinished exam. Would you like to continue where you left off?
+            </Text>
+            <View style={styles.modalBtns}>
+              <Pressable style={[styles.modalBtn, styles.modalBtnPrimary]}
+                onPress={(() => { setResumeVisible(false); router.push("/exam"); })}
+              >
+                <Text style={styles.modalBtnTextPrimary}>Continue Exam</Text>
+              </Pressable>
+              <Pressable style={[styles.modalBtn, styles.modalBtnSecondary]}
+                onPress={() => { setResumeVisible(false); clearSavedExam(); }}
+              >
+                <Text style={styles.modalBtnTextSecondary}>Abandon</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9" },
+  safe: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
@@ -112,4 +159,28 @@ const styles = StyleSheet.create({
   cardIcon: { fontSize: 40, marginBottom: 12 },
   cardTitle: { color: "#fff", fontSize: 22, fontWeight: "800" },
   cardSub: { color: "rgba(255,255,255,0.7", fontSize: 14, marginTop: 4 },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  modalCard: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 20,
+    alignItems: "center",
+    gap: 12,
+    width: "100%",
+  },
+  modalTitle: { fontSize: 20, fontWeight: "800", color: TEXT },
+  modalSub: { fontSize: 14, color: SUBTLE, textAlign: "center", lineHeight: 20 },
+  modalBtns: { width: "100%", gap: 10, marginTop: 8 },
+  modalBtn: { borderRadius: 14, padding: 16, alignItems: "center" },
+  modalBtnPrimary: { backgroundColor: BRAND },
+  modalBtnSecondary: { backgroundColor: BG, borderWidth: 1, borderColor: BORDER },
+  modalBtnTextPrimary: { color: "#fff", fontWeight: "700", fontSize: 15 },
+  modalBtnTextSecondary: { color: SUBTLE, fontWeight: "600", fontSize: 15 },
 });

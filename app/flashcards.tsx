@@ -22,9 +22,11 @@ import { Ionicons } from "@expo/vector-icons";
 import data from "@/assets/questions.json";
 // @ts-ignore
 import { PremQuestion, getPremQuestions } from "@/src/premDB";
+import { useStatsStore } from "@/src/statsStore";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER, WARNING } from "@/app/theme/colors";
+import { SHADOW_LG } from "./theme/shadows";
 
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
+const REVIEW_INTERVAL_MS = 24 * 60 * 60 * 1000 // 24-hours
 
 type Card = {
   id: number;
@@ -32,6 +34,7 @@ type Card = {
   answers: string[];
   answerIndex: number;
   category: string;
+  source: "free" | "prem"
 };
 
 type CardState = "known" | "learning";
@@ -42,7 +45,7 @@ type FlashCardRef = {
 };
 
 const freeCards: Card[] = data.flatMap(section =>
-  section.questions.map(q => ({ ...q, category: section.category }))
+  section.questions.map(q => ({ ...q, category: section.category, source: "free" as const }))
 );
 const freeCategories = data.map(s => s.category);
 
@@ -145,19 +148,24 @@ export default function FlashCardsScreen() {
   const [statsVisible, setStatsVisible] = useState(false);
   const [selectedSections, setSelectedSections] = useState<Set<string>>(() => new Set(freeCategories));
   const [pendingSections, setPendingSections] = useState<Set<string>>(() => new Set(freeCategories));
-  const [cardStates, setCardStates] = useState<Record<number, CardState>>({});
+  const flashcardRatings = useStatsStore((s) => s.flashcardRatings);
   const [reviewDeck, setReviewDeck] = useState<Card[] | null>(null);
   const [premCards, setPremCards] = useState<Card[]>([]);
+  const flashcardNextReview = useStatsStore((s) => s.flashcardNextReview);
+  const setNextReview = useStatsStore((s) => s.setNextReview);
 
   useEffect(() => {
     try { 
       const prem = getPremQuestions();
-      setPremCards(prem);
-      const premCats= [...new Set(prem.map((c: PremQuestion) => c.category))] as string[];
+      setPremCards(prem.map((q: PremQuestion) => ({ ...q, source: "prem" as const })));
+      const premCats = [...new Set(prem.map((c: PremQuestion) => c.category))] as string[];
       setSelectedSections(prev => new Set<string>([...prev, ...premCats]));
       setPendingSections(prev => new Set<string>([...prev, ...premCats]));
     } catch {}
   }, []);
+
+  const storeMarkCard = useStatsStore((s) => s.markCard);
+  const resetFlashcardRatings = useStatsStore((s) => s.resetFlashcardRatings);
 
   const allCards = useMemo(() => {
     const combined = [...freeCards, ...premCards];
@@ -173,10 +181,13 @@ export default function FlashCardsScreen() {
     [allCards, categories]
   );
 
-  const filteredCards = useMemo(
-    () => allCards.filter(c => selectedSections.has(c.category)),
-    [selectedSections]
-  );
+  const filteredCards = useMemo(() => {
+    const now = Date.now();
+    return allCards.filter(c =>
+      selectedSections.has(c.category) &&
+      (flashcardNextReview[`${c.source}_${c.id}`] ?? 0) <= now
+    );
+  }, [selectedSections, allCards, flashcardNextReview])
 
   const deck = useMemo(() => {
     if (reviewDeck !== null ) return shuffleOn ? shuffleDeck([...reviewDeck]) : reviewDeck;
@@ -187,17 +198,21 @@ export default function FlashCardsScreen() {
 
   const current = deck[index];
   const total = deck.length;
-  const reviewedCount = deck.filter(c => cardStates[c.id] !== undefined).length;
+  const reviewedCount = deck.filter(c => flashcardRatings[`${c.source}_${c.id}`] !== undefined).length;
 
-  const markCard = (id: number, state: CardState) => {
-    const alreadyMarked = cardStates[id] !== undefined;
-    setCardStates(prev => ({ ...prev, [id]: state }));
+  const markCard = (id: number, source: "free" | "prem", state: CardState) => {
+    const key = `${source}_${id}`;
+    const alreadyMarked = flashcardRatings[key] !== undefined;
+    storeMarkCard(source, id, state === "known" ? "know" : "learning");
+    if (state === "known") {
+      setNextReview(source, id, Date.now() + REVIEW_INTERVAL_MS);
+    }
     if (!alreadyMarked && index < total - 1) flashCardRef.current?.animateForward(() => setIndex(i => i + 1));
   };
 
   const enterReviewMode = () => {
     const missed = allCards.filter(c =>
-      selectedSections.has(c.category) && cardStates[c.id] === "learning"
+      selectedSections.has(c.category) && flashcardRatings[`${c.source}_${c.id}`] === "learning"
     );
     setReviewDeck(missed);
     setIndex(0);
@@ -214,11 +229,11 @@ export default function FlashCardsScreen() {
       .filter(cat => selectedSections.has(cat))
       .map(cat => {
         const cards = allCards.filter(c => c.category === cat);
-        const known = cards.filter(c => cardStates[c.id] === "known").length;
-        const learning = cards.filter(c => cardStates[c.id] === "learning").length;
+        const known = cards.filter(c => flashcardRatings[`${c.source}_${c.id}`] === "know").length;
+        const learning = cards.filter(c => flashcardRatings[`${c.source}_${c.id}`] === "learning").length;
         return { category: cat, known, learning, unreviewed: cards.length - known - learning, total: cards.length };
       });
-  }, [cardStates, selectedSections]);
+  }, [flashcardRatings, selectedSections]);
 
   const togglePending = (category: string) => {
     setPendingSections(prev => {
@@ -337,21 +352,21 @@ export default function FlashCardsScreen() {
         {current && (
           <View style={styles.ratingRow}>
             <Pressable
-              style={[styles.ratingBtn, styles.ratingLearning, cardStates[current.id] === "learning" && styles.ratingLearningActive]}
-              onPress={() => markCard(current.id, "learning")}
+              style={[styles.ratingBtn, styles.ratingLearning, flashcardRatings[`${current.source}_${current.id}`] === "learning" && styles.ratingLearningActive]}
+              onPress={() => markCard(current.id, current.source, "learning")}
             >
-              <Ionicons name="close" size={18} color={cardStates[current.id] === "learning" ? "#fff" : "#dc2626"} />
-              <Text style={[styles.ratingText, cardStates[current.id] === "learning" && styles.ratingTextActive]}>
+              <Ionicons name="close" size={18} color={flashcardRatings[`${current.source}_${current.id}`] === "learning" ? "#fff" : DANGER} />
+              <Text style={[styles.ratingText, flashcardRatings[`${current.source}_${current.id}`] === "learning" && styles.ratingTextActive]}>
                 Still Learning
               </Text>
             </Pressable>
 
             <Pressable
-              style={[styles.ratingBtn, styles.ratingKnown, cardStates[current.id] === "known" && styles.ratingKnownActive]}
-              onPress={() => markCard(current.id, "known")}
+              style={[styles.ratingBtn, styles.ratingKnown, flashcardRatings[`${current.source}_${current.id}`] === "know" && styles.ratingKnownActive]}
+              onPress={() => markCard(current.id, current.source, "known")}
             >
-              <Ionicons name="checkmark" size={18} color={cardStates[current.id] === "known" ? "#fff" : "#16a34a"} />
-              <Text style={[styles.ratingText, cardStates[current.id] === "known" && styles.ratingTextActive]}>
+              <Ionicons name="checkmark" size={18} color={flashcardRatings[`${current.source}_${current.id}`] === "know" ? "#fff" : SUCCESS} />
+              <Text style={[styles.ratingText, flashcardRatings[`${current.source}_${current.id}`] === "know" && styles.ratingTextActive]}>
                 Know it
               </Text>
             </Pressable>
@@ -390,7 +405,7 @@ export default function FlashCardsScreen() {
               onPress={goToPrevSection}
               disabled={!hasPrevSection}
             >
-              <Ionicons name="chevron-back" size={16} color={!hasPrevSection ? "#cbd5e1" : "#94a3b8"} />
+              <Ionicons name="chevron-back" size={16} color={!hasPrevSection ? "#cbd5e1" : MUTED} />
               <Text style={[styles.sectionNavText, !hasPrevSection && styles.navTextDisabled]}>Prev Section</Text>
             </Pressable>
 
@@ -400,7 +415,7 @@ export default function FlashCardsScreen() {
               disabled={!hasNextSection}
             >
               <Text style={[styles.sectionNavText, !hasNextSection && styles.navTextDisabled]}>Next Section</Text>
-              <Ionicons name="chevron-forward" size={16} color={!hasNextSection ? "#cbd5e1" : "#94a3b8"} />
+              <Ionicons name="chevron-forward" size={16} color={!hasNextSection ? "#cbd5e1" : MUTED} />
             </Pressable>
           </View>
       </View>
@@ -448,7 +463,7 @@ export default function FlashCardsScreen() {
             <View style={styles.statsHeader}>
               <Text style={styles.modalTitle}>Progress</Text>
               <Pressable onPress={() => setStatsVisible(false)} hitSlop={12}>
-                <Ionicons name="close" size={22} color="#64748b" />
+                <Ionicons name="close" size={22} color={SUBTLE} />
               </Pressable>
             </View>
 
@@ -456,19 +471,19 @@ export default function FlashCardsScreen() {
             <View style={styles.overallRow}>
               <View style={styles.overallBadge}>
                 <Text style={styles.overallNum}>
-                  {Object.values(cardStates).filter(s => s === "known").length}
+                  {Object.values(flashcardRatings).filter(s => s === "know").length}
                 </Text>
                 <Text style={styles.overallLabel}>Know It</Text>
               </View>
               <View style={styles.overallBadge}>
-                <Text style={[styles.overallNum, { color: "#dc2626" }]}>
-                  {Object.values(cardStates).filter(s => s === "learning").length}
+                <Text style={[styles.overallNum, { color: DANGER }]}>
+                  {Object.values(flashcardRatings).filter(s => s === "learning").length}
                 </Text>
                 <Text style={styles.overallLabel}>Still Learning</Text>
               </View>
               <View style={styles.overallBadge}>
-                <Text style={[styles.overallNum, { color: "#94a3b8" }]}>
-                  {deck.filter(c => cardStates[c.id] === undefined).length}
+                <Text style={[styles.overallNum, { color: MUTED }]}>
+                  {deck.filter(c => flashcardRatings[`${c.source}_${c.id}`] === undefined).length}
                 </Text>
                 <Text style={styles.overallLabel}>Unreviewed</Text>
               </View>
@@ -480,30 +495,30 @@ export default function FlashCardsScreen() {
                 <View key={category} style={styles.statRow}>
                   <Text style={styles.statCategory}>{category}</Text>
                   <View style={styles.statBarBg}>
-                    <View style={[styles.statBarSegment, { flex: known, backgroundColor: "#16a34a" }]} />
-                    <View style={[styles.statBarSegment, { flex: learning, backgroundColor: "#dc2626" }]} />
-                    <View style={[styles.statBarSegment, { flex: unreviewed, backgroundColor: "#e2e8f0" }]} />
+                    <View style={[styles.statBarSegment, { flex: known, backgroundColor: SUCCESS }]} />
+                    <View style={[styles.statBarSegment, { flex: learning, backgroundColor: DANGER }]} />
+                    <View style={[styles.statBarSegment, { flex: unreviewed, backgroundColor: BORDER }]} />
                   </View>
                   <View style={styles.statCounts}>
-                    <Text style={[styles.statCount, { color: "#16a34a" }]}>{known} known</Text>
-                    <Text style={[styles.statCount, { color: "#dc2626" }]}>{learning} learning</Text>
-                    <Text style={[styles.statCount, { color: "#94a3b8" }]}>{unreviewed} left</Text>
+                    <Text style={[styles.statCount, { color: SUCCESS }]}>{known} known</Text>
+                    <Text style={[styles.statCount, { color: DANGER }]}>{learning} learning</Text>
+                    <Text style={[styles.statCount, { color: MUTED }]}>{unreviewed} left</Text>
                   </View>
                 </View>
               ))}
             </ScrollView>
 
-            {Object.values(cardStates).some(s => s === "learning") && (
+            {Object.values(flashcardRatings).some(s => s === "learning") && (
               <Pressable style={styles.applyBtn} onPress={enterReviewMode}>
                 <Text style={styles.applyText}>
-                  Review Missed Cards ({Object.values(cardStates).filter(s => s === "learning").length})
+                  Review Missed Cards ({Object.values(flashcardRatings).filter(s => s === "learning").length})
                 </Text>
               </Pressable>
             )}
 
             <Pressable
               style={styles.applyBtn}
-              onPress={() => { setCardStates({}); setStatsVisible(false); }}
+              onPress={() => { resetFlashcardRatings(), setStatsVisible(false); }}
             >
               <Text style={styles.applyText}>Reset Progress</Text>
             </Pressable>
@@ -516,7 +531,7 @@ export default function FlashCardsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9" },
+  safe: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
@@ -530,11 +545,11 @@ const styles = StyleSheet.create({
   headerRight: { flexDirection: "row", alignItems: "center", gap: 12 },
   headerCount: { color: "#93c5fd", fontSize: 14 },
 
-  progressBg:   { height: 3, backgroundColor: "#e2e8f0" },
+  progressBg:   { height: 3, backgroundColor: BORDER },
   progressFill: { height: 3, backgroundColor: ACCENT },
 
   reviewBanner: {
-    backgroundColor: "#f59e0b",
+    backgroundColor: WARNING,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
@@ -545,10 +560,10 @@ const styles = StyleSheet.create({
   reviewBannerExit: { color: "#fff", fontSize: 13, fontWeight: "700", textDecorationLine: "underline" },
 
   body:         { flex: 1, padding: 20, gap: 12 },
-  chapterLabel: { color: "#64748b", fontSize: 13, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
+  chapterLabel: { color: SUBTLE, fontSize: 13, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
   shuffleBody:  { flexDirection: "row", justifyContent: "space-between"},
   shuffleRow:   { flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: 8 },
-  shuffleLabel: { color: "#64748b", fontSize: 13, fontWeight: "600" },
+  shuffleLabel: { color: SUBTLE, fontSize: 13, fontWeight: "600" },
 
   card: {
     backgroundColor: "#fff",
@@ -556,15 +571,11 @@ const styles = StyleSheet.create({
     padding: 28,
     minHeight: 280,
     justifyContent: "center",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
+    ...SHADOW_LG,
     gap: 16,
   },
-  cardHint:        { color: "#94a3b8", fontSize: 12, textAlign: "center" },
-  cardQuestion:    { color: "#1e293b", fontSize: 20, fontWeight: "700", textAlign: "center", lineHeight: 30 },
+  cardHint:        { color: MUTED, fontSize: 12, textAlign: "center" },
+  cardQuestion:    { color: TEXT, fontSize: 20, fontWeight: "700", textAlign: "center", lineHeight: 30 },
   cardAnswer:      { color: ACCENT,   fontSize: 20, fontWeight: "700", textAlign: "center" },
 
   ratingBtn: {
@@ -578,11 +589,11 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   ratingRow:            { flexDirection: "row", gap: 10 },
-  ratingLearning:       { borderColor: "#dc2626", backgroundColor: "#fff" },
-  ratingLearningActive: { backgroundColor: "#dc2626", borderColor: "#dc2626" },
-  ratingKnown:          { borderColor: "#16a34a", backgroundColor: "#fff" },
-  ratingKnownActive:    { backgroundColor: "#16a34a", borderColor: "#16a34a" },
-  ratingText:           { fontSize: 13, fontWeight: "700", color: "#1e293b" },
+  ratingLearning:       { borderColor: DANGER, backgroundColor: "#fff" },
+  ratingLearningActive: { backgroundColor: DANGER, borderColor: DANGER },
+  ratingKnown:          { borderColor: SUCCESS, backgroundColor: "#fff" },
+  ratingKnownActive:    { backgroundColor: SUCCESS, borderColor: SUCCESS },
+  ratingText:           { fontSize: 13, fontWeight: "700", color: TEXT },
   ratingTextActive:     { color: "#fff" },
 
   nav:            { flexDirection: "row", justifyContent: "space-between", marginTop: 8 },
@@ -593,7 +604,7 @@ const styles = StyleSheet.create({
 
   sectionNav:     { flexDirection: "row", justifyContent: "space-between", marginTop: 4 },
   sectionNavBtn:  { flexDirection: "row", alignItems: "center", gap: 4, padding: 8 },
-  sectionNavText: { color: "#94a3b8", fontWeight: "600", fontSize: 13 },
+  sectionNavText: { color: MUTED, fontWeight: "600", fontSize: 13 },
 
   modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" },
   modalCard: {
@@ -604,8 +615,8 @@ const styles = StyleSheet.create({
     maxHeight: "80%",
     gap: 12,
   },
-  modalTitle:    { color: "#1e293b", fontSize: 20, fontWeight: "800" },
-  modalSub:      { color: "#94a3b8", fontSize: 13 },
+  modalTitle:    { color: TEXT, fontSize: 20, fontWeight: "800" },
+  modalSub:      { color: MUTED, fontSize: 13 },
 
   selectAllText: { color: ACCENT, fontWeight: "600", fontSize: 14 },
   modalList:     { maxHeight: 320 },
@@ -614,7 +625,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 13,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: BG,
     gap: 14
   },
   checkbox: {
@@ -627,8 +638,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   checkboxChecked:  { backgroundColor: ACCENT, borderColor: ACCENT },
-  checkLabel:       { color: "#1e293b", fontSize: 15, flex: 1 },
-  checkCount:       { color: "#94a3b8", fontSize: 13, fontWeight: "600" },
+  checkLabel:       { color: TEXT, fontSize: 15, flex: 1 },
+  checkCount:       { color: MUTED, fontSize: 13, fontWeight: "600" },
   applyBtn:         { backgroundColor: BRAND, borderRadius: 14, padding: 16, alignItems: "center", marginTop: 4 },
   applyBtnDisabled: { backgroundColor: "#cbd5e1" },
   applyText:        { color: "#fff", fontWeight: "700", fontSize: 16 },
@@ -636,13 +647,13 @@ const styles = StyleSheet.create({
   statsHeader:  { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   overallRow:   { flexDirection: "row", gap: 8 },
   overallBadge: { flex: 1, backgroundColor: "#f8fafc", borderRadius: 12, padding: 12, alignItems: "center", gap: 4 },
-  overallNum:  { fontSize: 22, fontWeight: "800", color: "#16a34a" },
-  overallLabel: { fontSize: 11, color: "#94a3b8", fontWeight: "600", textAlign: "center" },
+  overallNum:  { fontSize: 22, fontWeight: "800", color: SUCCESS },
+  overallLabel: { fontSize: 11, color: MUTED, fontWeight: "600", textAlign: "center" },
 
   statsList:    { maxHeight: 300 },
-  statRow:      { paddingVertical: 12, gap: 6, borderBottomWidth: 1, borderBottomColor: "#f1f5f9" },
-  statCategory: { color: "#1e293b", fontSize: 13, fontWeight: "700" },
-  statBarBg:    { flexDirection: "row", height: 6, borderRadius: 3, overflow: "hidden", backgroundColor: "#e2e8f0" },
+  statRow:      { paddingVertical: 12, gap: 6, borderBottomWidth: 1, borderBottomColor: BG },
+  statCategory: { color: TEXT, fontSize: 13, fontWeight: "700" },
+  statBarBg:    { flexDirection: "row", height: 6, borderRadius: 3, overflow: "hidden", backgroundColor: BORDER },
   statBarSegment: { height: 6 },
   statCounts:   { flexDirection: "row", gap: 12 },
   statCount:    { fontSize: 11, fontWeight: "600" },

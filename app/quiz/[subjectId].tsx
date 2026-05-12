@@ -6,9 +6,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { getQuestionBank, type PremQuestion } from "../questionData";
 // @ts-ignore
 import { getPremQuestions } from "@/src/premDB";
+import { useStatsStore } from "@/src/statsStore";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
+import { SHADOW_MD } from "../theme/shadows";
 
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
 const QUIZ_QUESTION_LIMIT = 20;
 
 type QuestionFromJson = {
@@ -20,6 +21,7 @@ type QuestionFromJson = {
 
 type QuizQuestion = QuestionFromJson & {
   category: string;
+  source: "free" | "prem"
 };
 
 function shuffle<T>(items: T[]): T[] {
@@ -49,10 +51,12 @@ function buildQuiz(index: number, title: string, premQuestions: PremQuestion[] =
   return selectedQuestions.map((question) => {
     const correctAnswer = question.answers[question.answerIndex];
     const shuffledAnswers = shuffle(question.answers);
+    const isPrem = premQuestions.some(p => p.id === question.id);
 
     return {
       ...question,
       category: title,
+      source: isPrem ? "prem" as const : "free" as const,
       answers: shuffledAnswers,
       answerIndex: shuffledAnswers.indexOf(correctAnswer),
     };
@@ -105,6 +109,25 @@ export default function SubjectQuiz() {
 
     }
   }, [])
+
+  const addQuizResult = useStatsStore((s) => s.addQuizResult);
+
+  useEffect(() => {
+    if (!submitted) return;
+    addQuizResult({
+      timestamp: Date.now(),
+      section: quizTitle,
+      score,
+      total: totalQuestions,
+      questions: quiz.map((q, i) => ({
+        questionId: q.id,
+        source: q.source,
+        correct: selected[i] === q.answerIndex,
+        category: q.category,
+        selectedAnswer: q.answers[selected[i]],
+      })),
+    });
+  }, [submitted]);
 
   const scorePercent =
     totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
@@ -282,7 +305,7 @@ export default function SubjectQuiz() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: BG,
   },
 
   header: {
@@ -341,18 +364,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     gap: 10,
-    elevation: 2,
-    shadowColor: "#000000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    ...SHADOW_MD,
   },
 
   cardCategory: {
-    color: "#94a3b8",
+    color: MUTED,
     fontSize: 11,
     fontWeight: "700",
     textTransform: "uppercase",
@@ -360,7 +376,7 @@ const styles = StyleSheet.create({
   },
 
   cardQuestion: {
-    color: "#1e293b",
+    color: TEXT,
     fontSize: 15,
     fontWeight: "600",
     lineHeight: 22,
@@ -373,18 +389,18 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: BORDER,
     backgroundColor: "#f8fafc",
   },
 
   optionCorrect: {
     backgroundColor: "#f0fdf4",
-    borderColor: "#16a34a",
+    borderColor: SUCCESS,
   },
 
   optionWrong: {
     backgroundColor: "#fef2f2",
-    borderColor: "#dc2626",
+    borderColor: DANGER,
   },
 
   optionText: {

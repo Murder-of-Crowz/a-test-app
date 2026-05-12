@@ -12,9 +12,10 @@ import { Ionicons } from "@expo/vector-icons";
 import data from "@/assets/questions.json"
 // @ts-ignore
 import { getPremQuestions, type PremQuestion } from "@/src/premDB";
+import { useStatsStore } from "@/src/statsStore";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
+import { SHADOW_MD } from "./theme/shadows";
 
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
 const TOTAL = 25;
 
 type Question = {
@@ -23,6 +24,7 @@ type Question = {
   answers: string[],
   answerIndex: number,
   category: string;
+  source: "free" | "prem";
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -47,7 +49,10 @@ function buildExam(PremQuestion: Question[] = []): Question[] {
   const questions: Question[] = [];
   for (const { section, count } of counts) {
     const premForSection = PremQuestion.filter(q => q.category === section.category);
-    const pool = shuffle([...section.questions.map(q => ({ ...q, category: section.category})), ...premForSection]);
+    const pool = shuffle([
+      ...section.questions.map(q => ({ ...q, category: section.category, source: "free" as const})),
+      ...premForSection.map(q => ({ ...q, source: "prem" as const})),
+    ]);
     pool.slice(0, count).forEach(q => {
       const correct = q.answers[q.answerIndex];
       const shuffledAnswers = shuffle(q.answers);
@@ -65,16 +70,49 @@ export default function ExamScreen() {
   const [submitted, setSubmitted] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
   const [showMissedOnly, setShowMissedOnly] = useState(false);
+  const savedExam = useStatsStore((s) => s.savedExam);
+  const savedExamProgress = useStatsStore((s) => s.saveExamProgress);
+  const clearSavedExam = useStatsStore((s) => s.clearSavedExam);
 
   useEffect(() => {
     try {
       const prem = getPremQuestions() as Question[];
       setPremCards(prem);
       setExam(buildExam(prem));
+      if (savedExam && savedExam.questions.length > 0) {
+        setExam(savedExam.questions);
+        setSelected(savedExam.answers);
+      } else {
+        setExam(buildExam(prem))
+      }
     } catch {
+      if (savedExam && savedExam.questions.length > 0) {
+        setExam(savedExam.questions);
+        setSelected(savedExam.answers);
+      } else {
       setExam(buildExam());
+      }
     }
   }, []);
+
+  const addExamResult = useStatsStore((s) => s.addExamResult);
+
+  useEffect(() => {
+    if (!submitted) return;
+    addExamResult({
+      timestamp: Date.now(),
+      score,
+      total: TOTAL,
+      breakdown,
+      questions: exam.map((q, i) => ({
+        questionId: q.id,
+        source: q.source,
+        correct: selected[i] === q.answerIndex,
+        category: q.category,
+        selectedAnswer: q.answers[selected[i]],
+      })),
+    });
+  }, [submitted])
 
   const answeredCount = Object.keys(selected).length;
   const score = useMemo(
@@ -99,6 +137,7 @@ export default function ExamScreen() {
     setSubmitted(false);
     setShowMissedOnly(false);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
+    clearSavedExam();
   }
 
   return (
@@ -173,10 +212,10 @@ export default function ExamScreen() {
                 if (submitted) {
                   if (isCorrect) {
                     rowExtra = styles.optionCorrect;
-                    icon = <Ionicons name="checkmark-circle" size={20} color="#16a34a" />;
+                    icon = <Ionicons name="checkmark-circle" size={20} color={SUCCESS} />;
                   } else if (isPicked) {
                     rowExtra = styles.optionWrong;
-                    icon = <Ionicons name="close-circle" size={20} color="#dc2626" />;
+                    icon = <Ionicons name="close-circle" size={20} color={DANGER} />;
                   }
                 }
 
@@ -184,7 +223,11 @@ export default function ExamScreen() {
                   <Pressable
                     key={ai}
                     style={[styles.option, rowExtra]}
-                    onPress={() => !submitted && setSelected(s => ({ ...s, [qi]: ai}))}
+                    onPress={() => {if (submitted) return;
+                      const next = { ...selected, [qi]: ai};
+                      setSelected(next);
+                      savedExamProgress({ questions: exam, answers: next, startedAt: Date.now() })
+                    }}
                     disabled={submitted}
                   >
                     {submitted ? icon : (
@@ -207,6 +250,7 @@ export default function ExamScreen() {
           <Pressable
             style={[styles.submitBtn, answeredCount < TOTAL && styles.submitBtnDisabled]}
             onPress={() => {
+              clearSavedExam();
               setSubmitted(true);
               scrollRef.current?.scrollTo({ y: 0, animated: true });
             }}
@@ -225,7 +269,7 @@ export default function ExamScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9"},
+  safe: { flex: 1, backgroundColor: BG},
 
   header: {
     backgroundColor: BRAND,
@@ -293,14 +337,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     gap: 10,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
+    ...SHADOW_MD,
   },
-  cardCategory: { color: "#94a3b8", fontSize: 11, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
-  cardQuestion: { color: "#1e293b", fontSize: 15, fontWeight: "600", lineHeight: 22 },
+  cardCategory: { color: MUTED, fontSize: 11, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
+  cardQuestion: { color: TEXT, fontSize: 15, fontWeight: "600", lineHeight: 22 },
 
   option: {
     flexDirection: "row",
@@ -309,11 +349,11 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderColor: BORDER,
     backgroundColor: "#f8fafc",
   },
-  optionCorrect: { backgroundColor: "#f0fdf4", borderColor: "#16a34a" },
-  optionWrong: { backgroundColor: "#fef2f2", borderColor: "#dc2626" },
+  optionCorrect: { backgroundColor: "#f0fdf4", borderColor: SUCCESS },
+  optionWrong: { backgroundColor: "#fef2f2", borderColor: DANGER },
   optionText: { flex: 1, color: "#374151", fontSize: 14 },
   optionTextSelected: { color: BRAND, fontWeight: "600" },
 

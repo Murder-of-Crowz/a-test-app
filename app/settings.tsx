@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, DANGER } from "@/app/theme/colors";
+import { SHADOW_MD } from "./theme/shadows";
 
 /*
 Foundation is set for settings, everything you see here right now is just placeholders as stated below.
@@ -36,9 +38,6 @@ Terms of Service needs completion.
 
 */
 
-const BRAND = "#1e3a5f";
-const ACCENT = "#3b82f6";
-
 // Placeholders
 const USER_NAME = "Joe";
 const USER_EMAIL = "joe@mama.com"
@@ -62,7 +61,7 @@ function Row({ icon, label, onPress, right, danger }: RowProps) {
       <Ionicons
         name={icon as any}
         size={20}
-        color={danger ? "#dc2626" : BRAND }
+        color={danger ? DANGER : BRAND }
         style={styles.rowIcon}
       />
       <Text style={[styles.rowLabel, danger && styles.rowLabelDanger]}>{label}</Text>
@@ -176,7 +175,7 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f1f5f9" },
+  safe: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
@@ -198,19 +197,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 16,
     marginBottom: 8,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
+    ...SHADOW_MD,
   },
   avatar: { width: 52, height: 52, borderRadius: 26, backgroundColor: ACCENT, justifyContent: "center", alignItems: "center" },
   avatarText: { color: "#fff", fontSize: 22, fontWeight: "800" },
-  accountName: { color: "#1e293b", fontSize: 16, fontWeight: "700" },
-  accountEmail: { color: "#64748b", fontSize: 13, marginTop: 2 },
+  accountName: { color: TEXT, fontSize: 16, fontWeight: "700" },
+  accountEmail: { color: SUBTLE, fontSize: 13, marginTop: 2 },
 
   sectionHeader: {
-    color: "#94a3b8",
+    color: MUTED,
     fontSize: 11,
     fontWeight: "700",
     textTransform: "uppercase",
@@ -224,11 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 16,
     overflow: "hidden",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
+    ...SHADOW_MD,
   },
 
   row: {
@@ -237,31 +228,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
+    borderBottomColor: BG,
   },
   rowPressed: { backgroundColor: "#f8fafc" },
   rowIcon: { marginRight: 12 },
-  rowLabel: { flex: 1, color: "#1e293b",  fontSize: 15 },
-  rowLabelDanger: { color: "#dc2626" },
+  rowLabel: { flex: 1, color: TEXT,  fontSize: 15 },
+  rowLabelDanger: { color: DANGER },
 
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
-  badgeFree: { backgroundColor: "#f1f5f9" },
+  badgeFree: { backgroundColor: BG },
   badgePremium: { backgroundColor: "#f3f9c3" },
-  badgeText: { fontSize: 12, fontWeight: "700", color: "#1e293b" },
+  badgeText: { fontSize: 12, fontWeight: "700", color: TEXT },
 
   upgradeBtn: { margin: 12, backgroundColor: ACCENT, borderRadius: 12, padding: 14, alignItems: "center" },
   upgradeText: { color: "#fff", fontWeight: "700", fontSize: 15 },
 
-  versionText: { color: "#94a3b8", fontSize: 14 },
+  versionText: { color: MUTED, fontSize: 14 },
 
   overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center", padding: 32 },
   modalCard: { backgroundColor: "#fff", borderRadius: 20, padding: 24, width: "100%", gap: 8 },
-  modalTitle: { color: "#1e293b", fontSize: 18, fontWeight: "800" },
-  modalBody: { color: "#64748b", fontSize: 14, lineHeight: 20 },
+  modalTitle: { color: TEXT, fontSize: 18, fontWeight: "800" },
+  modalBody: { color: SUBTLE, fontSize: 14, lineHeight: 20 },
   modalActions: { flexDirection: "row", gap: 12, marginTop: 8 },
   modalBtn: { flex: 1, borderRadius: 12, padding: 14, alignItems: "center" },
-  modalBtnCancel: { backgroundColor: "#f1f5f9" },
-  modalBtnConfirm: { backgroundColor: "#dc2626" },
+  modalBtnCancel: { backgroundColor: BG },
+  modalBtnConfirm: { backgroundColor: DANGER },
   modalBtnCancelText: { color: "#1d293b", fontWeight: "600" },
   modalBtnConfirmText: { color: "#fff", fontWeight: "700" },
 });
