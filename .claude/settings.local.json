@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -H \"Expo-Platform: ios\" -H \"Accept: application/expo+json\" \"http://localhost:8081/\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); exp=d.get\\('exp',{}\\); print\\('reactCompiler:', exp.get\\('experiments',{}\\).get\\('reactCompiler','not found'\\)\\)\")",
+      "Bash(rm -rf node_modules/expo-modules-autolinking)",
+      "Bash(npm install *)",
+      "Bash(npx expo *)"
+    ]
+  }
+}
