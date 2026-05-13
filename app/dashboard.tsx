@@ -2,7 +2,6 @@ import { useFocusEffect, useRouter } from "expo-router";
 import {
   Modal,
   Pressable,
-  Settings,
   StatusBar,
   StyleSheet,
   Text,
@@ -10,9 +9,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useStatsStore } from "@/src/statsStore";
 import { BRAND, ACCENT, BG, TEXT, SUBTLE, BORDER } from "@/src/theme/colors";
+import { getPermissionStatus, requestPermission, scheduleReminder } from "@/src/notifications";
 
 const USER_NAME = "Joe";
 
@@ -21,6 +21,17 @@ export default function DashboardScreen() {
   const savedExam = useStatsStore((s) => s.savedExam);
   const clearSavedExam = useStatsStore((s) => s.clearSavedExam);
   const [resumeVisible, setResumeVisible] = useState(false);
+
+  useEffect(() => {
+    async function promptIfNeeded() {
+      const status = await getPermissionStatus();
+      if (status === "undetermined") {
+        const granted = await requestPermission();
+        if (granted) scheduleReminder(8, 0);
+      }
+    }
+    promptIfNeeded();
+  }, []);
 
   useFocusEffect(useCallback(() => {
     if (savedExam) setResumeVisible(true);
