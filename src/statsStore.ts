@@ -40,9 +40,6 @@ type StatsState = {
   flashcardRatings: Record<string, FlashcardRating>;
   flashcardNextReview: Record<string, number>;
   savedExam: SavedExam | null;
-  notificationsEnabled: boolean;
-  reminderTime: { hour: number; minute: number };
-  setNotificationPrefs: (enabled: boolean, hour: number, minute: number) => void;
   setNextReview: (source: "free" | "prem", id: number, nextdate: number) => void;
   saveExamProgress: (progress: SavedExam) => void;
   clearSavedExam: () => void;
@@ -63,10 +60,6 @@ export const useStatsStore = create<StatsState>()(
       flashcardRatings: {},
       flashcardNextReview: {},
       savedExam: null,
-      notificationsEnabled: false,
-      reminderTime: { hour: 8, minute: 0 },
-      setNotificationPrefs: (enabled, hour, minute) =>
-        set({ notificationsEnabled: enabled, reminderTime: { hour, minute } }),
       examHistory: [],
       quizHistory: [],
       markCard: (source, id, rating) =>
