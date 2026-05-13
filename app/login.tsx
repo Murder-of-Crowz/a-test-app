@@ -5,7 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { COLORS } from "./theme/colors";
+import { COLORS } from "@/src/theme/colors";
 
 export default function Login() {
   return (

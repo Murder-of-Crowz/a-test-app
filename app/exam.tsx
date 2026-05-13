@@ -13,8 +13,8 @@ import data from "@/assets/questions.json"
 // @ts-ignore
 import { getPremQuestions, type PremQuestion } from "@/src/premDB";
 import { useStatsStore } from "@/src/statsStore";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
-import { SHADOW_MD } from "./theme/shadows";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/src/theme/colors";
+import { SHADOW_MD } from "@/src/theme/shadows";
 
 const TOTAL = 25;
 

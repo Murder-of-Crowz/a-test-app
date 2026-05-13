@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/src/theme/colors";
 import { getQuizSubjects } from "./questionData";
-import { SHADOW_MD } from "./theme/shadows";
+import { SHADOW_MD } from "@/src/theme/shadows";
 
 const quizSubjects = getQuizSubjects();
 

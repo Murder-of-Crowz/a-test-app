@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useState } from "react";
 import { useStatsStore } from "@/src/statsStore";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
+import { BRAND, ACCENT, BG, TEXT, SUBTLE, BORDER } from "@/src/theme/colors";
 
 const USER_NAME = "Joe";
 

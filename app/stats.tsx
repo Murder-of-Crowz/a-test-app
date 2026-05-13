@@ -15,8 +15,8 @@ import { useStatsStore } from "@/src/statsStore";
 import data from "@/assets/questions.json";
 // @ts-ignore
 import { getPremQuestions, PremQuestion } from "@/src/premDB";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
-import { SHADOW_SM } from "./theme/shadows";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/src/theme/colors";
+import { SHADOW_SM } from "@/src/theme/shadows";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 

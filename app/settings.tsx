@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, DANGER } from "@/app/theme/colors";
-import { SHADOW_MD } from "./theme/shadows";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, DANGER } from "@/src/theme/colors";
+import { SHADOW_MD } from "@/src/theme/shadows";
 
 /*
 Foundation is set for settings, everything you see here right now is just placeholders as stated below.
