@@ -173,7 +173,8 @@ export default function SettingsScreen() {
           )}
 
           {/* TEST for Notification // Comment out when not in use. */}
-          <Pressable style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}>
+          <Pressable style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+            onPress={sendTestNotif}>
             <Ionicons name="notifications-outline" size={28} color={ACCENT} style={styles.rowIcon} />
             <Text style={styles.rowLabel}>Test Notification</Text>
             <Text style={{ color: MUTED, fontSize: 13 }}>Fires in 5s</Text>
