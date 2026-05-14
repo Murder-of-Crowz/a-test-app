@@ -13,6 +13,11 @@
       "bundleIdentifier": "com.studyprep.esthetics"
     },
     "android": {
+      "permissions": [
+        "POST_NOTIFICATIONS",
+        "RECEIVE_BOOT_COMPLETED",
+        "SCHEDULE_EXACT_ALARM"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -28,7 +33,12 @@
     },
     "plugins": [
       "expo-router",
-      "expo-notifications",
+      [
+        "expo-notifications",
+        {
+          "defaultChannel": "default"
+        }
+      ],
       [
         "expo-splash-screen",
         {
