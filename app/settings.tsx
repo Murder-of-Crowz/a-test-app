@@ -83,7 +83,8 @@ export default function SettingsScreen() {
   const [spanish, setSpanish] = useState(false);
   const [signOutVisible, setSignOutVisible] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [reminderTime, setReminderTime] = useState({ hour: 8, minute: 0 })
+  const [reminderTime, setReminderTime] = useState({ hour: 8, minute: 0 });
+  const [showPicker, setShowPicker] = useState(false);
 
   useEffect(() => {
     hasScheduledReminder().then(setNotificationsEnabled);
@@ -96,6 +97,7 @@ export default function SettingsScreen() {
       if (!granted) return;
       await scheduleReminder(reminderTime.hour, reminderTime.minute);
       setNotificationsEnabled(true);
+      setShowPicker(true);
     } else {
       await cancelReminder();
       setNotificationsEnabled(false);
@@ -150,7 +152,7 @@ export default function SettingsScreen() {
               thumbColor="#fff"
             />
           } />
-          {notificationsEnabled && (
+          {notificationsEnabled && showPicker && (
             <View style={styles.timePickerRow}>
               <DateTimePicker
                 value={(() => {
@@ -161,6 +163,7 @@ export default function SettingsScreen() {
                 mode="time"
                 display="spinner"
                 onChange={(_, date) => {
+                  setShowPicker(false);
                   if (!date) return;
                   const hour = date.getHours();
                   const minute = date.getMinutes();
