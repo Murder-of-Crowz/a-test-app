@@ -7,7 +7,7 @@ import { useStatsStore } from "@/src/statsStore";
 import data from "@/assets/questions.json";
 // @ts-ignore
 import { getPremQuestions } from "@/src/premDB";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/src/theme/colors";
 
 type FullQuestion = {
   id: number;

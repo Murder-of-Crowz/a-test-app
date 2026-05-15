@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BRAND, ACCENT, SUBTLE } from "@/app/theme/colors";
+import { BRAND, ACCENT, SUBTLE } from "@/src/theme/colors";
 
 export default function SplashScreen() {
   const router = useRouter();

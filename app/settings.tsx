@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { 
   Text,
@@ -11,8 +11,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, DANGER } from "@/app/theme/colors";
-import { SHADOW_MD } from "./theme/shadows";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, DANGER } from "@/src/theme/colors";
+import { SHADOW_MD } from "@/src/theme/shadows";
+import { scheduleReminder, cancelReminder, getPermissionStatus, hasScheduledReminder, requestPermission, sendTestNotif } from "@/src/notifications";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 /*
 Foundation is set for settings, everything you see here right now is just placeholders as stated below.
@@ -80,6 +82,25 @@ export default function SettingsScreen() {
   const router = useRouter();
   const [spanish, setSpanish] = useState(false);
   const [signOutVisible, setSignOutVisible] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [reminderTime, setReminderTime] = useState({ hour: 8, minute: 0 })
+
+  useEffect(() => {
+    hasScheduledReminder().then(setNotificationsEnabled);
+  }, []);
+
+  const handleNotificationToggle = async (val: boolean) => {
+    if (val) {
+      const status = await getPermissionStatus();
+      const granted = status === "granted" || await requestPermission();
+      if (!granted) return;
+      await scheduleReminder(reminderTime.hour, reminderTime.minute);
+      setNotificationsEnabled(true);
+    } else {
+      await cancelReminder();
+      setNotificationsEnabled(false);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -121,6 +142,43 @@ export default function SettingsScreen() {
               thumbColor="#fff"
             />
           } />
+          <Row icon="notifications-outline" label="Daily Reminder" right={
+            <Switch
+              value={notificationsEnabled}
+              onValueChange={handleNotificationToggle}
+              trackColor={{ false: "#cdb5e1", true: ACCENT }}
+              thumbColor="#fff"
+            />
+          } />
+          {notificationsEnabled && (
+            <View style={styles.timePickerRow}>
+              <DateTimePicker
+                value={(() => {
+                  const d = new Date();
+                  d.setHours(reminderTime.hour, reminderTime.minute, 0, 0);
+                  return d;
+                })()}
+                mode="time"
+                display="spinner"
+                onChange={(_, date) => {
+                  if (!date) return;
+                  const hour = date.getHours();
+                  const minute = date.getMinutes();
+                  setReminderTime({ hour, minute });
+                  scheduleReminder(hour, minute);
+                }}
+                style={styles.timePicker}
+              />
+            </View>
+          )}
+
+          {/* TEST for Notification // Comment out when not in use. */}
+          <Pressable style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+            onPress={sendTestNotif}>
+            <Ionicons name="notifications-outline" size={28} color={ACCENT} style={styles.rowIcon} />
+            <Text style={styles.rowLabel}>Test Notification</Text>
+            <Text style={{ color: MUTED, fontSize: 13 }}>Fires in 5s</Text>
+          </Pressable>
         </View>
 
         <SectionHeader title="Premium" />
@@ -255,4 +313,7 @@ const styles = StyleSheet.create({
   modalBtnConfirm: { backgroundColor: DANGER },
   modalBtnCancelText: { color: "#1d293b", fontWeight: "600" },
   modalBtnConfirmText: { color: "#fff", fontWeight: "700" },
+
+  timePickerRow: { backgroundColor: "#fff", alignItems: "center" },
+  timePicker: { width: "100%", height: 120 },
 });

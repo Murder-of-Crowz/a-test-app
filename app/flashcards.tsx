@@ -23,8 +23,8 @@ import data from "@/assets/questions.json";
 // @ts-ignore
 import { PremQuestion, getPremQuestions } from "@/src/premDB";
 import { useStatsStore } from "@/src/statsStore";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER, WARNING } from "@/app/theme/colors";
-import { SHADOW_LG } from "./theme/shadows";
+import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER, WARNING } from "@/src/theme/colors";
+import { SHADOW_LG } from "@/src/theme/shadows";
 
 const REVIEW_INTERVAL_MS = 24 * 60 * 60 * 1000 // 24-hours
 

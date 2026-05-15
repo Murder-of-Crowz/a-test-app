@@ -7,8 +7,8 @@ import { getQuestionBank, type PremQuestion } from "../questionData";
 // @ts-ignore
 import { getPremQuestions } from "@/src/premDB";
 import { useStatsStore } from "@/src/statsStore";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/app/theme/colors";
-import { SHADOW_MD } from "../theme/shadows";
+import { BRAND, ACCENT, BG, TEXT, MUTED, BORDER, SUCCESS, DANGER } from "@/src/theme/colors";
+import { SHADOW_MD } from "@/src/theme/shadows";
 
 const QUIZ_QUESTION_LIMIT = 20;
 
