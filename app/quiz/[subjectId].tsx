@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { getQuestionBank, type PremQuestion } from "../questionData";
+import { getQuestionBank, type PremQuestion } from "../../src/data/questionData";
 // @ts-ignore
 import { getPremQuestions } from "@/src/premDB";
 import { useStatsStore } from "@/src/statsStore";

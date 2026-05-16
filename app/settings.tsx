@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { 
+import {
   Text,
   View,
   StyleSheet,
@@ -11,39 +11,29 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, DANGER } from "@/src/theme/colors";
+import {
+  BRAND,
+  ACCENT,
+  BG,
+  TEXT,
+  MUTED,
+  SUBTLE,
+  DANGER,
+} from "@/src/theme/colors";
 import { SHADOW_MD } from "@/src/theme/shadows";
-import { scheduleReminder, cancelReminder, getPermissionStatus, hasScheduledReminder, requestPermission, sendTestNotif } from "@/src/notifications";
+import {
+  scheduleReminder,
+  cancelReminder,
+  getPermissionStatus,
+  hasScheduledReminder,
+  requestPermission,
+  sendTestNotif,
+} from "@/src/notifications";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useSettingsStore } from "@/src/settingsStore";
 
-/*
-Foundation is set for settings, everything you see here right now is just placeholders as stated below.
-
-Language toggle from English to Spanish needs toggle function completion once JSON translation is good.
-
-Once firebase is implemented the following changes need to happen on:
-user = auth.currentUser;
-USER_NAME = user?.displayName ?? "User";
-USER_EMAIL = user?.email ?? "";
-
-Change password onPress:
-onPress={() => sendPasswordResetEmail(auth, user.email)}
-
-Sign out confirm onPress:
-await signOut(auth);
-router.replace("/login");
-
-Once RevenueCat is implemented, "Restore Purchase" onPresss needs changed.
-
-Privacy Policy needs completion.
-Terms of Service needs completion.
-
-*/
-
-// Placeholders
 const USER_NAME = "Joe";
-const USER_EMAIL = "joe@mama.com"
-const IS_PREMIUM = false;
+const USER_EMAIL = "joe@mama.com";
 const APP_VERSION = "1.0.0";
 
 type RowProps = {
@@ -57,30 +47,42 @@ type RowProps = {
 function Row({ icon, label, onPress, right, danger }: RowProps) {
   return (
     <Pressable
-      style={({ pressed }) => [styles.row, pressed && onPress && styles.rowPressed ]}
+      style={({ pressed }) => [
+        styles.row,
+        pressed && onPress && styles.rowPressed,
+      ]}
       onPress={onPress}
     >
       <Ionicons
         name={icon as any}
         size={20}
-        color={danger ? DANGER : BRAND }
+        color={danger ? DANGER : BRAND}
         style={styles.rowIcon}
       />
-      <Text style={[styles.rowLabel, danger && styles.rowLabelDanger]}>{label}</Text>
-      {right !== undefined
-        ? right
-        : <Ionicons name="chevron-forward" size={16} color="#cbd5e1" />}
+
+      <Text style={[styles.rowLabel, danger && styles.rowLabelDanger]}>
+        {label}
+      </Text>
+
+      {right !== undefined ? (
+        right
+      ) : (
+        <Ionicons name="chevron-forward" size={16} color="#cbd5e1" />
+      )}
     </Pressable>
   );
 }
 
-function SectionHeader({ title } : { title : string }) {
+function SectionHeader({ title }: { title: string }) {
   return <Text style={styles.sectionHeader}>{title}</Text>;
 }
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const [spanish, setSpanish] = useState(false);
+
+  const IS_PREMIUM = useSettingsStore((state) => state.IS_PREMIUM);
+  const spanish = useSettingsStore((state) => state.spanish);
+
   const [signOutVisible, setSignOutVisible] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [reminderTime, setReminderTime] = useState({ hour: 8, minute: 0 });
@@ -90,11 +92,17 @@ export default function SettingsScreen() {
     hasScheduledReminder().then(setNotificationsEnabled);
   }, []);
 
+  const handleSpanishToggle = (value: boolean) => {
+    useSettingsStore.setState({ spanish: value });
+  };
+
   const handleNotificationToggle = async (val: boolean) => {
     if (val) {
       const status = await getPermissionStatus();
-      const granted = status === "granted" || await requestPermission();
+      const granted = status === "granted" || (await requestPermission());
+
       if (!granted) return;
+
       await scheduleReminder(reminderTime.hour, reminderTime.minute);
       setNotificationsEnabled(true);
       setShowPicker(true);
@@ -102,7 +110,7 @@ export default function SettingsScreen() {
       await cancelReminder();
       setNotificationsEnabled(false);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -110,17 +118,20 @@ export default function SettingsScreen() {
         <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </Pressable>
+
         <Text style={styles.headerTile}>Settings</Text>
+
         <View style={{ width: 24 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll}>
-
-        {/* Account info */}
         <View style={styles.accountCard}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{USER_NAME.charAt(0).toUpperCase()}</Text>
+            <Text style={styles.avatarText}>
+              {USER_NAME.charAt(0).toUpperCase()}
+            </Text>
           </View>
+
           <View>
             <Text style={styles.accountName}>{USER_NAME}</Text>
             <Text style={styles.accountEmail}>{USER_EMAIL}</Text>
@@ -128,30 +139,48 @@ export default function SettingsScreen() {
         </View>
 
         <SectionHeader title="Account" />
+
         <View style={styles.section}>
           <Row icon="key-outline" label="Change Password" onPress={() => {}} />
-          <Row icon="log-out-outline" label="Sign Out" onPress={() => setSignOutVisible(true)} danger right={null} />
+
+          <Row
+            icon="log-out-outline"
+            label="Sign Out"
+            onPress={() => setSignOutVisible(true)}
+            danger
+            right={null}
+          />
         </View>
 
-
         <SectionHeader title="Preferences" />
+
         <View style={styles.section}>
-          <Row icon="language-outline" label="Spanish" right={
-            <Switch 
-              value={spanish}
-              onValueChange={setSpanish}
-              trackColor={{ false: "#cbd5e1", true: ACCENT }}
-              thumbColor="#fff"
-            />
-          } />
-          <Row icon="notifications-outline" label="Daily Reminder" right={
-            <Switch
-              value={notificationsEnabled}
-              onValueChange={handleNotificationToggle}
-              trackColor={{ false: "#cdb5e1", true: ACCENT }}
-              thumbColor="#fff"
-            />
-          } />
+          <Row
+            icon="language-outline"
+            label="Spanish"
+            right={
+              <Switch
+                value={spanish}
+                onValueChange={handleSpanishToggle}
+                trackColor={{ false: "#cbd5e1", true: ACCENT }}
+                thumbColor="#fff"
+              />
+            }
+          />
+
+          <Row
+            icon="notifications-outline"
+            label="Daily Reminder"
+            right={
+              <Switch
+                value={notificationsEnabled}
+                onValueChange={handleNotificationToggle}
+                trackColor={{ false: "#cbd5e1", true: ACCENT }}
+                thumbColor="#fff"
+              />
+            }
+          />
+
           {notificationsEnabled && showPicker && (
             <View style={styles.timePickerRow}>
               <DateTimePicker
@@ -164,9 +193,12 @@ export default function SettingsScreen() {
                 display="spinner"
                 onChange={(_, date) => {
                   setShowPicker(false);
+
                   if (!date) return;
+
                   const hour = date.getHours();
                   const minute = date.getMinutes();
+
                   setReminderTime({ hour, minute });
                   scheduleReminder(hour, minute);
                 }}
@@ -175,56 +207,96 @@ export default function SettingsScreen() {
             </View>
           )}
 
-          {/* TEST for Notification // Comment out when not in use. */}
-          <Pressable style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
-            onPress={sendTestNotif}>
-            <Ionicons name="notifications-outline" size={28} color={ACCENT} style={styles.rowIcon} />
+          <Pressable
+            style={({ pressed }) => [
+              styles.row,
+              pressed && styles.rowPressed,
+            ]}
+            onPress={sendTestNotif}
+          >
+            <Ionicons
+              name="notifications-outline"
+              size={28}
+              color={ACCENT}
+              style={styles.rowIcon}
+            />
+
             <Text style={styles.rowLabel}>Test Notification</Text>
             <Text style={{ color: MUTED, fontSize: 13 }}>Fires in 5s</Text>
           </Pressable>
         </View>
 
         <SectionHeader title="Premium" />
+
         <View style={styles.section}>
-          <Row icon="star-outline" label="Current Plan" right={
-            <View style={[styles.badge, IS_PREMIUM ? styles.badgePremium : styles.badgeFree]}>
-              <Text style={styles.badgeText}>{IS_PREMIUM ? "Premium" : "Free"}</Text>
-            </View>
-          } />
+          <Row
+            icon="star-outline"
+            label="Current Plan"
+            right={
+              <View
+                style={[
+                  styles.badge,
+                  IS_PREMIUM ? styles.badgePremium : styles.badgeFree,
+                ]}
+              >
+                <Text style={styles.badgeText}>
+                  {IS_PREMIUM ? "Premium" : "Free"}
+                </Text>
+              </View>
+            }
+          />
+
           <Row icon="refresh-outline" label="Restore Purchase" onPress={() => {}} />
-            {!IS_PREMIUM && (
-              <Pressable style={styles.upgradeBtn} onPress={() => {}}>
-                <Text style={styles.upgradeText}>Upgrade to Premium</Text>
-              </Pressable>
-            )}
+
+          {!IS_PREMIUM && (
+            <Pressable style={styles.upgradeBtn} onPress={() => {}}>
+              <Text style={styles.upgradeText}>Upgrade to Premium</Text>
+            </Pressable>
+          )}
         </View>
 
         <SectionHeader title="About" />
+
         <View style={styles.section}>
           <Row icon="document-text-outline" label="Privacy Policy" onPress={() => {}} />
           <Row icon="reader-outline" label="Terms of Service" onPress={() => {}} />
-          <Row icon="information-circle-outline" label="Version" right={<Text style={styles.versionText}>{APP_VERSION}</Text>} /> 
-        </View>
 
+          <Row
+            icon="information-circle-outline"
+            label="Version"
+            right={<Text style={styles.versionText}>{APP_VERSION}</Text>}
+          />
+        </View>
       </ScrollView>
 
-      {/* Sign out confirm */}
       <Modal
         visible={signOutVisible}
         transparent
         animationType="fade"
         onRequestClose={() => setSignOutVisible(false)}
       >
-        <Pressable style={styles.overlay} onPress={() => setSignOutVisible(false)}>
+        <Pressable
+          style={styles.overlay}
+          onPress={() => setSignOutVisible(false)}
+        >
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>Sign Out</Text>
-            <Text style={styles.modalBody}>Are you sure you want to sign out?</Text>
+            <Text style={styles.modalBody}>
+              Are you sure you want to sign out?
+            </Text>
+
             <View style={styles.modalActions}>
-              <Pressable style={[styles.modalBtn, styles.modalBtnCancel]} onPress={() => setSignOutVisible(false)}>
+              <Pressable
+                style={[styles.modalBtn, styles.modalBtnCancel]}
+                onPress={() => setSignOutVisible(false)}
+              >
                 <Text style={styles.modalBtnCancelText}>Cancel</Text>
               </Pressable>
-              {/* Below this needs configured after firebase implementation */}
-              <Pressable style={[styles.modalBtn, styles.modalBtnConfirm]} onPress={() => setSignOutVisible(false)}> 
+
+              <Pressable
+                style={[styles.modalBtn, styles.modalBtnConfirm]}
+                onPress={() => setSignOutVisible(false)}
+              >
                 <Text style={styles.modalBtnConfirmText}>Sign Out</Text>
               </Pressable>
             </View>
@@ -246,6 +318,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
   },
+
   headerTile: { color: "#fff", fontSize: 17, fontWeight: "700" },
 
   scroll: { padding: 20, gap: 8, paddingBottom: 40 },
@@ -260,9 +333,20 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     ...SHADOW_MD,
   },
-  avatar: { width: 52, height: 52, borderRadius: 26, backgroundColor: ACCENT, justifyContent: "center", alignItems: "center" },
+
+  avatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: ACCENT,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   avatarText: { color: "#fff", fontSize: 22, fontWeight: "800" },
+
   accountName: { color: TEXT, fontSize: 16, fontWeight: "700" },
+
   accountEmail: { color: SUBTLE, fontSize: 13, marginTop: 2 },
 
   sectionHeader: {
@@ -291,32 +375,68 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: BG,
   },
+
   rowPressed: { backgroundColor: "#f8fafc" },
+
   rowIcon: { marginRight: 12 },
-  rowLabel: { flex: 1, color: TEXT,  fontSize: 15 },
+
+  rowLabel: { flex: 1, color: TEXT, fontSize: 15 },
+
   rowLabelDanger: { color: DANGER },
 
   badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
+
   badgeFree: { backgroundColor: BG },
+
   badgePremium: { backgroundColor: "#f3f9c3" },
+
   badgeText: { fontSize: 12, fontWeight: "700", color: TEXT },
 
-  upgradeBtn: { margin: 12, backgroundColor: ACCENT, borderRadius: 12, padding: 14, alignItems: "center" },
+  upgradeBtn: {
+    margin: 12,
+    backgroundColor: ACCENT,
+    borderRadius: 12,
+    padding: 14,
+    alignItems: "center",
+  },
+
   upgradeText: { color: "#fff", fontWeight: "700", fontSize: 15 },
 
   versionText: { color: MUTED, fontSize: 14 },
 
-  overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center", padding: 32 },
-  modalCard: { backgroundColor: "#fff", borderRadius: 20, padding: 24, width: "100%", gap: 8 },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+
+  modalCard: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 24,
+    width: "100%",
+    gap: 8,
+  },
+
   modalTitle: { color: TEXT, fontSize: 18, fontWeight: "800" },
+
   modalBody: { color: SUBTLE, fontSize: 14, lineHeight: 20 },
+
   modalActions: { flexDirection: "row", gap: 12, marginTop: 8 },
+
   modalBtn: { flex: 1, borderRadius: 12, padding: 14, alignItems: "center" },
+
   modalBtnCancel: { backgroundColor: BG },
+
   modalBtnConfirm: { backgroundColor: DANGER },
+
   modalBtnCancelText: { color: "#1d293b", fontWeight: "600" },
+
   modalBtnConfirmText: { color: "#fff", fontWeight: "700" },
 
   timePickerRow: { backgroundColor: "#fff", alignItems: "center" },
+
   timePicker: { width: "100%", height: 120 },
 });

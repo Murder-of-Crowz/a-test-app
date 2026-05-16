@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "expo-router";
-import { 
+import {
   Dimensions,
   Pressable,
   ScrollView,
@@ -10,20 +10,36 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import Animated, { useAnimatedStyle, withTiming, useSharedValue, interpolate } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+  useSharedValue,
+} from "react-native-reanimated";
 import { useStatsStore } from "@/src/statsStore";
-import data from "@/assets/questions.json";
+import { useSettingsStore } from "@/src/settingsStore";
+
+import englishData from "@/assets/questions.json";
+import spanishData from "@/assets/spanishQuestions.json";
+
 // @ts-ignore
 import { getPremQuestions, PremQuestion } from "@/src/premDB";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/src/theme/colors";
+import {
+  BRAND,
+  ACCENT,
+  BG,
+  TEXT,
+  MUTED,
+  SUBTLE,
+  BORDER,
+  SUCCESS,
+  DANGER,
+} from "@/src/theme/colors";
 import { SHADOW_SM } from "@/src/theme/shadows";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-const TABS = ["Flashcards", "Quiz", "Exam" ] as const;
-
-function formatDate(ts: number) {
-  return new Date(ts).toLocaleDateString("en-US", {
+function formatDate(ts: number, spanish: boolean) {
+  return new Date(ts).toLocaleDateString(spanish ? "es-US" : "en-US", {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -31,7 +47,13 @@ function formatDate(ts: number) {
   });
 }
 
-function CollapsibleBody({ isOpen, children }: { isOpen: boolean; children: React.ReactNode}) {
+function CollapsibleBody({
+  isOpen,
+  children,
+}: {
+  isOpen: boolean;
+  children: React.ReactNode;
+}) {
   const maxHeight = useSharedValue(0);
 
   useEffect(() => {
@@ -43,11 +65,16 @@ function CollapsibleBody({ isOpen, children }: { isOpen: boolean; children: Reac
     overflow: "hidden",
   }));
 
-  return <Animated.View style={animStyle}>{children}</Animated.View>
+  return <Animated.View style={animStyle}>{children}</Animated.View>;
 }
 
 export default function StatsScreen() {
   const router = useRouter();
+  const spanish = useSettingsStore((state) => state.spanish);
+  const data = spanish ? spanishData : englishData;
+
+  const TABS = spanish ? ["Tarjetas", "Quiz", "Examen"] : ["Flashcards", "Quiz", "Exam"];
+
   const scrollRef = useRef<ScrollView>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [premCards, setPremCards] = useState<PremQuestion[]>([]);
@@ -61,38 +88,57 @@ export default function StatsScreen() {
   const resetFlashcardRatings = useStatsStore((s) => s.resetFlashcardRatings);
   const resetExamHistory = useStatsStore((s) => s.resetExamHistory);
   const resetQuizHistory = useStatsStore((s) => s.resetQuizHistory);
-  const resetStats = useStatsStore((s) => s.resetStats);
 
   useEffect(() => {
-    try { setPremCards(getPremQuestions()); } catch {}
-  }, []);
+    if (spanish) {
+      setPremCards([]);
+      return;
+    }
+
+    try {
+      setPremCards(getPremQuestions());
+    } catch {
+      setPremCards([]);
+    }
+  }, [spanish]);
 
   const idToCategoryLookup = useMemo(() => {
     const lookup: Record<string, string> = {};
-    data.forEach(section => {
-      section.questions.forEach(q => {
+
+    data.forEach((section) => {
+      section.questions.forEach((q) => {
         lookup[`free_${q.id}`] = section.category;
       });
     });
-    premCards.forEach(q => {
-      lookup[`prem_${q.id}`] = q.category
+
+    premCards.forEach((q) => {
+      lookup[`prem_${q.id}`] = q.category;
     });
+
     return lookup;
-  }, [premCards]);
+  }, [data, premCards]);
 
   const flashcardSectionStats = useMemo(() => {
     const categoryTotals: Record<string, number> = {};
-    data.forEach(s => { categoryTotals[s.category] = s.questions.length; });
-    premCards.forEach(q => {
+
+    data.forEach((s) => {
+      categoryTotals[s.category] = s.questions.length;
+    });
+
+    premCards.forEach((q) => {
       categoryTotals[q.category] = (categoryTotals[q.category] || 0) + 1;
     });
 
-    const categoryRatings: Record<string, { known: number, learning: number }> = {};
+    const categoryRatings: Record<string, { known: number; learning: number }> = {};
+
     Object.entries(flashcardRatings).forEach(([key, rating]) => {
       const category = idToCategoryLookup[key];
       if (!category) return;
 
-      if (!categoryRatings[category]) categoryRatings[category] = { known: 0, learning: 0 };
+      if (!categoryRatings[category]) {
+        categoryRatings[category] = { known: 0, learning: 0 };
+      }
+
       if (rating === "know") categoryRatings[category].known++;
       else categoryRatings[category].learning++;
     });
@@ -102,21 +148,26 @@ export default function StatsScreen() {
       total,
       known: categoryRatings[category]?.known ?? 0,
       learning: categoryRatings[category]?.learning ?? 0,
-      unreviewed: total - (categoryRatings[category]?.known ?? 0) - (categoryRatings[category]?.learning ?? 0),
+      unreviewed:
+        total -
+        (categoryRatings[category]?.known ?? 0) -
+        (categoryRatings[category]?.learning ?? 0),
     }));
-  }, [flashcardRatings, idToCategoryLookup, premCards])
+  }, [flashcardRatings, idToCategoryLookup, premCards, data]);
 
-  const totalKnown = Object.values(flashcardRatings).filter(r => r === "know").length;
-  const totalLearning = Object.values(flashcardRatings).filter(r => r === "learning").length;
+  const totalKnown = Object.values(flashcardRatings).filter((r) => r === "know").length;
+  const totalLearning = Object.values(flashcardRatings).filter((r) => r === "learning").length;
   const totalCards = data.reduce((sum, s) => sum + s.questions.length, 0) + premCards.length;
-  const totalUnreviewed = totalCards - totalKnown - totalLearning
+  const totalUnreviewed = totalCards - totalKnown - totalLearning;
 
   const quizBySection = useMemo(() => {
     const map: Record<string, typeof quizHistory> = {};
-    quizHistory.forEach(q => {
+
+    quizHistory.forEach((q) => {
       if (!map[q.section]) map[q.section] = [];
       map[q.section].push(q);
     });
+
     return map;
   }, [quizHistory]);
 
@@ -130,7 +181,8 @@ export default function StatsScreen() {
     if (resetConfirm === tabIndex) {
       if (tabIndex === 0) resetFlashcardRatings();
       else if (tabIndex === 1) resetQuizHistory();
-      else resetExamHistory;
+      else resetExamHistory();
+
       setResetConfirm(null);
     } else {
       setResetConfirm(tabIndex);
@@ -138,26 +190,25 @@ export default function StatsScreen() {
   };
 
   const toggleExam = (id: string) => {
-    setExpandedExam(prev => prev === id ? null : id);
+    setExpandedExam((prev) => (prev === id ? null : id));
   };
 
   const toggleQuizSection = (section: string) => {
-    setExpandedQuizSections(prev => prev === section ? null : section);
+    setExpandedQuizSections((prev) => (prev === section ? null : section));
   };
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
-
-      {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </Pressable>
-        <Text style={styles.headerTitle}>Stats</Text>
+
+        <Text style={styles.headerTitle}>{spanish ? "Progreso" : "Stats"}</Text>
+
         <Text style={{ width: 24 }} />
       </View>
 
-      {/* Tab bar */}
       <View style={styles.tabBar}>
         {TABS.map((tab, i) => (
           <Pressable
@@ -172,7 +223,6 @@ export default function StatsScreen() {
         ))}
       </View>
 
-      {/* Pages */}
       <ScrollView
         ref={scrollRef}
         horizontal
@@ -186,87 +236,132 @@ export default function StatsScreen() {
           setResetConfirm(null);
         }}
       >
-
-        {/* Flashcards tab */}
         <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
           <View style={styles.overallRow}>
             <View style={styles.overallBadge}>
               <Text style={[styles.overallNum, { color: SUCCESS }]}>{totalKnown}</Text>
-              <Text style={styles.overallLabel}>Know It</Text>
+              <Text style={styles.overallLabel}>{spanish ? "Lo sé" : "Know It"}</Text>
             </View>
+
             <View style={styles.overallBadge}>
               <Text style={[styles.overallNum, { color: DANGER }]}>{totalLearning}</Text>
-              <Text style={styles.overallLabel}>Still Learning</Text>
+              <Text style={styles.overallLabel}>
+                {spanish ? "Aprendiendo" : "Still Learning"}
+              </Text>
             </View>
+
             <View style={styles.overallBadge}>
               <Text style={[styles.overallNum, { color: MUTED }]}>{totalUnreviewed}</Text>
-              <Text style={styles.overallLabel}>Unreviewed</Text>
+              <Text style={styles.overallLabel}>
+                {spanish ? "Sin repasar" : "Unreviewed"}
+              </Text>
             </View>
           </View>
 
           {flashcardSectionStats.map(({ category, known, learning, unreviewed }) => (
             <View key={category} style={styles.statRow}>
               <Text style={styles.statCategory}>{category}</Text>
+
               <View style={styles.statBarBg}>
-                <View style={[styles.statBarSegment, { flex: known, backgroundColor: SUCCESS}]} />
-                <View style={[styles.statBarSegment, { flex: learning, backgroundColor: DANGER}]} />
-                <View style={[styles.statBarSegment, { flex: unreviewed, backgroundColor: MUTED}]} />
+                <View style={[styles.statBarSegment, { flex: known, backgroundColor: SUCCESS }]} />
+                <View style={[styles.statBarSegment, { flex: learning, backgroundColor: DANGER }]} />
+                <View style={[styles.statBarSegment, { flex: unreviewed, backgroundColor: MUTED }]} />
               </View>
+
               <View style={styles.statCounts}>
-                <Text style={[styles.statCount, { color: SUCCESS }]}>{known} known</Text>
-                <Text style={[styles.statCount, { color: DANGER }]}>{learning} learning</Text>
-                <Text style={[styles.statCount, { color: MUTED }]}>{unreviewed} left</Text>
+                <Text style={[styles.statCount, { color: SUCCESS }]}>
+                  {known} {spanish ? "sabidas" : "known"}
+                </Text>
+                <Text style={[styles.statCount, { color: DANGER }]}>
+                  {learning} {spanish ? "aprendiendo" : "learning"}
+                </Text>
+                <Text style={[styles.statCount, { color: MUTED }]}>
+                  {unreviewed} {spanish ? "restantes" : "left"}
+                </Text>
               </View>
             </View>
           ))}
 
           <Pressable style={styles.resetBtn} onPress={() => handleReset(0)}>
             <Text style={styles.resetText}>
-              {resetConfirm === 0 ? "Tap again to confirm reset" : "Reset Flashcard Progress"}
+              {resetConfirm === 0
+                ? spanish
+                  ? "Toca otra vez para confirmar"
+                  : "Tap again to confirm reset"
+                : spanish
+                  ? "Restablecer progreso de tarjetas"
+                  : "Reset Flashcard Progress"}
             </Text>
           </Pressable>
         </ScrollView>
 
-        {/* Quiz tab */}
         <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
           {Object.keys(quizBySection).length === 0 ? (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>No quizzes taken yet</Text>
+              <Text style={styles.emptyText}>
+                {spanish ? "Aún no has tomado quizzes" : "No quizzes taken yet"}
+              </Text>
             </View>
           ) : (
             Object.entries(quizBySection).map(([section, attempts]) => {
               const isOpen = expandedQuizSections === section;
+
               return (
                 <View key={section} style={styles.collapseCard}>
-                  <Pressable style={styles.collapseHeader} onPress={() => toggleQuizSection(section)}>
+                  <Pressable
+                    style={styles.collapseHeader}
+                    onPress={() => toggleQuizSection(section)}
+                  >
                     <View style={styles.collapseHeaderLeft}>
                       <Text style={styles.collapseTitle}>{section}</Text>
                       <Text style={styles.collapseScore}>
-                        {attempts.length} attempt{attempts.length !== 1 ? "s" : ""}
+                        {attempts.length}{" "}
+                        {spanish
+                          ? `intento${attempts.length !== 1 ? "s" : ""}`
+                          : `attempt${attempts.length !== 1 ? "s" : ""}`}
                       </Text>
                     </View>
-                    <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color={MUTED} />
+
+                    <Ionicons
+                      name={isOpen ? "chevron-up" : "chevron-down"}
+                      size={18}
+                      color={MUTED}
+                    />
                   </Pressable>
+
                   <CollapsibleBody isOpen={isOpen}>
                     <View style={styles.collapseBody}>
                       {attempts.map((attempt) => {
                         const pct = Math.round((attempt.score / attempt.total) * 100);
+
                         return (
                           <View key={attempt.id} style={styles.quizAttemptRow}>
                             <View style={{ gap: 2 }}>
-                              <Text style={styles.quizAttemptDate}>{formatDate(attempt.timestamp)}</Text>
-                              <Text style={styles.quizAttemptScore}>{attempt.score}/{attempt.total} - {pct}%</Text>
+                              <Text style={styles.quizAttemptDate}>
+                                {formatDate(attempt.timestamp, spanish)}
+                              </Text>
+                              <Text style={styles.quizAttemptScore}>
+                                {attempt.score}/{attempt.total} - {pct}%
+                              </Text>
                             </View>
+
                             {attempt.questions?.length > 0 && (
                               <Pressable
-                                onPress={() => router.push({ pathname: "/results", params: { type: "quiz", id: attempt.id } })}
+                                onPress={() =>
+                                  router.push({
+                                    pathname: "/results",
+                                    params: { type: "quiz", id: attempt.id },
+                                  })
+                                }
                                 style={styles.reviewBtn}
                               >
-                                <Text style={styles.reviewBtnText}>Review</Text>
+                                <Text style={styles.reviewBtnText}>
+                                  {spanish ? "Revisar" : "Review"}
+                                </Text>
                               </Pressable>
                             )}
                           </View>
-                        )
+                        );
                       })}
                     </View>
                   </CollapsibleBody>
@@ -274,49 +369,88 @@ export default function StatsScreen() {
               );
             })
           )}
+
           <Pressable style={styles.resetBtn} onPress={() => handleReset(1)}>
             <Text style={styles.resetText}>
-              {resetConfirm === 1 ? "Tap again to confirm reset" : "Reset Quiz History"}
+              {resetConfirm === 1
+                ? spanish
+                  ? "Toca otra vez para confirmar"
+                  : "Tap again to confirm reset"
+                : spanish
+                  ? "Restablecer historial de quizzes"
+                  : "Reset Quiz History"}
             </Text>
           </Pressable>
         </ScrollView>
 
-        {/* Exam tab */}
         <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
           {examHistory.length === 0 ? (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>No exams taken yet</Text>
+              <Text style={styles.emptyText}>
+                {spanish ? "Aún no has tomado exámenes" : "No exams taken yet"}
+              </Text>
             </View>
           ) : (
             examHistory.map((exam) => {
               const isOpen = expandedExam === exam.id;
               const pct = Math.round((exam.score / exam.total) * 100);
+
               return (
                 <View key={exam.id} style={styles.collapseCard}>
-                  <Pressable style={styles.collapseHeader} onPress={() => toggleExam(exam.id)}>
+                  <Pressable
+                    style={styles.collapseHeader}
+                    onPress={() => toggleExam(exam.id)}
+                  >
                     <View style={styles.collapseHeaderLeft}>
-                      <Text style={styles.collapseTitle}>{formatDate(exam.timestamp)}</Text>
-                      <Text style={styles.collapseScore}>{exam.score}/{exam.total} - {pct}%</Text>
+                      <Text style={styles.collapseTitle}>
+                        {formatDate(exam.timestamp, spanish)}
+                      </Text>
+                      <Text style={styles.collapseScore}>
+                        {exam.score}/{exam.total} - {pct}%
+                      </Text>
                     </View>
-                    <Ionicons name={isOpen ? "chevron-up" : "chevron-down"} size={18} color={MUTED} />
+
+                    <Ionicons
+                      name={isOpen ? "chevron-up" : "chevron-down"}
+                      size={18}
+                      color={MUTED}
+                    />
                   </Pressable>
+
                   <CollapsibleBody isOpen={isOpen}>
                     <View style={styles.collapseBody}>
                       {exam.breakdown.map(({ category, correct, total }) => (
                         <View key={category} style={styles.breakdownRow}>
                           <Text style={styles.breakdownCategory}>{category}</Text>
-                          <Text style={styles.breakdownScore}>{correct}/{total}</Text>
+                          <Text style={styles.breakdownScore}>
+                            {correct}/{total}
+                          </Text>
                           <View style={styles.breakdownBarBg}>
-                            <View style={[styles.breakdownBarFill, { width: `${Math.round((correct / total) * 100)}%` as any}]} />
+                            <View
+                              style={[
+                                styles.breakdownBarFill,
+                                {
+                                  width: `${Math.round((correct / total) * 100)}%` as any,
+                                },
+                              ]}
+                            />
                           </View>
                         </View>
                       ))}
+
                       {exam.questions?.length > 0 && (
                         <Pressable
-                          onPress={() => router.push({ pathname: "/results", params: { type: "exam", id: exam.id } })}
+                          onPress={() =>
+                            router.push({
+                              pathname: "/results",
+                              params: { type: "exam", id: exam.id },
+                            })
+                          }
                           style={styles.reviewBtn}
                         >
-                          <Text style={styles.reviewBtnText}>Review Questions</Text>
+                          <Text style={styles.reviewBtnText}>
+                            {spanish ? "Revisar preguntas" : "Review Questions"}
+                          </Text>
                         </Pressable>
                       )}
                     </View>
@@ -325,15 +459,22 @@ export default function StatsScreen() {
               );
             })
           )}
+
           <Pressable style={styles.resetBtn} onPress={() => handleReset(2)}>
             <Text style={styles.resetText}>
-              {resetConfirm === 2 ? "Tap again to confirm reset" : "Reset Exam History"}
+              {resetConfirm === 2
+                ? spanish
+                  ? "Toca otra vez para confirmar"
+                  : "Tap again to confirm reset"
+                : spanish
+                  ? "Restablecer historial de exámenes"
+                  : "Reset Exam History"}
             </Text>
           </Pressable>
         </ScrollView>
       </ScrollView>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -362,7 +503,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: "center",
     borderBottomWidth: 2,
-    borderBottomColor: "transparent"
+    borderBottomColor: "transparent",
   },
   tabBtnActive: { borderBottomColor: BRAND },
   tabText: { color: MUTED, fontSize: 14, fontWeight: "800" },
@@ -379,7 +520,12 @@ const styles = StyleSheet.create({
     ...SHADOW_SM,
   },
   overallNum: { fontSize: 22, fontWeight: "800" },
-  overallLabel: { fontSize: 11, color: MUTED, fontWeight: "600", textAlign: "center" },
+  overallLabel: {
+    fontSize: 11,
+    color: MUTED,
+    fontWeight: "600",
+    textAlign: "center",
+  },
 
   statRow: { backgroundColor: "#fff", borderRadius: 12, padding: 14, gap: 6 },
   statCategory: { color: TEXT, fontSize: 13, fontWeight: "700" },
@@ -398,7 +544,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
     overflow: "hidden",
-    ...SHADOW_SM
+    ...SHADOW_SM,
   },
   collapseHeader: {
     flexDirection: "row",
@@ -451,7 +597,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   resetText: { color: DANGER, fontSize: 14, fontWeight: "600" },
-  
+
   reviewBtn: {
     backgroundColor: BRAND,
     borderRadius: 8,

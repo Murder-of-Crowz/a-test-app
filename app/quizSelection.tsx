@@ -1,27 +1,36 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER } from "@/src/theme/colors";
-import { getQuizSubjects } from "./questionData";
+import {
+  BRAND,
+  ACCENT,
+  BG,
+  MUTED,
+  SUBTLE,
+  BORDER,
+} from "@/src/theme/colors";
+import { getQuizSubjects } from "@/src/data/questionData";
 import { SHADOW_MD } from "@/src/theme/shadows";
-
-const quizSubjects = getQuizSubjects();
-
-type QuizSubject = (typeof quizSubjects)[number];
+import { useSettingsStore } from "@/src/settingsStore";
 
 export default function QuizSelection() {
   const router = useRouter();
+  const spanish = useSettingsStore((state) => state.spanish);
+
+  const quizSubjects = useMemo(() => {
+    return getQuizSubjects();
+  }, [spanish]);
+
+  type QuizSubject = (typeof quizSubjects)[number];
 
   const [selectedSubject, setSelectedSubject] = useState<QuizSubject | null>(
     null,
   );
 
   const handleStartQuiz = () => {
-    if (!selectedSubject) {
-      return;
-    }
+    if (!selectedSubject) return;
 
     router.push({
       pathname: "/quiz/[subjectId]",
@@ -38,18 +47,22 @@ export default function QuizSelection() {
       <View style={styles.header}>
         <View style={styles.headerSide}>
           <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
-            <Ionicons name='arrow-back' size={24} color='#fff' />
+            <Ionicons name="arrow-back" size={24} color="#fff" />
           </Pressable>
         </View>
 
-        <Text style={styles.headerTitle}>Quiz Subjects</Text>
+        <Text style={styles.headerTitle}>
+          {spanish ? "Temas del Quiz" : "Quiz Subjects"}
+        </Text>
 
         <View style={styles.headerSide} />
       </View>
 
       <View style={styles.screen}>
         <Text style={styles.subtitle}>
-          Choose a subject to start your quiz.
+          {spanish
+            ? "Elige un tema para comenzar tu quiz."
+            : "Choose a subject to start your quiz."}
         </Text>
 
         <FlatList
@@ -62,9 +75,11 @@ export default function QuizSelection() {
             return (
               <Pressable
                 style={[styles.card, isSelected && styles.selectedCard]}
-                onPress={() => setSelectedSubject(item)}>
+                onPress={() => setSelectedSubject(item)}
+              >
                 <Text
-                  style={[styles.title, isSelected && styles.selectedTitle]}>
+                  style={[styles.title, isSelected && styles.selectedTitle]}
+                >
                   {item.title}
                 </Text>
               </Pressable>
@@ -78,8 +93,11 @@ export default function QuizSelection() {
             !selectedSubject && styles.disabledButton,
           ]}
           disabled={!selectedSubject}
-          onPress={handleStartQuiz}>
-          <Text style={styles.startButtonText}>Start Quiz</Text>
+          onPress={handleStartQuiz}
+        >
+          <Text style={styles.startButtonText}>
+            {spanish ? "Comenzar Quiz" : "Start Quiz"}
+          </Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -136,7 +154,7 @@ const styles = StyleSheet.create({
     padding: 18,
     borderWidth: 1,
     borderColor: BORDER,
-    ...SHADOW_MD
+    ...SHADOW_MD,
   },
 
   selectedCard: {

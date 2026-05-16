@@ -11,13 +11,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useEffect, useState } from "react";
 import { useStatsStore } from "@/src/statsStore";
+import { useSettingsStore } from "@/src/settingsStore";
 import { BRAND, ACCENT, BG, TEXT, SUBTLE, BORDER } from "@/src/theme/colors";
-import { getPermissionStatus, requestPermission, scheduleReminder } from "@/src/notifications";
+import {
+  getPermissionStatus,
+  requestPermission,
+  scheduleReminder,
+} from "@/src/notifications";
 
 const USER_NAME = "Joe";
 
 export default function DashboardScreen() {
   const router = useRouter();
+  const spanish = useSettingsStore((state) => state.spanish);
+
   const savedExam = useStatsStore((s) => s.savedExam);
   const clearSavedExam = useStatsStore((s) => s.clearSavedExam);
   const [resumeVisible, setResumeVisible] = useState(false);
@@ -25,111 +32,154 @@ export default function DashboardScreen() {
   useEffect(() => {
     async function promptIfNeeded() {
       const status = await getPermissionStatus();
+
       if (status === "undetermined") {
         const granted = await requestPermission();
         if (granted) scheduleReminder(8, 0);
       }
     }
+
     promptIfNeeded();
   }, []);
 
-  useFocusEffect(useCallback(() => {
-    if (savedExam) setResumeVisible(true);
-  }, [savedExam]))
+  useFocusEffect(
+    useCallback(() => {
+      if (savedExam) setResumeVisible(true);
+    }, [savedExam]),
+  );
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
-      <StatusBar barStyle='light-content' backgroundColor={BRAND} />
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
 
-      {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>Hello, {USER_NAME}!</Text>
-          <Text style={styles.sub}>What would you like to do today?</Text>
+          <Text style={styles.greeting}>
+            {spanish ? `¡Hola, ${USER_NAME}!` : `Hello, ${USER_NAME}!`}
+          </Text>
+
+          <Text style={styles.sub}>
+            {spanish
+              ? "¿Qué te gustaría hacer hoy?"
+              : "What would you like to do today?"}
+          </Text>
         </View>
+
         <Pressable onPress={() => router.push("/settings")} hitSlop={12}>
-          <Ionicons name='settings-outline' size={26} color='#93c5fd' />
+          <Ionicons name="settings-outline" size={26} color="#93c5fd" />
         </Pressable>
       </View>
 
-      {/* Buttons */}
       <View style={styles.body}>
-        {/* Flashcards */}
         <Pressable
           style={({ pressed }) => [
             styles.card,
             styles.cardBlue,
             pressed && styles.pressed,
           ]}
-          onPress={() => router.push("/flashcards")} // Need this changed once flashcard page done
+          onPress={() => router.push("/flashcards")}
         >
           <Text style={styles.cardIcon}>~</Text>
-          <Text style={styles.cardTitle}>Flashcards</Text>
-          <Text style={styles.cardSub}>Start your studying!</Text>
+          <Text style={styles.cardTitle}>
+            {spanish ? "Tarjetas" : "Flashcards"}
+          </Text>
+          <Text style={styles.cardSub}>
+            {spanish ? "¡Comienza a estudiar!" : "Start your studying!"}
+          </Text>
         </Pressable>
 
-        {/* Practice Quiz */}
         <Pressable
           style={({ pressed }) => [
             styles.card,
             styles.cardBlue,
             pressed && styles.pressed,
           ]}
-          onPress={() => router.push("/quizSelection")} // Need this changed once quiz page done
+          onPress={() => router.push("/quizSelection")}
         >
           <Text style={styles.cardIcon}>~</Text>
-          <Text style={styles.cardTitle}>Quiz</Text>
-          <Text style={styles.cardSub}>You ready to take a practice quiz?</Text>
+          <Text style={styles.cardTitle}>{spanish ? "Quiz" : "Quiz"}</Text>
+          <Text style={styles.cardSub}>
+            {spanish
+              ? "¿Lista para tomar un quiz de práctica?"
+              : "You ready to take a practice quiz?"}
+          </Text>
         </Pressable>
 
-        {/* Practice Exam */}
         <Pressable
           style={({ pressed }) => [
             styles.card,
             styles.cardBlue,
             pressed && styles.pressed,
           ]}
-          onPress={() => router.push("/exam")} // Need this changed once exam page done
+          onPress={() => router.push("/exam")}
         >
           <Text style={styles.cardIcon}>~</Text>
-          <Text style={styles.cardTitle}>Exam</Text>
-          <Text style={styles.cardSub}>You ready to take a practice exam?</Text>
+          <Text style={styles.cardTitle}>{spanish ? "Examen" : "Exam"}</Text>
+          <Text style={styles.cardSub}>
+            {spanish
+              ? "¿Lista para tomar un examen de práctica?"
+              : "You ready to take a practice exam?"}
+          </Text>
         </Pressable>
 
-        {/* Stats */}
         <Pressable
           style={({ pressed }) => [
             styles.card,
             styles.cardDark,
             pressed && styles.pressed,
           ]}
-          onPress={() => router.push("/stats")} // Need this changed once exam page done
+          onPress={() => router.push("/stats")}
         >
           <Text style={styles.cardIcon}>~</Text>
-          <Text style={styles.cardTitle}>Stats</Text>
-          <Text style={styles.cardSub}>See how far you&apos;ve gone</Text>
+          <Text style={styles.cardTitle}>
+            {spanish ? "Progreso" : "Stats"}
+          </Text>
+          <Text style={styles.cardSub}>
+            {spanish
+              ? "Mira cuánto has avanzado"
+              : "See how far you've gone"}
+          </Text>
         </Pressable>
       </View>
 
-      {/* Modal for Saved Exam prompt */}
       <Modal visible={resumeVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
             <Ionicons name="warning-outline" size={32} color="#f58e0b" />
-            <Text style={styles.modalTitle}>Exam Interrupted</Text>
-            <Text style={styles.modalSub}>
-              You have an unfinished exam. Would you like to continue where you left off?
+
+            <Text style={styles.modalTitle}>
+              {spanish ? "Examen interrumpido" : "Exam Interrupted"}
             </Text>
+
+            <Text style={styles.modalSub}>
+              {spanish
+                ? "Tienes un examen sin terminar. ¿Te gustaría continuar donde lo dejaste?"
+                : "You have an unfinished exam. Would you like to continue where you left off?"}
+            </Text>
+
             <View style={styles.modalBtns}>
-              <Pressable style={[styles.modalBtn, styles.modalBtnPrimary]}
-                onPress={(() => { setResumeVisible(false); router.push("/exam"); })}
+              <Pressable
+                style={[styles.modalBtn, styles.modalBtnPrimary]}
+                onPress={() => {
+                  setResumeVisible(false);
+                  router.push("/exam");
+                }}
               >
-                <Text style={styles.modalBtnTextPrimary}>Continue Exam</Text>
+                <Text style={styles.modalBtnTextPrimary}>
+                  {spanish ? "Continuar examen" : "Continue Exam"}
+                </Text>
               </Pressable>
-              <Pressable style={[styles.modalBtn, styles.modalBtnSecondary]}
-                onPress={() => { setResumeVisible(false); clearSavedExam(); }}
+
+              <Pressable
+                style={[styles.modalBtn, styles.modalBtnSecondary]}
+                onPress={() => {
+                  setResumeVisible(false);
+                  clearSavedExam();
+                }}
               >
-                <Text style={styles.modalBtnTextSecondary}>Abandon</Text>
+                <Text style={styles.modalBtnTextSecondary}>
+                  {spanish ? "Abandonar" : "Abandon"}
+                </Text>
               </Pressable>
             </View>
           </View>
@@ -169,7 +219,7 @@ const styles = StyleSheet.create({
 
   cardIcon: { fontSize: 40, marginBottom: 12 },
   cardTitle: { color: "#fff", fontSize: 22, fontWeight: "800" },
-  cardSub: { color: "rgba(255,255,255,0.7", fontSize: 14, marginTop: 4 },
+  cardSub: { color: "rgba(255,255,255,0.7)", fontSize: 14, marginTop: 4 },
 
   modalOverlay: {
     flex: 1,
