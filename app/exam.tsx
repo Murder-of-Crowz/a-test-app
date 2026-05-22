@@ -182,6 +182,7 @@ export default function ExamScreen() {
       timestamp: Date.now(),
       score,
       total: TOTAL,
+      type: "practice",
       breakdown,
       questions: exam.map((q, i) => ({
         questionId: q.id,
