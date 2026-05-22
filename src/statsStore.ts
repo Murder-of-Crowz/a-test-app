@@ -17,6 +17,7 @@ type ExamResult = {
   timestamp: number;
   score: number;
   total: number;
+  type: "practice" | "mock"
   breakdown: { category: string, correct: number, total: number }[];
   questions: QuestionResult[];
 };
