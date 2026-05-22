@@ -80,6 +80,7 @@ export default function StatsScreen() {
   const [premCards, setPremCards] = useState<PremQuestion[]>([]);
   const [expandedExam, setExpandedExam] = useState<string | null>(null);
   const [expandedQuizSections, setExpandedQuizSections] = useState<string | null>(null);
+  const [examTypeFilter, setExamTypeFilter] = useState<"practice" | "mock">("practice");
   const [resetConfirm, setResetConfirm] = useState<number | null>(null);
 
   const flashcardRatings = useStatsStore((s) => s.flashcardRatings);
@@ -170,6 +171,11 @@ export default function StatsScreen() {
 
     return map;
   }, [quizHistory]);
+
+  const filteredExams = useMemo(
+    () => examHistory.filter((e) => (e.type ?? "practice") === examTypeFilter),
+    [examHistory, examTypeFilter]
+  )
 
   const goToTab = (i: number) => {
     setActiveTab(i);
@@ -384,14 +390,32 @@ export default function StatsScreen() {
         </ScrollView>
 
         <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
-          {examHistory.length === 0 ? (
+          <View style={styles.segmentRow}>
+            <Pressable
+              style={[styles.segmentBtn, examTypeFilter === "practice" && styles.segmentBtnActive]}
+              onPress={() => setExamTypeFilter("practice")}
+            >
+              <Text style={[styles.segmentText, examTypeFilter === "practice" && styles.segmentTextActive]}>
+                {spanish ? "Práctica" : "Practice"}
+              </Text>
+            </Pressable>
+            <Pressable
+              style={[styles.segmentBtn, examTypeFilter === "mock" && styles.segmentBtnActive]}
+              onPress={() => setExamTypeFilter("mock")}
+            >
+              <Text style={[styles.segmentText, examTypeFilter === "mock" && styles.segmentTextActive]}>
+                Mock
+              </Text>
+            </Pressable>
+          </View>
+          {filteredExams.length === 0 ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>
                 {spanish ? "Aún no has tomado exámenes" : "No exams taken yet"}
               </Text>
             </View>
           ) : (
-            examHistory.map((exam) => {
+            filteredExams.map((exam) => {
               const isOpen = expandedExam === exam.id;
               const pct = Math.round((exam.score / exam.total) * 100);
 
@@ -605,4 +629,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   reviewBtnText: { color: "#fff", fontSize: 12, fontWeight: "700" },
+  
+  segmentRow: { flexDirection: "row", backgroundColor: "#fff", borderRadius: 12, padding: 4, ...SHADOW_SM },
+  segmentBtn: { flex: 1, paddingVertical: 8, borderRadius: 10, alignItems: "center" },
+  segmentBtnActive: { backgroundColor: BRAND },
+  segmentText: { fontSize: 13, fontWeight: "700", color: MUTED },
+  segmentTextActive: { color: "#fff" }
 });
