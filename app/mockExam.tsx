@@ -158,7 +158,7 @@ export default function MockExamScreen() {
     const interval = setInterval(() => {
       count --;
       setAdCountdown(count);
-      if (count < 0) {
+      if (count <= 0) {
         clearInterval(interval);
         setAdSimVisible(false);
         recordAdWatch();
@@ -325,21 +325,23 @@ export default function MockExamScreen() {
       {/* Gate Modal */}
       <Modal visible={gateVisible} transparent animationType="fade">
         <View style={styles.overlay}>
-          <Ionicons name="trophy-outline" size={40} color={BRAND} />
-          <Text style={styles.modalTitle}>Mock Exam</Text>
-          <Text style={styles.modalSub}>
-            Simulate the real board exam - 100 questions, 90 minutes. Free users can unlock one session per day by watchinbg a short ad.
-          </Text>
-          <Pressable style={styles.adBtn} onPress={handleWatchAd}>
-            <Ionicons name="play-circle-outline" size={20} color="#fff" />
-            <Text style={styles.adBtnText}>Watch Ad to Unlock</Text>
-          </Pressable>
-          <Pressable style={styles.premBtn} onPress={() => router.push("/dashboard")}>
-            <Text style={styles.premBtnText}>Go Premium - Unlimited Mock Exams</Text>
-          </Pressable>
-          <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
-            <Text style={styles.cancelText}>Cancel</Text>
-          </Pressable>
+          <View style={styles.modalCard}>
+            <Ionicons name="trophy-outline" size={40} color={BRAND} />
+            <Text style={styles.modalTitle}>Mock Exam</Text>
+            <Text style={styles.modalSub}>
+              Simulate the real board exam - 100 questions, 90 minutes. Free users can unlock one session per day by watchinbg a short ad.
+            </Text>
+            <Pressable style={styles.adBtn} onPress={handleWatchAd}>
+              <Ionicons name="play-circle-outline" size={20} color="#fff" />
+              <Text style={styles.adBtnText}>Watch Ad to Unlock</Text>
+            </Pressable>
+            <Pressable style={styles.premBtn} onPress={() => router.push("/dashboard")}>
+              <Text style={styles.premBtnText}>Go Premium - Unlimited Mock Exams</Text>
+            </Pressable>
+            <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </Pressable>
+          </View>
         </View>
       </Modal>
 
