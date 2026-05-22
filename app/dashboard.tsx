@@ -122,6 +122,21 @@ export default function DashboardScreen() {
           </Text>
         </Pressable>
 
+        {/* Mock Exam */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.card,
+            styles.cardBlue,
+            pressed && styles.pressed,
+          ]}
+          onPress={() => router.push("/mockExam")}
+        >
+          <Text style={styles.cardIcon}>~</Text>
+          <Text style={styles.cardTitle}>Mock Exam</Text>
+          <Text style={styles.cardSub}>Simulate the real board exam</Text>
+        </Pressable>
+
+        {/* Stats */}
         <Pressable
           style={({ pressed }) => [
             styles.card,
