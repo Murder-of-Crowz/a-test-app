@@ -3,7 +3,7 @@
 A mobile exam prep app built using React Native and Expo. Features flashcards and practice exams drawn from a weighted question bank across several exam categories.
 
 ## Tech Stack 
-### Current as of 5/7/2026
+### Current as of 5/21/2026
 
 |  Layer        |  Library / Tool |
 |---------------|-----------------|
@@ -18,6 +18,9 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 | State         | Zustand + AsyncStorage |
 | Safe areas    | react-native-safe-area-context |
 | Language      | TypeScript 5.9 |
+| Notifications | expo-notifications |
+| Date Picker   | @react-native-community/datetimepicker |
+| Storage       | @react-native-async-storage/async-storage |
 
 ### Planned
 
@@ -31,7 +34,7 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 | Tests        | Jest + @testing-library/react-native |
 
 
-## Project Structure (as of 5/7/2026)
+## Project Structure (as of 5/21/2026)
 ```
 a-test-app/
 │
@@ -42,6 +45,7 @@ a-test-app/
 │    ├── dashboard.tsx          # Home screen with navigation cards
 │    ├── flashcards.tsx         # Flashcard study mode
 │    ├── exam.tsx               # Weighted 25-question practice exam
+│    ├── mockExam.tsx           # Timed 100-question mock exam with ad gate
 │    ├── quizSelection.tsx      # Category picker for quiz mode
 │    ├── questionData.ts        # Quiz subject/question bank helpers
 │    ├── settings.tsx           # (in progress)
@@ -61,7 +65,12 @@ a-test-app/
 ├── src/
 │    ├── premDB.native.ts       # SQLite DB init, version check, question reader
 │    ├── premDB.web.ts          # Stub for web builds
-│    └── statsStore.ts          # Zustand store - flashcard ratings, exam/quiz history
+│    ├── statsStore.ts          # Zustand store - flashcard ratings, exam/quiz history
+│    ├── settingsStore.ts       # Zustand store - Spanish toggle
+│    ├── notification.ts        # expo-notifications helpers: permission, schedule, cancel
+│    └── theme/
+│         ├── colors.tsx        # Design tokens (BRANDS, ACCENTS, BG, etc)
+│         └── shadows.ts        # Shadow presets (SHADOW_SM, SHADOW_MD, SHADOW_LG)
 │
 ├── metro.config.js             # Asset extensions + module resolver override
 ├── app.json
@@ -87,7 +96,9 @@ a-test-app/
 
 ### Dashboard (`dashboard.tsx`)
 - Personalized greeting with settings cog. 
-- Four full-height navigation cards: Flashcards, Quiz, Exam, and.
+- Five navigation cards: Flashcards, Quiz, Exam, Mock Exam, Stats
+- Resume interrupted exam modal on focus
+- Notification permission prompt on first visit
 
 ### Flashcards (`flashcards.tsx`)
 - Browse all 314 questions one at a time.
@@ -120,13 +131,29 @@ a-test-app/
 - Show Missed Only toggle
 - Premium DB merge into weighted pool functionality
 
+### Mock Exam (`mockExam.tsx`)
+- 100 questions selected proportionally by category weight from free + premium pool
+- 90-minute countdown timer — turns yellow at 10 min, red at 5 min, auto-submits at 0
+- Free users gated behind a rewarded ad (once per day); premium users get unlimited access
+- Pass/fail result at 75% threshold with category breakdown and missed-only toggle
+- Results saved to exam history with `type: "mock"`
+
 ### Stats (`stats.tsx`)
 - Three-tab layout: Flashcards, Exam, Quiz - swipeable or tap to switch.
 - Flashcard tab: overall Know It / Still Learning / Unreviewed badges with per-category progress bars.
 - Quiz tab: collapsible sections grouped by topic, each showing past attempt scores and timestamps.
-- Exam tab: collapsible past exam entries by timestamp, expands to show per-category breakdown.
+- Exam tab: egmented filter (Practice / Mock) with collapsible entries showing per-category breakdown.
 - Per-tab reset with double-tap confirmation.
 - Data persists via Zustand + AsyncStorage across sessions.
+
+### Settings (`settings.tsx`)
+- Account info display (name, email placeholder until auth)
+- Daily reminder toggle with inline time picker (expo-notifications)
+- Test notification button (dev use)
+- Spanish language toggle
+- Premium plan badge and Restore Purchase button (RevenueCat placeholder)
+- Privacy Policy, Terms of Service, version number
+- Sign out confirmation modal
 
 ## Question Bank
 314 questions across 7 categories, weighted to match the state board exam distribution:
