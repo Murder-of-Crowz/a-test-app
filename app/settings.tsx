@@ -31,6 +31,10 @@ import {
 } from "@/src/notifications";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSettingsStore } from "@/src/settingsStore";
+import { useSubscription } from "@/src/hooks/useSubscription";
+import { Paywall } from "@/src/components/Paywall";
+import { CustomerCenter } from "@/src/components/CustomerCenter";
+import { restorePurchases } from "@/src/revenuecat/subscriptionManager";
 
 const USER_NAME = "Joe";
 const USER_EMAIL = "joe@mama.com";
@@ -80,13 +84,16 @@ function SectionHeader({ title }: { title: string }) {
 export default function SettingsScreen() {
   const router = useRouter();
 
-  const IS_PREMIUM = useSettingsStore((state) => state.IS_PREMIUM);
   const spanish = useSettingsStore((state) => state.spanish);
+  const { hasEsthiPro, refresh } = useSubscription();
 
   const [signOutVisible, setSignOutVisible] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [reminderTime, setReminderTime] = useState({ hour: 8, minute: 0 });
   const [showPicker, setShowPicker] = useState(false);
+  const [paywallVisible, setPaywallVisible] = useState(false);
+  const [customerCenterVisible, setCustomerCenterVisible] = useState(false);
+  const [restoreLoading, setRestoreLoading] = useState(false);
 
   useEffect(() => {
     hasScheduledReminder().then(setNotificationsEnabled);
@@ -109,6 +116,18 @@ export default function SettingsScreen() {
     } else {
       await cancelReminder();
       setNotificationsEnabled(false);
+    }
+  };
+
+  const handleRestorePurchases = async () => {
+    try {
+      setRestoreLoading(true);
+      await restorePurchases();
+      await refresh();
+      setRestoreLoading(false);
+    } catch (error) {
+      console.error("Failed to restore purchases:", error);
+      setRestoreLoading(false);
     }
   };
 
@@ -236,21 +255,59 @@ export default function SettingsScreen() {
               <View
                 style={[
                   styles.badge,
-                  IS_PREMIUM ? styles.badgePremium : styles.badgeFree,
+                  hasEsthiPro ? styles.badgePremium : styles.badgeFree,
                 ]}
               >
                 <Text style={styles.badgeText}>
-                  {IS_PREMIUM ? "Premium" : "Free"}
+                  {hasEsthiPro ? "Esthi Pro" : "Free"}
                 </Text>
               </View>
             }
           />
 
-          <Row icon="refresh-outline" label="Restore Purchase" onPress={() => {}} />
+          <Pressable
+            style={({ pressed }) => [
+              styles.row,
+              pressed && styles.rowPressed,
+            ]}
+            onPress={handleRestorePurchases}
+            disabled={restoreLoading}
+          >
+            <Ionicons
+              name="refresh-outline"
+              size={20}
+              color={restoreLoading ? MUTED : BRAND}
+              style={styles.rowIcon}
+            />
+            <Text style={styles.rowLabel}>
+              {restoreLoading ? "Restoring..." : "Restore Purchase"}
+            </Text>
+            <Ionicons name="chevron-forward" size={16} color="#cbd5e1" />
+          </Pressable>
 
-          {!IS_PREMIUM && (
-            <Pressable style={styles.upgradeBtn} onPress={() => {}}>
-              <Text style={styles.upgradeText}>Upgrade to Premium</Text>
+          <Pressable
+            style={({ pressed }) => [
+              styles.row,
+              pressed && styles.rowPressed,
+            ]}
+            onPress={() => setCustomerCenterVisible(true)}
+          >
+            <Ionicons
+              name="settings-outline"
+              size={20}
+              color={BRAND}
+              style={styles.rowIcon}
+            />
+            <Text style={styles.rowLabel}>Manage Subscription</Text>
+            <Ionicons name="chevron-forward" size={16} color="#cbd5e1" />
+          </Pressable>
+
+          {!hasEsthiPro && (
+            <Pressable
+              style={styles.upgradeBtn}
+              onPress={() => setPaywallVisible(true)}
+            >
+              <Text style={styles.upgradeText}>Upgrade to Esthi Pro</Text>
             </Pressable>
           )}
         </View>
@@ -268,6 +325,38 @@ export default function SettingsScreen() {
           />
         </View>
       </ScrollView>
+
+      <Modal
+        visible={paywallVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setPaywallVisible(false)}
+      >
+        <Paywall
+          onPurchaseSuccess={() => {
+            setPaywallVisible(false);
+            refresh();
+          }}
+          onPurchaseError={(error) => {
+            console.error("Purchase error:", error);
+          }}
+          onClose={() => setPaywallVisible(false)}
+        />
+      </Modal>
+
+      <Modal
+        visible={customerCenterVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setCustomerCenterVisible(false)}
+      >
+        <CustomerCenter
+          onClose={() => setCustomerCenterVisible(false)}
+          onError={(error) => {
+            console.error("Customer center error:", error);
+          }}
+        />
+      </Modal>
 
       <Modal
         visible={signOutVisible}
