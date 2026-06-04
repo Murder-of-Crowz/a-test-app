@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import { RevenueCatUI } from 'react-native-purchases-ui';
+import RevenueCatUI from 'react-native-purchases-ui';
 import { getManagementURL, getCustomerInfo } from '../revenuecat/subscriptionManager';
 
 interface CustomerCenterProps {
@@ -79,8 +79,8 @@ export function CustomerCenter({ onClose, onError }: CustomerCenterProps) {
   return (
     <View style={styles.container}>
       {/* Using RevenueCat's official customer center UI */}
-      <RevenueCatUI.CustomerCenter
-        onDismissed={() => {
+      <RevenueCatUI.CustomerCenterView
+        onDismiss={() => {
           console.log('[CustomerCenter] Dismissed');
           onClose?.();
         }}

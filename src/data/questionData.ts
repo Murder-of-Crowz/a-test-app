@@ -1,62 +1,53 @@
-import englishData from "../../assets/questions.json";
-import spanishData from "../../assets/spanishQuestions.json";
-import { useSettingsStore } from "@/src/settingsStore";
+import freeEnglishData from "../../assets/freeQuestions.json";
+import premiumEnglishData from "../../assets/premQustions.json";
+import freeSpanishData from "../../assets/freeSpanishQuesions.json";
+import premiumSpanishData from "../../assets/premSpanishQuestions.json";
 
-export type PremQuestion = {
+export type QuestionBankSource = "free" | "prem";
+
+export type QuestionData = {
   id: number;
   question: string;
   answers: string[];
   answerIndex: number;
-  category: string;
 };
 
-function getQuestionData() {
-  return useSettingsStore.getState().spanish ? spanishData : englishData;
+export type QuestionSection = {
+  sectionId: number;
+  category: string;
+  weight: number;
+  questions: QuestionData[];
+};
+
+export function getQuestionData(
+  spanish: boolean,
+  hasEsthiPro: boolean,
+): QuestionSection[] {
+  if (spanish) {
+    return (hasEsthiPro ? premiumSpanishData : freeSpanishData) as QuestionSection[];
+  }
+
+  return (hasEsthiPro ? premiumEnglishData : freeEnglishData) as QuestionSection[];
 }
 
-export function getQuizSubjects() {
-  const data = getQuestionData();
+export function getQuestionBankSource(hasEsthiPro: boolean): QuestionBankSource {
+  return hasEsthiPro ? "prem" : "free";
+}
 
-  type Category = {
-    id: number;
-    title: string;
-    index: number;
-    weight?: number;
-  };
-
-  const categories: Category[] = [];
-
-  (data as { category: string; weight?: number }[]).forEach((item) => {
-    const existingCategory = categories.find(
-      (cat) => cat.title.toLowerCase() === item.category.toLowerCase()
-    );
-
-    if (!existingCategory) {
-      categories.push({
-        id: categories.length + 1,
-        title: item.category,
-        index: categories.length,
-        weight: item.weight,
-      });
-    }
-  });
-
-  return categories;
+export function getQuizSubjects(spanish: boolean, hasEsthiPro: boolean) {
+  return getQuestionData(spanish, hasEsthiPro).map((section, index) => ({
+    id: section.sectionId,
+    title: section.category,
+    index,
+    weight: section.weight,
+    questionCount: section.questions.length,
+  }));
 }
 
 export function getQuestionBank(
   index: number,
-  premQuestions: PremQuestion[] = []
-) {
-  const data = getQuestionData();
-
-  const section = data[index];
-
-  if (!section) return [];
-
-  const premForCategory = premQuestions.filter(
-    (q) => q.category === section.category
-  );
-
-  return [...section.questions, ...premForCategory];
+  spanish: boolean,
+  hasEsthiPro: boolean,
+): QuestionData[] {
+  return getQuestionData(spanish, hasEsthiPro)[index]?.questions ?? [];
 }

@@ -3,17 +3,19 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type SettingsState = {
-  IS_PREMIUM: boolean;
   spanish: boolean;
+  forceFreeForTesting: boolean;
   setSpanish: (value: boolean) => void;
+  setForceFreeForTesting: (value: boolean) => void;
 };
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      IS_PREMIUM: false,
       spanish: false,
+      forceFreeForTesting: false,
       setSpanish: (value) => set({ spanish: value }),
+      setForceFreeForTesting: (value) => set({ forceFreeForTesting: value }),
     }),
     {
       name: "settings-storage",

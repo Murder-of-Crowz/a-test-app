@@ -5,8 +5,19 @@
 
 import { useEffect } from 'react';
 import { useSubscriptionStore } from '../stores/subscriptionStore';
+import { useSettingsStore } from '../settingsStore';
 
-export function useSubscription() {
+type UseSubscriptionOptions = {
+  refreshOnMount?: boolean;
+  fetchOfferings?: boolean;
+};
+
+export function useSubscription(options: UseSubscriptionOptions = {}) {
+  const {
+    refreshOnMount = false,
+    fetchOfferings: shouldFetchOfferings = false,
+  } = options;
+  const forceFreeForTesting = useSettingsStore((state) => state.forceFreeForTesting);
   const {
     customerInfo,
     hasEsthiPro,
@@ -17,19 +28,25 @@ export function useSubscription() {
     fetchCustomerInfo,
     fetchOfferings,
     refreshCustomerInfo,
+    updateCustomerInfo,
     clearError,
   } = useSubscriptionStore();
 
-  // Fetch customer info and offerings on mount
+  // Most screens only need the cached subscription state. RevenueCat is
+  // refreshed once at app startup and then kept current by its listener.
   useEffect(() => {
-    fetchCustomerInfo();
-    fetchOfferings();
-  }, [fetchCustomerInfo, fetchOfferings]);
+    if (refreshOnMount) {
+      fetchCustomerInfo();
+    }
+    if (shouldFetchOfferings) {
+      fetchOfferings();
+    }
+  }, [fetchCustomerInfo, fetchOfferings, refreshOnMount, shouldFetchOfferings]);
 
   return {
     // State
     customerInfo,
-    hasEsthiPro,
+    hasEsthiPro: forceFreeForTesting ? false : hasEsthiPro,
     currentOffering,
     allOfferings,
     isLoading,
@@ -37,6 +54,7 @@ export function useSubscription() {
 
     // Actions
     refresh: refreshCustomerInfo,
+    updateCustomerInfo,
     fetchOfferings,
     clearError,
   };

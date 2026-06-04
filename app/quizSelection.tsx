@@ -14,14 +14,16 @@ import {
 import { getQuizSubjects } from "@/src/data/questionData";
 import { SHADOW_MD } from "@/src/theme/shadows";
 import { useSettingsStore } from "@/src/settingsStore";
+import { useSubscription } from "@/src/hooks/useSubscription";
 
 export default function QuizSelection() {
   const router = useRouter();
   const spanish = useSettingsStore((state) => state.spanish);
+  const { hasEsthiPro } = useSubscription();
 
   const quizSubjects = useMemo(() => {
-    return getQuizSubjects();
-  }, [spanish]);
+    return getQuizSubjects(spanish, hasEsthiPro);
+  }, [hasEsthiPro, spanish]);
 
   type QuizSubject = (typeof quizSubjects)[number];
 

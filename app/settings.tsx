@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { CustomerInfo } from "react-native-purchases";
 import {
   BRAND,
   ACCENT,
@@ -85,7 +86,8 @@ export default function SettingsScreen() {
   const router = useRouter();
 
   const spanish = useSettingsStore((state) => state.spanish);
-  const { hasEsthiPro, refresh } = useSubscription();
+  const forceFreeForTesting = useSettingsStore((state) => state.forceFreeForTesting);
+  const { hasEsthiPro, refresh, updateCustomerInfo } = useSubscription();
 
   const [signOutVisible, setSignOutVisible] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
@@ -101,6 +103,10 @@ export default function SettingsScreen() {
 
   const handleSpanishToggle = (value: boolean) => {
     useSettingsStore.setState({ spanish: value });
+  };
+
+  const handleForceFreeToggle = (value: boolean) => {
+    useSettingsStore.setState({ forceFreeForTesting: value });
   };
 
   const handleNotificationToggle = async (val: boolean) => {
@@ -122,13 +128,26 @@ export default function SettingsScreen() {
   const handleRestorePurchases = async () => {
     try {
       setRestoreLoading(true);
-      await restorePurchases();
-      await refresh();
+      const customerInfo = await restorePurchases();
+      useSettingsStore.setState({ forceFreeForTesting: false });
+      updateCustomerInfo(customerInfo);
       setRestoreLoading(false);
     } catch (error) {
       console.error("Failed to restore purchases:", error);
       setRestoreLoading(false);
     }
+  };
+
+  const handlePurchaseSuccess = (customerInfo?: CustomerInfo) => {
+    setPaywallVisible(false);
+    useSettingsStore.setState({ forceFreeForTesting: false });
+
+    if (customerInfo) {
+      updateCustomerInfo(customerInfo);
+      return;
+    }
+
+    refresh();
   };
 
   return (
@@ -265,6 +284,21 @@ export default function SettingsScreen() {
             }
           />
 
+          {__DEV__ && (
+            <Row
+              icon="flask-outline"
+              label="Remove Pro for Testing"
+              right={
+                <Switch
+                  value={forceFreeForTesting}
+                  onValueChange={handleForceFreeToggle}
+                  trackColor={{ false: "#cbd5e1", true: DANGER }}
+                  thumbColor="#fff"
+                />
+              }
+            />
+          )}
+
           <Pressable
             style={({ pressed }) => [
               styles.row,
@@ -333,10 +367,7 @@ export default function SettingsScreen() {
         onRequestClose={() => setPaywallVisible(false)}
       >
         <Paywall
-          onPurchaseSuccess={() => {
-            setPaywallVisible(false);
-            refresh();
-          }}
+          onPurchaseSuccess={handlePurchaseSuccess}
           onPurchaseError={(error) => {
             console.error("Purchase error:", error);
           }}

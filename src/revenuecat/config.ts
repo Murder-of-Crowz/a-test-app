@@ -4,8 +4,7 @@
  */
 
 import Purchases, {
-  PurchasesConfiguration,
-  LogLevel,
+  LOG_LEVEL,
 } from 'react-native-purchases';
 
 // API Key - Store this securely in your environment
@@ -18,17 +17,14 @@ export const REVENUECAT_API_KEY = 'test_shvqxUHedVYHANlkMFhIGVJpKqL';
  */
 export async function initializeRevenueCat(): Promise<void> {
   try {
-    // Configure the SDK
-    const configuration = new PurchasesConfiguration({
+    // Set log level for development (optional, remove or set to ERROR in production)
+    Purchases.setLogLevel(LOG_LEVEL.DEBUG);
+
+    // Configure the SDK with API key
+    Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
       appUserID: undefined, // Let RevenueCat handle anonymous user ID, or set custom ID
     });
-
-    // Set log level for development (optional, remove or set to ERROR in production)
-    Purchases.setLogLevel(LogLevel.DEBUG);
-
-    // Initialize the SDK
-    await Purchases.configure(configuration);
 
     console.log('[RevenueCat] SDK initialized successfully');
   } catch (error) {

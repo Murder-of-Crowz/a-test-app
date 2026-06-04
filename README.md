@@ -45,7 +45,7 @@ a-test-app/
 │    ├── dashboard.tsx          # Home screen with navigation cards
 │    ├── flashcards.tsx         # Flashcard study mode
 │    ├── exam.tsx               # Weighted 25-question practice exam
-│    ├── mockExam.tsx           # Timed 100-question mock exam with ad gate
+│    ├── mockExam.tsx           # Timed 100-question mock exam with RevenueCat paywall gate
 │    ├── quizSelection.tsx      # Category picker for quiz mode
 │    ├── questionData.ts        # Quiz subject/question bank helpers
 │    ├── settings.tsx           # (in progress)
@@ -110,14 +110,14 @@ a-test-app/
 - Stats modal
 - Review missed cards mode
 - Animated navigation
-- Premium DB merge functionality
+- Selects the Free or Premium English/Spanish question bank from account access and language settings
 
 ### Quiz Selection (`quizSelection.tsx`)
 - Category list with question count and weight per section.
 - Navigates to per-category quiz with section index and title.
 
 ### Quiz (`quiz/[subjectId].tsx`)
-- 20 questions from the selected category, drawn from free + premium pool
+- Up to 20 questions from the selected account/language question bank
 - Answer choices shuffled per question.
 - Submit locked until all questions answered.
 - Results show score with Retake, New Quiz, and Home options
@@ -129,12 +129,12 @@ a-test-app/
 - Results show total score and a per-category breakdown with progress bars.
 - New Exam button
 - Show Missed Only toggle
-- Premium DB merge into weighted pool functionality
+- Drawn from the selected Free or Premium English/Spanish question bank
 
 ### Mock Exam (`mockExam.tsx`)
-- 100 questions selected proportionally by category weight from free + premium pool
+- 100 questions selected proportionally by category weight from the selected Premium language bank
 - 90-minute countdown timer — turns yellow at 10 min, red at 5 min, auto-submits at 0
-- Free users gated behind a rewarded ad (once per day); premium users get unlimited access
+- Free users are gated behind the RevenueCat Esthi Pro paywall; premium users get unlimited access
 - Pass/fail result at 75% threshold with category breakdown and missed-only toggle
 - Results saved to exam history with `type: "mock"`
 
@@ -156,17 +156,17 @@ a-test-app/
 - Sign out confirmation modal
 
 ## Question Bank
-314 questions across 7 categories, weighted to match the state board exam distribution:
+Free banks contain 200 weighted questions. Premium banks contain all 1,400 questions across 7 categories.
 
-|  Category                      |  Weight   | No. of Qs |
-|--------------------------------|-----------|-----------|
-| Safety and Infection Control   | 34%       | 90        |
-| Skin Care                      | 27%       | 80        |
-| Skin Analysis                  | 13%       | 40        | 
-| Hair Removal                   | 13%       | 40        |
-| Advanced Treatments            | 5%        | 24        |
-| Makeup                         | 4%        | 18        |
-| Client Consultation            | 4%        | 22        |
+| Category                     | Weight | Free / Premium |
+|------------------------------|--------|----------------|
+| Safety and Infection Control | 34%    | 68 / 200       |
+| Skin Care                    | 27%    | 54 / 200       |
+| Skin Analysis                | 13%    | 26 / 200       |
+| Hair Removal                 | 13%    | 26 / 200       |
+| Advanced Treatments          | 5%     | 10 / 200       |
+| Makeup                       | 4%     | 8 / 200         |
+| Client Consultation          | 4%     | 8 / 200         |
 
 ### Regenerationmg the JSON
 After editing `assets/questions.csv`, regenerate the JSON:

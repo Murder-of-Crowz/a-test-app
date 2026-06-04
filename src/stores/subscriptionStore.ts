@@ -25,6 +25,7 @@ interface SubscriptionStore {
   fetchCustomerInfo: () => Promise<void>;
   fetchOfferings: () => Promise<void>;
   refreshCustomerInfo: () => Promise<void>;
+  updateCustomerInfo: (customerInfo: CustomerInfo | null) => void;
   clearError: () => void;
   reset: () => void;
 }
@@ -81,6 +82,14 @@ export const useSubscriptionStore = create<SubscriptionStore>((set, get) => ({
     if (state.isLoading) return; // Prevent duplicate requests
     await state.fetchCustomerInfo();
   },
+
+  updateCustomerInfo: (customerInfo) =>
+    set({
+      customerInfo,
+      hasEsthiPro: customerInfo ? hasEsthiPro(customerInfo) : false,
+      isLoading: false,
+      error: null,
+    }),
 
   // Clear error
   clearError: () => set({ error: null }),

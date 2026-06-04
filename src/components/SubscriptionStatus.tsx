@@ -94,7 +94,7 @@ export function SubscriptionStatus({
       </View>
 
       {/* Active Subscriptions */}
-      {activeSubscriptions && activeSubscriptions.size > 0 && (
+      {activeSubscriptions && activeSubscriptions.length > 0 && (
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Active Subscriptions</Text>
           {Array.from(activeSubscriptions).map((subscription, index) => (
@@ -106,7 +106,7 @@ export function SubscriptionStatus({
       )}
 
       {/* All Purchases */}
-      {customerInfo && customerInfo.allPurchasedProductIdentifiers.size > 0 && (
+      {customerInfo && customerInfo.allPurchasedProductIdentifiers.length > 0 && (
         <View style={styles.card}>
           <Text style={styles.cardTitle}>All Purchases</Text>
           {Array.from(customerInfo.allPurchasedProductIdentifiers).map(
@@ -151,7 +151,7 @@ export function SubscriptionStatus({
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Total Purchases:</Text>
             <Text style={styles.infoValue}>
-              {customerInfo.allPurchasedProductIdentifiers.size}
+              {customerInfo.allPurchasedProductIdentifiers.length}
             </Text>
           </View>
         </View>

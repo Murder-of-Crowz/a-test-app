@@ -7,6 +7,7 @@ import Purchases, {
   CustomerInfo,
   PurchasesPackage,
   PurchasesOffering,
+  PurchasesStoreTransaction,
 } from 'react-native-purchases';
 import { ENTITLEMENTS } from './config';
 
@@ -47,7 +48,8 @@ export function hasEsthiPro(customerInfo: CustomerInfo): boolean {
 export async function getOfferings(): Promise<PurchasesOffering[] | null> {
   try {
     const offerings = await Purchases.getOfferings();
-    return offerings.all.length > 0 ? offerings.all : null;
+    const allOfferings = Object.values(offerings.all);
+    return allOfferings.length > 0 ? allOfferings : null;
   } catch (error) {
     console.error('[RevenueCat] Failed to get offerings:', error);
     throw error;
@@ -75,8 +77,15 @@ export function getPackageFromOffering(
   packageType: string
 ): PurchasesPackage | null {
   if (!offering) return null;
-  const pkg = offering.getPackage(packageType);
-  return pkg || null;
+  const normalizedPackageType = packageType.toLowerCase();
+  return (
+    offering.availablePackages.find((pkg) => {
+      return (
+        pkg.identifier.toLowerCase() === normalizedPackageType ||
+        pkg.packageType.toLowerCase() === normalizedPackageType
+      );
+    }) ?? null
+  );
 }
 
 /**
@@ -86,7 +95,7 @@ export async function purchasePackage(
   packageToPurchase: PurchasesPackage
 ): Promise<CustomerInfo> {
   try {
-    const customerInfo = await Purchases.purchasePackage(packageToPurchase);
+    const { customerInfo } = await Purchases.purchasePackage(packageToPurchase);
     console.log('[RevenueCat] Purchase successful');
     return customerInfo;
   } catch (error: any) {
@@ -118,14 +127,14 @@ export async function restorePurchases(): Promise<CustomerInfo> {
  */
 export function getActiveSubscriptions(
   customerInfo: CustomerInfo
-): Set<string> {
+): string[] {
   return customerInfo.activeSubscriptions;
 }
 
 /**
  * Get all purchases
  */
-export function getAllPurchases(customerInfo: CustomerInfo): Set<string> {
+export function getAllPurchases(customerInfo: CustomerInfo): string[] {
   return customerInfo.allPurchasedProductIdentifiers;
 }
 
@@ -134,7 +143,7 @@ export function getAllPurchases(customerInfo: CustomerInfo): Set<string> {
  */
 export function getNonSubscriptionPurchases(
   customerInfo: CustomerInfo
-): { [key: string]: string[] } {
+): PurchasesStoreTransaction[] {
   return customerInfo.nonSubscriptionTransactions;
 }
 

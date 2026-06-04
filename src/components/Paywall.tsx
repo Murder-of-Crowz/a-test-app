@@ -5,68 +5,54 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { RevenueCatUI } from 'react-native-purchases-ui';
-import { useSubscription } from '../hooks/useSubscription';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import RevenueCatUI from 'react-native-purchases-ui';
+import { CustomerInfo, PurchasesError, PurchasesOffering } from 'react-native-purchases';
 
 interface PaywallProps {
-  onPurchaseSuccess?: () => void;
-  onPurchaseError?: (error: Error) => void;
+  onPurchaseSuccess?: (customerInfo?: CustomerInfo) => void;
+  onPurchaseError?: (error: PurchasesError) => void;
   onClose?: () => void;
-  offering?: any; // PurchasesOffering
+  offering?: PurchasesOffering | null;
 }
 
 export function Paywall({
   onPurchaseSuccess,
   onPurchaseError,
   onClose,
+  offering,
 }: PaywallProps) {
-  const { currentOffering, isLoading, error } = useSubscription();
-
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#007AFF" />
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Error: {error}</Text>
-        {onClose && (
-          <TouchableOpacity style={styles.button} onPress={onClose}>
-            <Text style={styles.buttonText}>Close</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       {/* Using RevenueCat's official paywall UI */}
       <RevenueCatUI.Paywall
-        offering={currentOffering}
-        onPurchaseCompleted={(customerInfo) => {
-          console.log('[Paywall] Purchase completed');
-          onPurchaseSuccess?.();
+        options={{
+          offering,
+          displayCloseButton: true,
         }}
-        onPurchaseFailed={(error) => {
+        onPurchaseCompleted={({ customerInfo }) => {
+          console.log('[Paywall] Purchase completed');
+          onPurchaseSuccess?.(customerInfo);
+        }}
+        onPurchaseError={({ error }: { error: PurchasesError }) => {
           console.error('[Paywall] Purchase failed:', error);
           onPurchaseError?.(error);
         }}
         onPurchaseCancelled={() => {
           console.log('[Paywall] Purchase cancelled');
+          onClose?.();
         }}
-        onRestoreCompleted={(customerInfo) => {
+        onRestoreCompleted={({ customerInfo }) => {
           console.log('[Paywall] Restore completed');
-          onPurchaseSuccess?.();
+          onPurchaseSuccess?.(customerInfo);
         }}
-        onRestoreFailed={(error) => {
+        onRestoreError={({ error }: { error: PurchasesError }) => {
           console.error('[Paywall] Restore failed:', error);
           onPurchaseError?.(error);
+        }}
+        onDismiss={() => {
+          console.log('[Paywall] Dismissed');
+          onClose?.();
         }}
       />
 
@@ -82,27 +68,6 @@ export function Paywall({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-  errorText: {
-    fontSize: 16,
-    color: '#FF3B30',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 32,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginTop: 12,
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
   },
   closeButton: {
     position: 'absolute',

@@ -10,12 +10,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
-import englishData from "@/assets/questions.json";
-import spanishData from "@/assets/spanishQuestions.json";
-
 import { useSettingsStore } from "@/src/settingsStore";
-// @ts-ignore
-import { getPremQuestions } from "@/src/premDB";
+import { useSubscription } from "@/src/hooks/useSubscription";
+import {
+  getQuestionData,
+  getQuestionBankSource,
+  type QuestionSection,
+} from "@/src/data/questionData";
 import { useStatsStore } from "@/src/statsStore";
 import {
   BRAND,
@@ -40,12 +41,6 @@ type Question = {
   source: "free" | "prem";
 };
 
-type QuestionSection = {
-  category: string;
-  weight: number;
-  questions: Omit<Question, "category" | "source">[];
-};
-
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
 
@@ -59,7 +54,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 function buildExam(
   data: QuestionSection[],
-  premQuestions: Question[] = [],
+  source: "free" | "prem",
 ): Question[] {
   const totalWeight = data.reduce((sum, s) => sum + s.weight, 0);
 
@@ -74,21 +69,13 @@ function buildExam(
   const questions: Question[] = [];
 
   for (const { section, count } of counts) {
-    const premForSection = premQuestions.filter(
-      (q) => q.category === section.category,
-    );
-
-    const pool = shuffle([
-      ...section.questions.map((q) => ({
+    const pool = shuffle(
+      section.questions.map((q) => ({
         ...q,
         category: section.category,
-        source: "free" as const,
+        source,
       })),
-      ...premForSection.map((q) => ({
-        ...q,
-        source: "prem" as const,
-      })),
-    ]);
+    );
 
     pool.slice(0, count).forEach((q) => {
       const correct = q.answers[q.answerIndex];
@@ -108,44 +95,44 @@ function buildExam(
 export default function ExamScreen() {
   const router = useRouter();
   const spanish = useSettingsStore((state) => state.spanish);
-  const data = (spanish ? spanishData : englishData) as QuestionSection[];
+  const { hasEsthiPro } = useSubscription();
+  const data = getQuestionData(spanish, hasEsthiPro);
+  const source = getQuestionBankSource(hasEsthiPro);
 
   const [exam, setExam] = useState<Question[]>([]);
-  const [premCards, setPremCards] = useState<Question[]>([]);
   const [selected, setSelected] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [showMissedOnly, setShowMissedOnly] = useState(false);
 
   const scrollRef = useRef<ScrollView>(null);
 
-  const savedExam = useStatsStore((s) => s.savedExam);
   const saveExamProgress = useStatsStore((s) => s.saveExamProgress);
   const clearSavedExam = useStatsStore((s) => s.clearSavedExam);
   const addExamResult = useStatsStore((s) => s.addExamResult);
 
   useEffect(() => {
-    try {
-      const prem = getPremQuestions() as Question[];
-      setPremCards(prem);
+    const currentSavedExam = useStatsStore.getState().savedExam;
+    const currentCategories = new Set(data.map((section) => section.category));
+    const canResume =
+      currentSavedExam &&
+      currentSavedExam.questions.length > 0 &&
+      currentSavedExam.questions.every(
+        (question) =>
+          question.source === source && currentCategories.has(question.category),
+      );
 
-      if (savedExam && savedExam.questions.length > 0) {
-        setExam(savedExam.questions);
-        setSelected(savedExam.answers);
-      } else {
-        setExam(buildExam(data, prem));
-      }
-    } catch {
-      if (savedExam && savedExam.questions.length > 0) {
-        setExam(savedExam.questions);
-        setSelected(savedExam.answers);
-      } else {
-        setExam(buildExam(data));
-      }
+    if (canResume) {
+      setExam(currentSavedExam.questions);
+      setSelected(currentSavedExam.answers);
+    } else {
+      setExam(buildExam(data, source));
+      setSelected({});
+      clearSavedExam();
     }
 
     setSubmitted(false);
     setShowMissedOnly(false);
-  }, [spanish]);
+  }, [clearSavedExam, data, source]);
 
   const answeredCount = Object.keys(selected).length;
 
@@ -192,10 +179,10 @@ export default function ExamScreen() {
         selectedAnswer: q.answers[selected[i]],
       })),
     });
-  }, [submitted]);
+  }, [addExamResult, breakdown, exam, score, selected, submitted]);
 
   function handleNewExam() {
-    setExam(buildExam(data, premCards));
+    setExam(buildExam(data, source));
     setSelected({});
     setSubmitted(false);
     setShowMissedOnly(false);

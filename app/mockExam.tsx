@@ -1,6 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import {
   Modal,
   Pressable,
@@ -11,9 +11,16 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import data from "@/assets/questions.json";
-// @ts-ignore
-import { getPremQuestions } from "@/src/premDB";
+import { CustomerInfo } from "react-native-purchases";
+import { Paywall } from "@/src/components/Paywall";
+import {
+  getQuestionData,
+  getQuestionBankSource,
+  type QuestionSection,
+} from "@/src/data/questionData";
+import { useSubscription } from "@/src/hooks/useSubscription";
+import { hasEsthiPro as customerHasEsthiPro } from "@/src/revenuecat/subscriptionManager";
+import { useSettingsStore } from "@/src/settingsStore";
 import { useStatsStore } from "@/src/statsStore";
 import { BRAND, ACCENT, BG, TEXT, MUTED, SUBTLE, BORDER, SUCCESS, DANGER, WARNING } from "@/src/theme/colors";
 import { SHADOW_MD } from "@/src/theme/shadows";
@@ -21,8 +28,6 @@ import { SHADOW_MD } from "@/src/theme/shadows";
 const TOTAL = 100;
 const TIMER_SECONDS = 90 * 60;
 const PASS_THRESHOLD = 0.75;
-const IS_PREMIUM = false;
-const AD_COOLDOWN_KEY = "mock_exam_last_ad";
 
 type Question = {
   id: number;
@@ -42,7 +47,10 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-function buildMockExam(premQuestion: Question[] = []): Question[] {
+function buildMockExam(
+  data: QuestionSection[],
+  source: "free" | "prem",
+): Question[] {
   const totalWeight = data.reduce((sum, s) => sum + s.weight, 0);
   const counts = data.map((s) => ({
     section: s,
@@ -53,11 +61,13 @@ function buildMockExam(premQuestion: Question[] = []): Question[] {
 
   const questions: Question[] = [];
   for (const { section, count } of counts) {
-    const premForSection = premQuestion.filter((q) => q.category === section.category);
-    const pool = shuffle([
-      ...section.questions.map((q) => ({ ...q, category: section.category, source: "free" as const })),
-      ...premForSection.map((q) => ({ ...q, source: "prem" as const })),
-    ]);
+    const pool = shuffle(
+      section.questions.map((q) => ({
+        ...q,
+        category: section.category,
+        source,
+      })),
+    );
     pool.slice(0, count).forEach((q) => {
       const correct = q.answers[q.answerIndex];
       const shuffled = shuffle(q.answers);
@@ -73,21 +83,19 @@ function formatTime(seconds: number): string {
   return `${m}:${s}`;
 }
 
-async function hasWatchedAdToday(): Promise<boolean> {
-  const raw = await AsyncStorage.getItem(AD_COOLDOWN_KEY);
-  if (!raw) return false;
-  const last = new Date(raw);
-  const now = new Date();
-  return last.toDateString() === now.toDateString();
-}
-
-async function recordAdWatch() {
-  await AsyncStorage.setItem(AD_COOLDOWN_KEY, new Date().toISOString());
-}
-
 export default function MockExamScreen() {
   const router = useRouter();
+  const isFocused = useIsFocused();
   const addExamResult = useStatsStore((s) => s.addExamResult);
+  const spanish = useSettingsStore((state) => state.spanish);
+  const {
+    hasEsthiPro,
+    isLoading: subscriptionLoading,
+    refresh,
+    updateCustomerInfo,
+  } = useSubscription();
+  const data = getQuestionData(spanish, hasEsthiPro);
+  const source = getQuestionBankSource(hasEsthiPro);
 
   const [exam, setExam] = useState<Question[]>([]);
   const [selected, setSelected] = useState<Record<number, number>>({});
@@ -95,39 +103,36 @@ export default function MockExamScreen() {
   const [showMissedOnly, setShowMissedOnly] = useState(false);
   const [examStarted, setExamStarted] = useState(false);
   const [gateVisible, setGateVisible] = useState(false);
-  const [adSimVisible, setAdSimVisible] = useState(false);
-  const [adCountdown, setAdCountdown] = useState(5);
+  const [paywallVisible, setPaywallVisible] = useState(false);
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    const prem = (() => {
-      try {
-        return getPremQuestions() as Question[];
-      } catch {
-        return [];
-      }
-    })();
-    setExam(buildMockExam(prem));
+    setExam(buildMockExam(data, source));
+  }, [data, source]);
+
+  const startExam = useCallback(() => {
+    setGateVisible(false);
+    setExamStarted(true);
   }, []);
 
-  // Ad Gate
   useEffect(() => {
-    async function checkGate() {
-      if (IS_PREMIUM) {
-        startExam();
-        return;
-      }
-      const watched = await hasWatchedAdToday();
-      if (watched) {
-        startExam();
-      } else {
-        setGateVisible(true);
-      }
+    if (!isFocused) {
+      setGateVisible(false);
+      setPaywallVisible(false);
+      return;
     }
-    checkGate();
-  }, []);
+
+    if (subscriptionLoading || examStarted || submitted) return;
+
+    if (hasEsthiPro) {
+      startExam();
+      return;
+    }
+
+    setGateVisible(true);
+  }, [examStarted, hasEsthiPro, isFocused, startExam, submitted, subscriptionLoading]);
 
   // Timer
   useEffect(() => {
@@ -145,38 +150,36 @@ export default function MockExamScreen() {
     return () => clearInterval(timerRef.current!);
   }, [examStarted, submitted]);
 
-  function startExam() {
-    setGateVisible(false);
-    setExamStarted(true);
-  }
-
-  async function handleWatchAd() {
-    setGateVisible(false);
-    setAdSimVisible(true);
-    setAdCountdown(5);
-    let count = 5;
-    const interval = setInterval(() => {
-      count --;
-      setAdCountdown(count);
-      if (count <= 0) {
-        clearInterval(interval);
-        setAdSimVisible(false);
-        recordAdWatch();
-        startExam();
-      }
-    }, 1000);
-  }
-
   function handleSubmit() {
     clearInterval(timerRef.current!);
     setSubmitted(true);
     scrollRef.current?.scrollTo({ y: 0, animated: true });
   }
 
+  function handlePaywallSuccess(customerInfo?: CustomerInfo) {
+    setPaywallVisible(false);
+    useSettingsStore.setState({ forceFreeForTesting: false });
+
+    if (customerInfo) {
+      updateCustomerInfo(customerInfo);
+      if (customerHasEsthiPro(customerInfo)) {
+        startExam();
+      }
+      return;
+    }
+
+    refresh();
+  }
+
+  function handleCancelGate() {
+    setGateVisible(false);
+    router.replace("/dashboard");
+  }
+
   const answeredCount = Object.keys(selected).length;
   const score = useMemo(() => 
     exam.filter((q, i) => selected[i] === q.answerIndex).length,
-  [submitted]
+  [exam, selected]
   );
   const passed = score / TOTAL >= PASS_THRESHOLD;
 
@@ -189,7 +192,7 @@ export default function MockExamScreen() {
       if (selected[i] === q.answerIndex) map[q.category].correct++;
     });
     return Object.entries(map).map(([category, stats]) => ({ category, ...stats }));
-  }, [submitted]);
+  }, [exam, selected, submitted]);
 
   useEffect(() => {
     if (!submitted) return;
@@ -207,7 +210,7 @@ export default function MockExamScreen() {
         selectedAnswer: q.answers[selected[i]],
       })),
     });
-  }, [submitted]);
+  }, [addExamResult, breakdown, exam, score, selected, submitted]);
 
   const timerColor = timeLeft < 300 ? DANGER : timeLeft < 600 ? WARNING : "#94c5fd";
 
@@ -215,7 +218,7 @@ export default function MockExamScreen() {
     <SafeAreaView style={styles.safe} edges={["top"]}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
+        <Pressable onPress={() => router.replace("/dashboard")} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </Pressable>
         <Text style={styles.headerTitle}>Mock Exam</Text>
@@ -260,7 +263,7 @@ export default function MockExamScreen() {
                   {showMissedOnly ? "Show All" : `Show Missed (${TOTAL - score})`}
                 </Text>
               </Pressable>
-              <Pressable style={styles.doneBtn} onPress={() => router.push("/dashboard")}>
+              <Pressable style={styles.doneBtn} onPress={() => router.replace("/dashboard")}>
                 <Text style={styles.doneBtnText}>Back to Dashboard</Text>
               </Pressable>
             </View>
@@ -323,36 +326,36 @@ export default function MockExamScreen() {
       </ScrollView>
 
       {/* Gate Modal */}
-      <Modal visible={gateVisible} transparent animationType="fade">
+      <Modal visible={isFocused && gateVisible} transparent animationType="fade">
         <View style={styles.overlay}>
           <View style={styles.modalCard}>
             <Ionicons name="trophy-outline" size={40} color={BRAND} />
             <Text style={styles.modalTitle}>Mock Exam</Text>
             <Text style={styles.modalSub}>
-              Simulate the real board exam - 100 questions, 90 minutes. Free users can unlock one session per day by watchinbg a short ad.
+              Simulate the real board exam - 100 questions, 90 minutes. Unlock unlimited mock exams with Esthi Pro.
             </Text>
-            <Pressable style={styles.adBtn} onPress={handleWatchAd}>
-              <Ionicons name="play-circle-outline" size={20} color="#fff" />
-              <Text style={styles.adBtnText}>Watch Ad to Unlock</Text>
+            <Pressable style={styles.premBtn} onPress={() => setPaywallVisible(true)}>
+              <Text style={styles.premBtnText}>Go Premium - Unlimited Access</Text>
             </Pressable>
-            <Pressable style={styles.premBtn} onPress={() => router.push("/dashboard")}>
-              <Text style={styles.premBtnText}>Go Premium - Unlimited Mock Exams</Text>
-            </Pressable>
-            <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
+            <Pressable onPress={handleCancelGate} hitSlop={12}>
               <Text style={styles.cancelText}>Cancel</Text>
             </Pressable>
           </View>
         </View>
       </Modal>
 
-      {/* Ad simulation Modal */}
-      <Modal visible={adSimVisible} transparent animationType="fade">
-        <View style={styles.overlay}>
-          <View style={styles.adSimCard}>
-            <Text style={styles.adSimLabel}>Ad Playing ...</Text>
-            <Text style={styles.adSimCountdown}>{adCountdown}</Text>
-          </View>
-        </View>
+      <Modal
+        visible={isFocused && paywallVisible}
+        animationType="slide"
+        onRequestClose={() => setPaywallVisible(false)}
+      >
+        <Paywall
+          onPurchaseSuccess={handlePaywallSuccess}
+          onPurchaseError={(error) => {
+            console.error("Mock exam purchase error:", error);
+          }}
+          onClose={() => setPaywallVisible(false)}
+        />
       </Modal>
     </SafeAreaView>
   );
@@ -416,13 +419,7 @@ const styles = StyleSheet.create({
   modalCard: { backgroundColor: "#fff", borderRadius: 24, padding: 24, width: "100%", alignItems: "center", gap: 12 },
   modalTitle: { fontSize: 22, fontWeight: "900", color: TEXT },
   modalSub: { fontSize: 14, color: SUBTLE, textAlign: "center", lineHeight: 20 },
-  adBtn: { flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: BRAND, borderRadius: 14, padding: 16, width: "100%", justifyContent: "center" },
-  adBtnText: { color: "#fff", fontWeight: "700", fontSize: 15 },
   premBtn: { borderRadius: 14, padding: 16, width: "100%", alignItems: "center", borderWidth: 1, borderColor: ACCENT },
   premBtnText: { color: ACCENT, fontWeight: "700", fontSize: 15 },
   cancelText: { color: MUTED, fontSize: 14, marginTop: 4 },
-
-  adSimCard: { backgroundColor: "#000", borderRadius: 16, padding: 40, alignItems: "center", gap: 12, width: "100%" },
-  adSimLabel: { color: "#fff", fontSize: 16, fontWeight: "600" },
-  adSimCountdown: { color: "#fff", fontSize: 48, fontWeight: "900" },
 });

@@ -1,0 +1,2251 @@
+[
+  {
+    "sectionId": 1,
+    "category": "Seguridad y control de infecciones",
+    "weight": 34,
+    "questions": [
+      {
+        "id": 1,
+        "question": "¿Qué es la sanitización?",
+        "answers": [
+          "El proceso de limpieza que elimina residuos visibles y reduce microorganismos",
+          "Destrucción completa de microorganismos",
+          "Herramientas de secado al aire",
+          "Herramientas de calefacción"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 2,
+        "question": "¿Qué es la desinfección?",
+        "answers": [
+          "Secado al aire",
+          "El uso de productos químicos para destruir la mayoría de los microorganismos en superficies no porosas",
+          "Esterilizar la piel",
+          "Quitar solo la suciedad"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 3,
+        "question": "¿Qué es la esterilización?",
+        "answers": [
+          "La destrucción completa de todos los microorganismos, incluidas las esporas",
+          "Escombros de limpieza",
+          "usando jabón",
+          "Reducir las bacterias"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 4,
+        "question": "¿Qué nivel elimina las esporas?",
+        "answers": [
+          "Sanitización",
+          "Desinfección",
+          "Esterilización",
+          "Limpieza"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 5,
+        "question": "¿Qué tipo de artículos deben esterilizarse?",
+        "answers": [
+          "Sólo herramientas no porosas",
+          "Toallas reutilizables",
+          "Artículos desechables",
+          "Artículos críticos que penetran la piel (poco comunes en estética)"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 6,
+        "question": "¿Qué es el EPP?",
+        "answers": [
+          "Fundamentos de la práctica de protección",
+          "Equipo de protección personal",
+          "Equipo de producto profesional",
+          "Elementos de Prevención Personal"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 7,
+        "question": "¿Qué es un ejemplo de EPI?",
+        "answers": [
+          "Almohadillas de algodón",
+          "Aplicadores de cera",
+          "Guantes, mascarillas y protección para los ojos.",
+          "toallas"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 8,
+        "question": "¿Qué es OSHA?",
+        "answers": [
+          "Junta de belleza y salud",
+          "Agencia de Licencia Médica",
+          "Consejo de sanitización",
+          "Administración de Seguridad y Salud Ocupacional"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 9,
+        "question": "¿Qué información proporciona una SDS, anteriormente llamada MSDS?",
+        "answers": [
+          "Un menú de servicio al cliente y una lista de precios.",
+          "Un cronograma para reemplazar los muebles del salón.",
+          "Una carta de colores del fabricante para productos.",
+          "Peligros químicos, manejo seguro, almacenamiento e información de emergencia"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 10,
+        "question": "¿Qué es la contaminación cruzada?",
+        "answers": [
+          "Aplicar loción",
+          "Transferencia de bacterias de una persona u objeto a otro",
+          "usando guantes",
+          "Limpieza de herramientas"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 11,
+        "question": "¿Qué es una precaución universal?",
+        "answers": [
+          "Limpiar semanalmente",
+          "Tratar toda sangre y fluidos corporales como infecciosos",
+          "Lávese las manos diariamente",
+          "usar loción"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 12,
+        "question": "¿Qué es un patógeno?",
+        "answers": [
+          "Célula muerta de la piel",
+          "Microorganismo que causa enfermedades",
+          "sudor",
+          "Glándula sebácea"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 13,
+        "question": "¿Qué son las bacterias?",
+        "answers": [
+          "Solo virus",
+          "Células de la piel",
+          "quimicos",
+          "Microorganismos unicelulares"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 14,
+        "question": "¿Qué son los virus?",
+        "answers": [
+          "Microorganismos que requieren un huésped para reproducirse.",
+          "Bacterias inofensivas",
+          "Aceites",
+          "Células muertas"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 15,
+        "question": "¿Qué son los hongos?",
+        "answers": [
+          "Capas de piel",
+          "Virus",
+          "Organismos como levadura y moho.",
+          "bacterias"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 16,
+        "question": "¿Qué es un desinfectante?",
+        "answers": [
+          "Producto químico utilizado para matar microbios en superficies.",
+          "loción para la piel",
+          "agua",
+          "limpiador"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 17,
+        "question": "¿Qué se requiere para la eficacia del desinfectante?",
+        "answers": [
+          "tiempo de secado",
+          "Tiempo de contacto adecuado",
+          "tiempo de calentamiento",
+          "tiempo de almacenamiento"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 18,
+        "question": "¿Qué son los residuos con riesgo biológico?",
+        "answers": [
+          "toallas de papel",
+          "Materiales, sangre y fluidos corporales contaminados.",
+          "algodon limpio",
+          "agua"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 19,
+        "question": "¿Dónde se eliminan los residuos biopeligrosos?",
+        "answers": [
+          "Contenedores de riesgo biológico aprobados",
+          "fregadero",
+          "basura",
+          "lavandería"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 20,
+        "question": "¿Cuál es el estándar de higiene de manos?",
+        "answers": [
+          "Lavar 20 segundos mínimo",
+          "1 minuto",
+          "10 segundos",
+          "5 segundos"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 21,
+        "question": "¿Cuándo se deben lavar las manos?",
+        "answers": [
+          "Antes y después de cada cliente",
+          "Una vez al día",
+          "Fin del turno",
+          "despues del almuerzo"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 22,
+        "question": "¿Qué es un antiséptico?",
+        "answers": [
+          "Tóner",
+          "Producto utilizado en la piel para reducir los microbios.",
+          "jabón de lavar",
+          "Limpiador de herramientas"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 23,
+        "question": "¿Qué es una superficie no porosa?",
+        "answers": [
+          "Superficie que no absorbe líquidos.",
+          "Material blando",
+          "Tela",
+          "Absorbe agua"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 24,
+        "question": "¿Cuál es un ejemplo de herramientas no porosas?",
+        "answers": [
+          "tejido",
+          "esponja",
+          "Pinzas metálicas",
+          "Algodón"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 25,
+        "question": "¿Qué es un artículo poroso?",
+        "answers": [
+          "herramienta metálica",
+          "plastico",
+          "tarro de cristal",
+          "Absorbe líquidos; no se puede desinfectar"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 26,
+        "question": "¿Cuál es un ejemplo de artículo poroso?",
+        "answers": [
+          "tarro de cristal",
+          "Esponjas",
+          "Espátula metálica",
+          "Pinzas"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 27,
+        "question": "¿Qué es el procedimiento de exposición a la sangre?",
+        "answers": [
+          "Lavar más tarde",
+          "Detener el servicio, limpiar, desinfectar y proteger",
+          "Continuar servicio",
+          "Ignorar incidente"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 28,
+        "question": "¿Qué es una cadena de contaminación?",
+        "answers": [
+          "Capas de producto",
+          "Vía por la que se propagan los microbios.",
+          "Proceso de limpieza de herramientas",
+          "Flujo de maquillaje"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 29,
+        "question": "¿Cuál es la primera defensa contra la infección?",
+        "answers": [
+          "Usa mascarillas",
+          "Solo guantes",
+          "Lavado de manos adecuado",
+          "Desinfectar herramientas"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 30,
+        "question": "¿Qué es una autoclave?",
+        "answers": [
+          "brocha",
+          "luz ultravioleta",
+          "Dispositivo de esterilización mediante vapor.",
+          "toalla"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 31,
+        "question": "¿Qué es la hepatitis?",
+        "answers": [
+          "Infección por hongos",
+          "enfermedad bacteriana",
+          "Infección de la piel",
+          "Un virus que causa infección hepática."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 32,
+        "question": "¿Qué es el VIH?",
+        "answers": [
+          "Enfermedad capilar",
+          "Condición de la piel",
+          "Un virus que ataca al sistema inmunológico.",
+          "Infección por hongos"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 33,
+        "question": "¿Qué es el uso adecuado de guantes?",
+        "answers": [
+          "Reutilizar guantes",
+          "Lavar y reutilizar",
+          "Uso opcional",
+          "De un solo uso; descartar después del servicio"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 34,
+        "question": "¿Qué es el orden de limpieza?",
+        "answers": [
+          "Limpiar, desinfectar y luego almacenar.",
+          "Lavar solo",
+          "Desinfectar, limpiar y luego almacenar",
+          "Almacenar, limpiar y luego desinfectar"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 35,
+        "question": "¿Cuál es el riesgo de contaminación en la doble inmersión?",
+        "answers": [
+          "Sin efecto",
+          "Ahorra tiempo",
+          "Mejora la higiene",
+          "Propaga bacterias"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 36,
+        "question": "¿Qué es el almacenamiento adecuado?",
+        "answers": [
+          "Contenedores mojados",
+          "Almacenamiento en el suelo",
+          "Contenedores limpios y cerrados",
+          "estantes abiertos"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 37,
+        "question": "¿Cuál es el objetivo de control de infecciones?",
+        "answers": [
+          "Prevenir la propagación de enfermedades",
+          "Servicio rápido",
+          "mejorar la apariencia",
+          "Reducir costos"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 38,
+        "question": "¿Qué es un ambiente limpio?",
+        "answers": [
+          "Sólo estéril",
+          "desordenado",
+          "mojado",
+          "Libre de escombros y contaminantes"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 39,
+        "question": "¿Cuál es la diferencia entre limpiar y desinfectar?",
+        "answers": [
+          "Mismo proceso",
+          "La limpieza elimina los escombros; Desinfectar mata los microbios.",
+          "Ambos hidratan la piel.",
+          "Ambos eliminan el aceite."
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 40,
+        "question": "¿Qué es la manipulación segura de productos químicos?",
+        "answers": [
+          "Ignorar etiquetas",
+          "Adivina el uso",
+          "Mezclar productos libremente",
+          "Siga las instrucciones de la SDS"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 41,
+        "question": "¿Cuál es el riesgo de dermatitis de contacto?",
+        "answers": [
+          "Exposición al frío",
+          "Exposición química inadecuada",
+          "exposición al sol",
+          "Exposición al agua"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 42,
+        "question": "¿Cuál es la importancia de la ventilación?",
+        "answers": [
+          "Agrega humedad",
+          "Agrega calor",
+          "Mejora la iluminación",
+          "Reduce los riesgos de inhalación."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 43,
+        "question": "¿Qué es la eliminación de EPP?",
+        "answers": [
+          "Mensual",
+          "Reutilizar",
+          "Semanal",
+          "Después de cada cliente"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 44,
+        "question": "¿Qué es la frecuencia de sanitización?",
+        "answers": [
+          "Después de cada uso",
+          "Mensual",
+          "Anual",
+          "Semanal"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 45,
+        "question": "¿Qué es la regla de la toalla limpia?",
+        "answers": [
+          "Uso opcional",
+          "Reutilizar toallas",
+          "Lavado semanal",
+          "Uno por cliente"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 46,
+        "question": "¿Qué es la prevención de la contaminación?",
+        "answers": [
+          "Compartir herramientas",
+          "Reutilizar artículos",
+          "Saltar la limpieza",
+          "Evite el contacto cruzado"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 47,
+        "question": "¿Qué es la prioridad de seguridad?",
+        "answers": [
+          "Velocidad",
+          "Costo",
+          "Protección del cliente y del practicante",
+          "Estilo"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 48,
+        "question": "¿Qué es un incidente de exposición?",
+        "answers": [
+          "Lavarse las manos",
+          "herramientas de limpieza",
+          "Contacto con material infeccioso",
+          "Aplicar loción"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 49,
+        "question": "¿Cuál es la importancia de la etiqueta del desinfectante?",
+        "answers": [
+          "Solo nombre de marca",
+          "Solo precio",
+          "Sólo color",
+          "Garantiza un uso correcto"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 50,
+        "question": "¿Qué es el sistema de control de infecciones?",
+        "answers": [
+          "Conjunto de procedimientos para mantener la higiene.",
+          "Sistema de maquillaje",
+          "Sistema de producto",
+          "Sistema capilar"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 51,
+        "question": "¿Cuál es el objetivo de sanitización?",
+        "answers": [
+          "Quitar solo el aceite",
+          "Mata a todos los microbios",
+          "Esterilizar herramientas",
+          "Reducir los microorganismos a niveles seguros."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 52,
+        "question": "¿Qué es el tipo de desinfectante?",
+        "answers": [
+          "Tónico sin alcohol",
+          "Solución de jabón",
+          "Limpiador a base de agua",
+          "Desinfectante registrado por la EPA"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 53,
+        "question": "¿Qué se requiere antes de la desinfección?",
+        "answers": [
+          "Herramientas de calefacción",
+          "Herramientas de enfriamiento",
+          "Herramientas de secado",
+          "Superficie de limpieza"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 54,
+        "question": "¿Qué es la infección?",
+        "answers": [
+          "Superficie hidratada",
+          "Tejido sano",
+          "Invasión de patógenos",
+          "piel limpia"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 55,
+        "question": "¿Qué es la transmisión de enfermedades?",
+        "answers": [
+          "depilación",
+          "Propagación de patógenos",
+          "Limpieza de herramientas",
+          "Hidratación de la piel"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 56,
+        "question": "¿Qué es la inmunidad?",
+        "answers": [
+          "Defensa del cuerpo contra las enfermedades.",
+          "Producción de petróleo",
+          "Crecimiento del vello",
+          "Hidratación de la piel"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 57,
+        "question": "¿Qué es la reproducción de bacterias?",
+        "answers": [
+          "Fotosíntesis",
+          "Absorción",
+          "Fisión binaria",
+          "Evaporación"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 58,
+        "question": "¿Cuál es la fuente de contaminación?",
+        "answers": [
+          "Solo herramientas",
+          "solo piel",
+          "solo aire",
+          "Cliente, herramientas y entorno."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 59,
+        "question": "¿Qué es un artículo desechable?",
+        "answers": [
+          "tarro de cristal",
+          "Artículo de un solo uso",
+          "instrumento metálico",
+          "Herramienta reutilizable"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 60,
+        "question": "¿Qué es el manejo de la ropa blanca?",
+        "answers": [
+          "Almacenar húmedo",
+          "compartir toallas",
+          "Reutilizar la misma toalla",
+          "Usar limpio; reemplazar después de cada cliente"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 61,
+        "question": "¿Qué es una estación de trabajo limpia?",
+        "answers": [
+          "herramientas mojadas",
+          "Área organizada y desinfectada",
+          "Contenedores abiertos",
+          "escritorio desordenado"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 62,
+        "question": "¿Cuál es el tiempo de contacto del desinfectante?",
+        "answers": [
+          "Tiempo necesario para matar los microbios.",
+          "tiempo de almacenamiento",
+          "tiempo de enfriamiento",
+          "tiempo de secado"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 63,
+        "question": "¿Qué es la infección cruzada?",
+        "answers": [
+          "Difusión entre individuos",
+          "depilación",
+          "Uso del producto",
+          "Limpieza de herramientas"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 64,
+        "question": "¿Qué es el método de sanitización?",
+        "answers": [
+          "hirviendo",
+          "Esterilizar",
+          "Calefacción",
+          "Limpieza y reducción de microbios."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 65,
+        "question": "¿Qué es la prevención de infecciones?",
+        "answers": [
+          "depilación con cera",
+          "Higiene y sanitización",
+          "Aplicación de maquillaje",
+          "masaje"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 66,
+        "question": "¿Cuál es el propósito del EPP?",
+        "answers": [
+          "Prevenir la exposición a peligros",
+          "Mejorar la comodidad",
+          "Agregar estilo",
+          "aumentar la velocidad"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 67,
+        "question": "¿Qué es el desinfectante para manos?",
+        "answers": [
+          "Crema hidratante",
+          "Sólo sustituto del jabón",
+          "Reductor de gérmenes a base de alcohol",
+          "Tóner"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 68,
+        "question": "¿Qué es la lesión cutánea?",
+        "answers": [
+          "Cambio anormal de la piel",
+          "Glándula sebácea",
+          "Crecimiento del vello",
+          "Piel sana"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+  {
+    "sectionId": 2,
+    "category": "Cuidado de la piel",
+    "weight": 27,
+    "questions": [
+      {
+        "id": 201,
+        "question": "¿Cuál es el órgano más grande?",
+        "answers": [
+          "Piel",
+          "corazón",
+          "hígado",
+          "Cerebro"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 202,
+        "question": "¿Cuáles son las 3 capas de la piel?",
+        "answers": [
+          "Sangre de la capa superficial",
+          "Epidermis, dermis y subcutánea.",
+          "Músculo, grasa y hueso",
+          "Tejido central externo"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 203,
+        "question": "¿Qué es la epidermis?",
+        "answers": [
+          "capa nerviosa",
+          "capa de grasa",
+          "capa de sangre",
+          "Capa protectora exterior"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 204,
+        "question": "¿Qué es la dermis?",
+        "answers": [
+          "Sólo sudor",
+          "Bolsas de aire",
+          "Contiene colágeno, elastina y vasos sanguíneos.",
+          "Sólo células muertas"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 205,
+        "question": "¿Qué es la capa subcutánea?",
+        "answers": [
+          "capa nerviosa",
+          "Capa de grasa para aislamiento.",
+          "capa de sangre",
+          "capa exterior"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 206,
+        "question": "¿Qué es el colágeno?",
+        "answers": [
+          "Petróleo",
+          "pigmento",
+          "agua",
+          "Proteína para fortalecer la piel"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 207,
+        "question": "¿Qué es la elastina?",
+        "answers": [
+          "control de aceite",
+          "pigmento",
+          "Proporciona elasticidad",
+          "sangre"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 208,
+        "question": "¿Qué es la melanina?",
+        "answers": [
+          "ácido",
+          "Proteína",
+          "Pigmento responsable del color de la piel.",
+          "Petróleo"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 209,
+        "question": "¿Qué es el sebo?",
+        "answers": [
+          "sudor",
+          "sangre",
+          "Aceite producido por las glándulas sebáceas.",
+          "agua"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 210,
+        "question": "¿Qué es un tratamiento facial?",
+        "answers": [
+          "Aplicación de maquillaje",
+          "Sólo masaje",
+          "Tratamiento para mejorar la salud de la piel.",
+          "depilación"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 211,
+        "question": "¿Qué es la exfoliación?",
+        "answers": [
+          "Aplicar SPF",
+          "Añadiendo agua",
+          "Eliminación de células muertas de la piel.",
+          "Añadiendo aceite"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 212,
+        "question": "¿Qué es la hidratación?",
+        "answers": [
+          "Retención de humedad en la piel.",
+          "Retención de aire",
+          "aumento de calor",
+          "Aumento del petróleo"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 213,
+        "question": "¿Qué es el tóner?",
+        "answers": [
+          "Equilibra el pH después de la limpieza.",
+          "Elimina el vello",
+          "Exfolia fuertemente",
+          "Hidrata profundamente"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 214,
+        "question": "¿Qué es el limpiador?",
+        "answers": [
+          "Exfolia",
+          "Elimina la suciedad y el aceite",
+          "Hidrata",
+          "Agrega aceite"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 215,
+        "question": "¿Cuál es el propósito de la máscara?",
+        "answers": [
+          "base de maquillaje",
+          "depilación",
+          "Tratar afecciones específicas de la piel.",
+          "limpiar herramientas"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 216,
+        "question": "¿Qué es la crema hidratante?",
+        "answers": [
+          "Limpia la piel",
+          "Exfolia",
+          "Elimina el aceite",
+          "Hidrata la piel"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 217,
+        "question": "¿Qué significa SPF?",
+        "answers": [
+          "Película protectora de superficies",
+          "Fórmula del producto para la piel",
+          "Factor de protección solar",
+          "Acabado de preparación de la piel"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 218,
+        "question": "¿Qué son los rayos UVA?",
+        "answers": [
+          "Rayos curativos",
+          "Rayos refrescantes",
+          "rayos ardientes",
+          "Rayos envejecidos"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 219,
+        "question": "¿Qué es la luz UVB?",
+        "answers": [
+          "Rayos curativos",
+          "rayos ardientes",
+          "Rayos refrescantes",
+          "Rayos envejecidos"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 220,
+        "question": "¿Qué es el acné?",
+        "answers": [
+          "Condición inflamatoria de la piel.",
+          "quemar",
+          "Sequedad",
+          "arruga"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 221,
+        "question": "¿Qué causa el acné?",
+        "answers": [
+          "Aceite, bacterias y poros obstruidos.",
+          "luz del sol",
+          "Agua y sequedad",
+          "aire frio"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 222,
+        "question": "¿Qué es el comedón?",
+        "answers": [
+          "Folículo piloso",
+          "Poro obstruido",
+          "nervio",
+          "vaso sanguíneo"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 223,
+        "question": "¿Qué es la extracción?",
+        "answers": [
+          "Aplicar SPF",
+          "Eliminar los poros obstruidos",
+          "Masajear la piel",
+          "Añadiendo aceite"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 224,
+        "question": "¿Qué es una contraindicación?",
+        "answers": [
+          "tipo de piel",
+          "Resultado deseado",
+          "Beneficio del tratamiento",
+          "Tratamiento que previene la condición"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 225,
+        "question": "¿Cuál es el beneficio del masaje facial?",
+        "answers": [
+          "Mejora la circulación",
+          "Quema la piel",
+          "Agrega aceite",
+          "Seca la piel"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 226,
+        "question": "¿Qué es la terapia LED?",
+        "answers": [
+          "Tratamiento del aire",
+          "Tratamiento ligero para la piel.",
+          "Tratamiento térmico",
+          "Tratamiento de agua"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 227,
+        "question": "¿Qué es la corriente galvánica?",
+        "answers": [
+          "terapia de frio",
+          "Tratamiento facial electrico",
+          "masaje manual",
+          "Terapia de calor"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 228,
+        "question": "¿Qué es la alta frecuencia?",
+        "answers": [
+          "Hidratación de la piel",
+          "depilación",
+          "herramienta de maquillaje",
+          "Tratamiento de las bacterias del acné."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 229,
+        "question": "¿Qué es la exfoliación enzimática?",
+        "answers": [
+          "depilación con cera",
+          "Exfoliación química suave",
+          "afeitado",
+          "exfoliación física"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 230,
+        "question": "¿Qué es la exfoliación química?",
+        "answers": [
+          "Hidratante",
+          "Rejuvenecimiento cutáneo a base de ácido",
+          "fregado manual",
+          "Cocer al vapor"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 231,
+        "question": "¿Qué es la exfoliación física?",
+        "answers": [
+          "Hidratación",
+          "Exfoliantes y remoción manual.",
+          "exfoliación química",
+          "Terapia LED"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 232,
+        "question": "¿Qué es la barrera cutánea?",
+        "answers": [
+          "capa interior",
+          "Capa exterior protectora",
+          "capa de sangre",
+          "capa de grasa"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 233,
+        "question": "¿Qué es la deshidratación?",
+        "answers": [
+          "Infección",
+          "Falta de agua en la piel.",
+          "piel quemada",
+          "exceso de aceite"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 234,
+        "question": "¿Qué es la sensibilidad?",
+        "answers": [
+          "Piel normal",
+          "piel grasa",
+          "piel gruesa",
+          "La piel reacciona fácilmente"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 235,
+        "question": "¿Qué es el signo de envejecimiento?",
+        "answers": [
+          "Aumento del sudor",
+          "Crecimiento del vello",
+          "Arrugas y pérdida de elasticidad.",
+          "Aumento del petróleo"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 236,
+        "question": "¿Qué es la estratificación de productos?",
+        "answers": [
+          "Aplicar productos en orden",
+          "Mezclar productos al azar",
+          "Aplicar un solo producto",
+          "Saltarse productos"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 237,
+        "question": "¿Qué es el suero?",
+        "answers": [
+          "Producto de tratamiento concentrado",
+          "limpiador",
+          "máscara",
+          "Tóner"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 238,
+        "question": "¿Cuál es el beneficio del vapor facial?",
+        "answers": [
+          "Seca la piel",
+          "Quema la piel",
+          "Abre los poros",
+          "Cierra los poros"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 239,
+        "question": "¿Qué es el tipo de mascarilla para piel grasa?",
+        "answers": [
+          "mascarilla hidratante",
+          "mascarilla de aceite",
+          "mascarilla de agua",
+          "mascarilla de arcilla"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 240,
+        "question": "¿Qué es la mascarilla para piel seca?",
+        "answers": [
+          "mascarilla hidratante",
+          "mascarilla de arcilla",
+          "Máscara de eliminación de aceite",
+          "mascarilla exfoliante"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 241,
+        "question": "¿Qué es la función de la piel?",
+        "answers": [
+          "Solo crecimiento del vello",
+          "Sólo circulación sanguínea",
+          "Sólo función nerviosa",
+          "Protección, regulación y sensación."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 242,
+        "question": "¿Qué es el manto ácido?",
+        "answers": [
+          "capa de grasa",
+          "Glándula sebácea",
+          "Película protectora sobre la piel.",
+          "capa de sangre"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 243,
+        "question": "¿Qué es el nivel de pH?",
+        "answers": [
+          "Temperatura",
+          "Nivel de hidratación",
+          "nivel de aceite",
+          "Medida de acidez y alcalinidad."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 244,
+        "question": "¿Qué es el pH normal?",
+        "answers": [
+          "10-12",
+          "1–2",
+          "Alrededor de 4,5 a 5,5",
+          "7–8"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 245,
+        "question": "¿Cuál es la causa de la deshidratación?",
+        "answers": [
+          "Solo quemaduras solares",
+          "falta de agua",
+          "exceso de aceite",
+          "Solo clima frio"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 246,
+        "question": "¿Qué es el daño de la barrera?",
+        "answers": [
+          "Capa de protección comprometida",
+          "Hidratación mejorada",
+          "aumento de aceite",
+          "Crecimiento del vello"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 247,
+        "question": "¿Cuál es el beneficio de la exfoliación?",
+        "answers": [
+          "Quitar pigmento",
+          "aumentar el aceite",
+          "textura suave",
+          "quemar la piel"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 248,
+        "question": "¿Qué es el tipo de limpiador?",
+        "answers": [
+          "cera",
+          "Gel, crema y espuma",
+          "exfoliación química",
+          "máscara"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 249,
+        "question": "¿Cuál es el beneficio del tóner?",
+        "answers": [
+          "quemar la piel",
+          "Restaurar el pH",
+          "aumentar el aceite",
+          "Eliminar el vello"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 250,
+        "question": "¿Cuál es el beneficio del suero?",
+        "answers": [
+          "quitar el aceite",
+          "Exfoliar",
+          "Tratamiento dirigido",
+          "piel limpia"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 251,
+        "question": "¿Qué es el tipo de crema hidratante?",
+        "answers": [
+          "Oclusivo, humectante y emoliente.",
+          "limpiador",
+          "máscara",
+          "Tóner"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 252,
+        "question": "¿Cuál es el propósito de los productos con SPF?",
+        "answers": [
+          "Eliminar el vello desde el folículo",
+          "Ayudar a proteger la piel de la exposición UV cuando se usan según las indicaciones",
+          "Desinfectar implementos reutilizables",
+          "Aumentar la penetración de la exfoliación química"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 253,
+        "question": "¿Qué es el daño de los rayos UVA?",
+        "answers": [
+          "Envejecimiento y arrugas",
+          "Ardiendo",
+          "Enfriamiento",
+          "Curación"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 254,
+        "question": "¿Qué es el daño de los rayos UVB?",
+        "answers": [
+          "Quemaduras de sol",
+          "Curación",
+          "Enfriamiento",
+          "envejecimiento"
+        ],
+        "answerIndex": 0
+      }
+    ]
+  },
+  {
+    "sectionId": 3,
+    "category": "Análisis de la piel",
+    "weight": 13,
+    "questions": [
+      {
+        "id": 401,
+        "question": "¿Cuáles son los principales tipos de piel?",
+        "answers": [
+          "Saludable y no saludable",
+          "Suave y áspero",
+          "Claro, oscuro y medio",
+          "Normal, grasa, seca y mixta."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 402,
+        "question": "¿Qué es la piel normal?",
+        "answers": [
+          "inflamado",
+          "Demasiado aceitoso",
+          "Aceite y humedad equilibrados.",
+          "demasiado seco"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 403,
+        "question": "¿Qué es la piel grasa?",
+        "answers": [
+          "Exceso de producción de sebo",
+          "Parches secos",
+          "falta de petroleo",
+          "equilibrado"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 404,
+        "question": "¿Qué es la piel seca?",
+        "answers": [
+          "inflamado",
+          "falta de petroleo",
+          "exceso de aceite",
+          "equilibrado"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 405,
+        "question": "¿Qué es la piel mixta?",
+        "answers": [
+          "completamente seco",
+          "Zona T aceitosa, seca en otras partes",
+          "Completamente normal",
+          "Totalmente aceitoso"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 406,
+        "question": "¿Qué es la escala Fitzpatrick?",
+        "answers": [
+          "Escala de acné",
+          "Clasificación del tipo de piel según la respuesta al sol.",
+          "Escala de envejecimiento",
+          "Escala de hidratación"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 407,
+        "question": "¿Con qué se asocia típicamente la piel tipo I de Fitzpatrick?",
+        "answers": [
+          "Se quema con mucha facilidad y se broncea mínimamente o nada",
+          "Rara vez se quema y se broncea profundamente",
+          "Nunca reacciona a la exposición a los rayos UV.",
+          "Está determinado únicamente por el color de ojos."
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 408,
+        "question": "¿Qué es la piel tipo VI?",
+        "answers": [
+          "Sin pigmento",
+          "Profundamente pigmentado, rara vez se quema.",
+          "Se quema fácilmente",
+          "Piel clara"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 409,
+        "question": "¿Qué es el signo de sensibilidad?",
+        "answers": [
+          "Crecimiento del vello",
+          "Enrojecimiento e irritación",
+          "Sequedad",
+          "Untuosidad"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 410,
+        "question": "¿Qué es el signo de deshidratación?",
+        "answers": [
+          "Ardiendo",
+          "Untuosidad",
+          "enrojecimiento",
+          "Tirantez y embotamiento"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 411,
+        "question": "¿Cuál es el grado de acné?",
+        "answers": [
+          "nivel de color",
+          "Nivel de hidratación",
+          "Nivel de textura",
+          "Nivel de gravedad"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 412,
+        "question": "¿Qué es la hiperpigmentación?",
+        "answers": [
+          "Puntos de luz",
+          "Sequedad",
+          "Manchas oscuras",
+          "Arrugas"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 413,
+        "question": "¿Qué es la hipopigmentación?",
+        "answers": [
+          "Untuosidad",
+          "Acné",
+          "Pérdida de color",
+          "Manchas oscuras"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 414,
+        "question": "¿Qué es la rosácea?",
+        "answers": [
+          "Untuosidad",
+          "arruga",
+          "Sequedad",
+          "Condición de enrojecimiento crónico"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 415,
+        "question": "¿Qué es la telangiectasia?",
+        "answers": [
+          "Crecimiento del vello",
+          "Capilares rotos",
+          "Peeling de la piel",
+          "Producción de petróleo"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 416,
+        "question": "¿Qué es la prueba de elasticidad de la piel?",
+        "answers": [
+          "Prueba de calor",
+          "prueba de luz",
+          "prueba de prensa",
+          "prueba de pellizco"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 417,
+        "question": "¿Qué es el indicador de tamaño de poro?",
+        "answers": [
+          "Producción de petróleo",
+          "nivel de calor",
+          "Contenido de agua",
+          "Densidad del vello"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 418,
+        "question": "¿Qué es la textura de la piel?",
+        "answers": [
+          "Sensación de superficie",
+          "Sólo color",
+          "Sólo espesor",
+          "Solo temperatura"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 419,
+        "question": "¿Qué es el signo de pérdida de elasticidad?",
+        "answers": [
+          "enrojecimiento",
+          "Sequedad",
+          "flacidez",
+          "Untuosidad"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 420,
+        "question": "¿Qué es la herramienta de análisis?",
+        "answers": [
+          "toalla",
+          "brocha",
+          "Lámpara de aumento",
+          "barra de cera"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 421,
+        "question": "¿Cuál es el objetivo del análisis?",
+        "answers": [
+          "limpiar herramientas",
+          "Determinar la condición de la piel.",
+          "Aplicar producto",
+          "Eliminar el vello"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 422,
+        "question": "¿Qué es el tono de piel?",
+        "answers": [
+          "color de piel",
+          "Espesor",
+          "Temperatura",
+          "textura"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 423,
+        "question": "¿Qué es el subtono?",
+        "answers": [
+          "Color sutil debajo de la superficie de la piel",
+          "Color de superficie",
+          "color de ojos",
+          "Color del vello"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 424,
+        "question": "¿Qué es la zona T grasa?",
+        "answers": [
+          "Frente, nariz y barbilla",
+          "Sólo cuello",
+          "solo mejillas",
+          "Sólo atrás"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 425,
+        "question": "¿Qué es el parche seco?",
+        "answers": [
+          "Área de exceso de aceite",
+          "Área sin humedad",
+          "área quemada",
+          "Crecimiento del vello"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 426,
+        "question": "¿Qué son los poros dilatados?",
+        "answers": [
+          "vasos sanguineos",
+          "Aumento visible del tamaño de los poros.",
+          "Nervios",
+          "Crecimiento del folículo piloso"
+        ],
+        "answerIndex": 1
+      }
+    ]
+  },
+  {
+    "sectionId": 4,
+    "category": "Depilación",
+    "weight": 13,
+    "questions": [
+      {
+        "id": 601,
+        "question": "¿Qué es la depilación con cera?",
+        "answers": [
+          "afeitado",
+          "Depilación del vello desde la raíz",
+          "Cortar el vello",
+          "Blanqueamiento"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 602,
+        "question": "¿Cuáles son los tipos de cera?",
+        "answers": [
+          "Líquido y espuma",
+          "Aerosol y polvo",
+          "Suave y duro",
+          "gel y pasta"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 603,
+        "question": "¿Para qué se utiliza la cera blanda?",
+        "answers": [
+          "Solo cejas",
+          "Grandes superficies",
+          "Áreas pequeñas",
+          "solo cara"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 604,
+        "question": "¿Para qué se utiliza la cera dura?",
+        "answers": [
+          "Zonas sensibles",
+          "Solo piernas",
+          "Grandes superficies",
+          "Solo brazos"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 605,
+        "question": "¿Qué es el ciclo de crecimiento del vello?",
+        "answers": [
+          "Ninguno",
+          "Anágena, catágena y telógena",
+          "Crecer, detenerse y caer",
+          "Corto y largo"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 606,
+        "question": "¿Qué fase del ciclo de crecimiento del vello es la fase de crecimiento activo?",
+        "answers": [
+          "Catágena",
+          "Exógena",
+          "Anágena",
+          "Telógena"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 607,
+        "question": "¿Qué condición es una razón común para evitar o posponer la depilación con cera?",
+        "answers": [
+          "Uso reciente de retinoides o piel frágil",
+          "Un área curada sin irritación.",
+          "Piel equilibrada e intacta",
+          "Hidratación normal"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 608,
+        "question": "¿Qué es la depilación con pinzas?",
+        "answers": [
+          "Depilación con pinzas",
+          "depilación con cera",
+          "afeitado",
+          "Ardiendo"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 609,
+        "question": "¿Qué es la depilación con hilo?",
+        "answers": [
+          "corte",
+          "Depilación usando hilo",
+          "Blanqueamiento",
+          "afeitado"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 610,
+        "question": "¿Qué es el vello encarnado?",
+        "answers": [
+          "el vello se cae",
+          "El vello crece debajo de la piel.",
+          "El vello crece más rápido",
+          "El vello se vuelve gris"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 611,
+        "question": "Para retirar una tira de cera blanda típica, ¿qué dirección se usa?",
+        "answers": [
+          "Aplicar en la dirección del crecimiento del vello y retirar en contra del crecimiento",
+          "Retire hacia arriba lentamente independientemente del patrón de crecimiento.",
+          "Aplicar y quitar en direcciones aleatorias.",
+          "Aplicar en contra del crecimiento del vello y retirar en la dirección del crecimiento del vello"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 612,
+        "question": "¿Qué es el uso de tiras?",
+        "answers": [
+          "Elimina la cera blanda",
+          "Calienta la cera",
+          "Limpia la piel",
+          "Aplica cera"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 613,
+        "question": "¿Qué es el riesgo de temperatura de depilación?",
+        "answers": [
+          "Enfriamiento",
+          "Hidratación",
+          "Secado",
+          "quemaduras"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 614,
+        "question": "¿Qué es la sanitización en la depilación con cera?",
+        "answers": [
+          "compartir cera",
+          "Sin doble inmersión",
+          "Reutilizar palitos",
+          "Saltar la limpieza"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 615,
+        "question": "¿Qué es el cuidado posterior?",
+        "answers": [
+          "exponer al calor",
+          "Exfoliar inmediatamente",
+          "ignorar la piel",
+          "Calmar y proteger la piel"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 616,
+        "question": "¿Qué es el folículo?",
+        "answers": [
+          "capa de piel",
+          "nervio",
+          "vaso sanguíneo",
+          "Estructura de la raíz del vello"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 617,
+        "question": "¿Qué es la depilación?",
+        "answers": [
+          "afeitado",
+          "Blanqueamiento",
+          "Cortar el vello",
+          "Quitar el vello desde la raíz"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 618,
+        "question": "¿Qué es la depilación?",
+        "answers": [
+          "Quitar el vello superficial",
+          "Crecimiento del vello",
+          "coloración del vello",
+          "Quitar el vello de raíz"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 619,
+        "question": "¿Cuál es la contraindicación para la depilación?",
+        "answers": [
+          "Piel seca",
+          "Piel sana",
+          "Infección de la piel",
+          "piel grasa"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 620,
+        "question": "¿Cuál es el principal beneficio de la depilación con cera?",
+        "answers": [
+          "Recrecimiento más rápido",
+          "Recrecimiento más lento",
+          "engrosamiento del vello",
+          "cambio de color del vello"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 621,
+        "question": "¿Cuál es otro beneficio de la depilación con cera?",
+        "answers": [
+          "Depilación más duradera",
+          "Decoloración del vello",
+          "engrosamiento del vello",
+          "Rebrote inmediato"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 622,
+        "question": "¿Qué es la preparación para la depilación?",
+        "answers": [
+          "piel sucia",
+          "Piel limpia y seca",
+          "piel mojada",
+          "piel grasa"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 623,
+        "question": "¿Qué es la velocidad de depilación con cera?",
+        "answers": [
+          "tirón rápido",
+          "tirón lento",
+          "Eliminación de calor",
+          "sin tirar"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 624,
+        "question": "¿Qué es el espesor de la cera?",
+        "answers": [
+          "Capa fina y uniforme",
+          "capa desigual",
+          "Sin capa",
+          "capa gruesa"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 625,
+        "question": "¿Qué es la tira de cera?",
+        "answers": [
+          "Limpia la piel",
+          "Calienta la cera",
+          "Aplica cera",
+          "Elimina la cera"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 626,
+        "question": "¿Qué es la depilación en barra?",
+        "answers": [
+          "Almacena cera",
+          "Limpia la piel",
+          "Aplica cera",
+          "Elimina la cera"
+        ],
+        "answerIndex": 2
+      }
+    ]
+  },
+  {
+    "sectionId": 5,
+    "category": "Tratamientos avanzados",
+    "weight": 5,
+    "questions": [
+      {
+        "id": 801,
+        "question": "¿Qué es la microdermoabrasión?",
+        "answers": [
+          "depilación con cera",
+          "masaje",
+          "exfoliación química",
+          "Tratamiento de exfoliación mecánica."
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 802,
+        "question": "¿Qué es una exfoliación química?",
+        "answers": [
+          "fregar",
+          "Exfoliación con ácidos",
+          "Hidratante",
+          "Cocer al vapor"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 803,
+        "question": "¿Cuáles son los tipos de exfoliaciones químicas?",
+        "answers": [
+          "Suave y duro",
+          "agua y aceite",
+          "Calor y frio",
+          "AHA y BHA"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 804,
+        "question": "¿Qué es la AHA?",
+        "answers": [
+          "Calentar ácido",
+          "Ácido de agua",
+          "Ácido alfa hidroxi",
+          "Antiácido capilar"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 805,
+        "question": "¿Qué es BHA?",
+        "answers": [
+          "ácido corporal",
+          "Equilibrio ácido",
+          "Ácido beta hidroxi",
+          "ácido básico"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 806,
+        "question": "¿Qué es la profundidad de una exfoliación química?",
+        "answers": [
+          "Sólo luz",
+          "Superficial, media y profunda.",
+          "Ninguno",
+          "Sólo profundo"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 807,
+        "question": "¿Qué hallazgo es una contraindicación común para tratamientos avanzados de exfoliación?",
+        "answers": [
+          "Infección activa, quemadura solar, lesiones abiertas o uso reciente de isotretinoína",
+          "Piel intacta y equilibrada sin irritación.",
+          "Un formulario de consulta completo y sin factores de riesgo.",
+          "Untuosidad leve sin inflamación."
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 808,
+        "question": "¿Qué es el poscuidado?",
+        "answers": [
+          "Exposición al calor",
+          "depilación con cera",
+          "exfoliación",
+          "protección solar"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 809,
+        "question": "¿Cuál es el propósito de una exfoliación química?",
+        "answers": [
+          "Exfoliar la piel",
+          "Hidratar la piel",
+          "Eliminar el vello",
+          "piel limpia"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 810,
+        "question": "¿Para qué se utiliza la AHA?",
+        "answers": [
+          "depilación",
+          "Exfoliación profunda",
+          "Exfoliación superficial",
+          "Hidratación"
+        ],
+        "answerIndex": 2
+      }
+    ]
+  },
+  {
+    "sectionId": 6,
+    "category": "Maquillaje",
+    "weight": 4,
+    "questions": [
+      {
+        "id": 1001,
+        "question": "¿Qué es la base de maquillaje?",
+        "answers": [
+          "brocha",
+          "sombra de ojos",
+          "Maquillaje base",
+          "lápiz labial"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 1002,
+        "question": "¿Qué es el corrector?",
+        "answers": [
+          "Agrega color",
+          "Cubre imperfecciones",
+          "Elimina el aceite",
+          "Limpia la piel"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 1003,
+        "question": "¿Qué es el contorneado?",
+        "answers": [
+          "exfoliante",
+          "piel hidratante",
+          "limpieza de la piel",
+          "Dar forma a la cara con sombreado"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 1004,
+        "question": "¿Qué es la mezcla?",
+        "answers": [
+          "Quitar maquillaje",
+          "Líneas de afilado",
+          "Añadiendo aceite",
+          "Líneas de productos suavizantes"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 1005,
+        "question": "¿Para qué se usa la teoría del color en el maquillaje?",
+        "answers": [
+          "Seleccionar productos sin ver el subtono",
+          "Reemplazo de la preferencia del cliente durante la consulta",
+          "Usar las relaciones entre colores para igualar, equilibrar y corregir tonos",
+          "Desinfectar brochas entre clientes"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 1006,
+        "question": "¿Cuál es una práctica clave de sanitización en la aplicación de maquillaje?",
+        "answers": [
+          "Aplicar productos en crema directamente desde el frasco.",
+          "Guarde las esponjas desechables usadas para reutilizarlas.",
+          "Compartir varitas de rímel entre clientes",
+          "Usar herramientas limpias y evitar la contaminación cruzada"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 1007,
+        "question": "¿Qué es la imprimación?",
+        "answers": [
+          "Crema hidratante",
+          "limpiador",
+          "Prepara la piel para el maquillaje",
+          "Tóner"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 1008,
+        "question": "¿Qué es el polvo fijador?",
+        "answers": [
+          "Limpia la piel",
+          "Elimina el maquillaje",
+          "Hidrata",
+          "Bloquea el maquillaje"
+        ],
+        "answerIndex": 3
+      }
+    ]
+  },
+  {
+    "sectionId": 7,
+    "category": "Consulta con el cliente",
+    "weight": 4,
+    "questions": [
+      {
+        "id": 1201,
+        "question": "¿Qué es la consulta?",
+        "answers": [
+          "Valoración del cliente",
+          "Vender producto",
+          "Realizar servicio",
+          "limpiar herramientas"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 1202,
+        "question": "¿Qué es el formulario de admisión?",
+        "answers": [
+          "Documento de historial del cliente.",
+          "Recibo",
+          "Menú",
+          "Horario"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 1203,
+        "question": "¿Qué es la identificación de contraindicaciones?",
+        "answers": [
+          "Servicio rápido",
+          "Prevenir tratamientos inseguros",
+          "Agregar productos",
+          "Mejorar las ventas"
+        ],
+        "answerIndex": 1
+      },
+      {
+        "id": 1204,
+        "question": "¿Cuál es el objetivo del cliente?",
+        "answers": [
+          "Venta de productos",
+          "Horario",
+          "Resultado deseado",
+          "Limpieza de herramientas"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 1205,
+        "question": "¿Qué es la documentación?",
+        "answers": [
+          "Registro de servicio",
+          "Sólo memoria",
+          "Sólo verbal",
+          "ignorar notas"
+        ],
+        "answerIndex": 0
+      },
+      {
+        "id": 1206,
+        "question": "¿Qué es la comunicación profesional?",
+        "answers": [
+          "Servicio urgente",
+          "ignorar cliente",
+          "Interacción clara y respetuosa.",
+          "Argot informal"
+        ],
+        "answerIndex": 2
+      },
+      {
+        "id": 1207,
+        "question": "¿Cuál es el objetivo de la consulta?",
+        "answers": [
+          "limpiar herramientas",
+          "Vender productos",
+          "Sólo programar",
+          "Comprender las necesidades del cliente"
+        ],
+        "answerIndex": 3
+      },
+      {
+        "id": 1208,
+        "question": "¿Qué es el historial de salud?",
+        "answers": [
+          "Horario",
+          "Lista de productos",
+          "Antecedentes médicos del cliente",
+          "Lista de herramientas"
+        ],
+        "answerIndex": 2
+      }
+    ]
+  }
+]
