@@ -17,12 +17,11 @@ import Animated, {
 } from "react-native-reanimated";
 import { useStatsStore } from "@/src/statsStore";
 import { useSettingsStore } from "@/src/settingsStore";
-
-import englishData from "@/assets/questions.json";
-import spanishData from "@/assets/spanishQuestions.json";
-
-// @ts-ignore
-import { getPremQuestions, PremQuestion } from "@/src/premDB";
+import { useSubscription } from "@/src/hooks/useSubscription";
+import {
+  getQuestionData,
+  getQuestionBankSource,
+} from "@/src/data/questionData";
 import {
   BRAND,
   ACCENT,
@@ -71,13 +70,14 @@ function CollapsibleBody({
 export default function StatsScreen() {
   const router = useRouter();
   const spanish = useSettingsStore((state) => state.spanish);
-  const data = spanish ? spanishData : englishData;
+  const { hasEsthiPro } = useSubscription();
+  const data = getQuestionData(spanish, hasEsthiPro);
+  const source = getQuestionBankSource(hasEsthiPro);
 
   const TABS = spanish ? ["Tarjetas", "Quiz", "Examen"] : ["Flashcards", "Quiz", "Exam"];
 
   const scrollRef = useRef<ScrollView>(null);
   const [activeTab, setActiveTab] = useState(0);
-  const [premCards, setPremCards] = useState<PremQuestion[]>([]);
   const [expandedExam, setExpandedExam] = useState<string | null>(null);
   const [expandedQuizSections, setExpandedQuizSections] = useState<string | null>(null);
   const [examTypeFilter, setExamTypeFilter] = useState<"practice" | "mock">("practice");
@@ -90,44 +90,23 @@ export default function StatsScreen() {
   const resetExamHistory = useStatsStore((s) => s.resetExamHistory);
   const resetQuizHistory = useStatsStore((s) => s.resetQuizHistory);
 
-  useEffect(() => {
-    if (spanish) {
-      setPremCards([]);
-      return;
-    }
-
-    try {
-      setPremCards(getPremQuestions());
-    } catch {
-      setPremCards([]);
-    }
-  }, [spanish]);
-
   const idToCategoryLookup = useMemo(() => {
     const lookup: Record<string, string> = {};
 
     data.forEach((section) => {
       section.questions.forEach((q) => {
-        lookup[`free_${q.id}`] = section.category;
+        lookup[`${source}_${q.id}`] = section.category;
       });
     });
 
-    premCards.forEach((q) => {
-      lookup[`prem_${q.id}`] = q.category;
-    });
-
     return lookup;
-  }, [data, premCards]);
+  }, [data, source]);
 
   const flashcardSectionStats = useMemo(() => {
     const categoryTotals: Record<string, number> = {};
 
     data.forEach((s) => {
       categoryTotals[s.category] = s.questions.length;
-    });
-
-    premCards.forEach((q) => {
-      categoryTotals[q.category] = (categoryTotals[q.category] || 0) + 1;
     });
 
     const categoryRatings: Record<string, { known: number; learning: number }> = {};
@@ -154,11 +133,14 @@ export default function StatsScreen() {
         (categoryRatings[category]?.known ?? 0) -
         (categoryRatings[category]?.learning ?? 0),
     }));
-  }, [flashcardRatings, idToCategoryLookup, premCards, data]);
+  }, [flashcardRatings, idToCategoryLookup, data]);
 
-  const totalKnown = Object.values(flashcardRatings).filter((r) => r === "know").length;
-  const totalLearning = Object.values(flashcardRatings).filter((r) => r === "learning").length;
-  const totalCards = data.reduce((sum, s) => sum + s.questions.length, 0) + premCards.length;
+  const currentBankRatings = Object.entries(flashcardRatings).filter(
+    ([key]) => idToCategoryLookup[key] !== undefined,
+  );
+  const totalKnown = currentBankRatings.filter(([, rating]) => rating === "know").length;
+  const totalLearning = currentBankRatings.filter(([, rating]) => rating === "learning").length;
+  const totalCards = data.reduce((sum, s) => sum + s.questions.length, 0);
   const totalUnreviewed = totalCards - totalKnown - totalLearning;
 
   const quizBySection = useMemo(() => {

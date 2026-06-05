@@ -3,9 +3,12 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { getQuestionBank, type PremQuestion } from "../../src/data/questionData";
-// @ts-ignore
-import { getPremQuestions } from "@/src/premDB";
+import {
+  getQuestionBank,
+  getQuestionBankSource,
+} from "../../src/data/questionData";
+import { useSettingsStore } from "@/src/settingsStore";
+import { useSubscription } from "@/src/hooks/useSubscription";
 import { useStatsStore } from "@/src/statsStore";
 import { BRAND, ACCENT, BG, TEXT, MUTED, BORDER, SUCCESS, DANGER } from "@/src/theme/colors";
 import { SHADOW_MD } from "@/src/theme/shadows";
@@ -39,24 +42,31 @@ function shuffle<T>(items: T[]): T[] {
   return shuffledItems;
 }
 
-function buildQuiz(index: number, title: string, premQuestions: PremQuestion[] = []): QuizQuestion[] {
-  const questionBank = getQuestionBank(index, premQuestions) as QuestionFromJson[] | undefined;
+function buildQuiz(
+  index: number,
+  title: string,
+  spanish: boolean,
+  hasEsthiPro: boolean,
+): QuizQuestion[] {
+  const questionBank = getQuestionBank(index, spanish, hasEsthiPro) as
+    | QuestionFromJson[]
+    | undefined;
 
   if (!questionBank || questionBank.length === 0) {
     return [];
   }
 
   const selectedQuestions = shuffle(questionBank).slice(0, QUIZ_QUESTION_LIMIT);
+  const source = getQuestionBankSource(hasEsthiPro);
 
   return selectedQuestions.map((question) => {
     const correctAnswer = question.answers[question.answerIndex];
     const shuffledAnswers = shuffle(question.answers);
-    const isPrem = premQuestions.some(p => p.id === question.id);
 
     return {
       ...question,
       category: title,
-      source: isPrem ? "prem" as const : "free" as const,
+      source,
       answers: shuffledAnswers,
       answerIndex: shuffledAnswers.indexOf(correctAnswer),
     };
@@ -66,6 +76,8 @@ function buildQuiz(index: number, title: string, premQuestions: PremQuestion[] =
 export default function SubjectQuiz() {
   const router = useRouter();
   const scrollRef = useRef<ScrollView>(null);
+  const spanish = useSettingsStore((state) => state.spanish);
+  const { hasEsthiPro } = useSubscription();
 
   const { title, index, subjectId } = useLocalSearchParams<{
     title?: string;
@@ -77,18 +89,10 @@ export default function SubjectQuiz() {
 
   const questionBankIndex = Number(index ?? subjectId);
 
-  const [quiz, setQuiz] = useState<QuizQuestion[]>(() => {
-    if (Number.isNaN(questionBankIndex)) {
-      return [];
-    }
-
-    return buildQuiz(questionBankIndex, quizTitle);
-  });
+  const [quiz, setQuiz] = useState<QuizQuestion[]>([]);
 
   const [selected, setSelected] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [premQuestions, setPremQuestions] = useState<PremQuestion[]>([]);
-
   const answeredCount = Object.keys(selected).length;
   const totalQuestions = quiz.length;
 
@@ -99,16 +103,12 @@ export default function SubjectQuiz() {
   }, [quiz, selected]);
 
   useEffect(() => {
-    try {
-      const prem = getPremQuestions() as PremQuestion[];
-      setPremQuestions(prem);
-      if (!Number.isNaN(questionBankIndex)) {
-        setQuiz(buildQuiz(questionBankIndex, quizTitle, prem));
-      }
-    } catch {
-
+    if (!Number.isNaN(questionBankIndex)) {
+      setQuiz(buildQuiz(questionBankIndex, quizTitle, spanish, hasEsthiPro));
+      setSelected({});
+      setSubmitted(false);
     }
-  }, [])
+  }, [hasEsthiPro, questionBankIndex, quizTitle, spanish]);
 
   const addQuizResult = useStatsStore((s) => s.addQuizResult);
 
@@ -127,14 +127,22 @@ export default function SubjectQuiz() {
         selectedAnswer: q.answers[selected[i]],
       })),
     });
-  }, [submitted]);
+  }, [
+    addQuizResult,
+    quiz,
+    quizTitle,
+    score,
+    selected,
+    submitted,
+    totalQuestions,
+  ]);
 
   const scorePercent =
     totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
 
   const handleRetakeQuiz = () => {
     if (!Number.isNaN(questionBankIndex)) {
-      setQuiz(buildQuiz(questionBankIndex, quizTitle, premQuestions));
+      setQuiz(buildQuiz(questionBankIndex, quizTitle, spanish, hasEsthiPro));
     }
   
     setSelected({});

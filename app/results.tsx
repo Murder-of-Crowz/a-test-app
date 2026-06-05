@@ -1,16 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useStatsStore } from "@/src/statsStore";
 import { useSettingsStore } from "@/src/settingsStore";
-
-import englishData from "@/assets/questions.json";
-import spanishData from "@/assets/spanishQuestions.json";
-
-// @ts-ignore
-import { getPremQuestions } from "@/src/premDB";
+import { getQuestionData } from "@/src/data/questionData";
 import {
   BRAND,
   BG,
@@ -88,30 +83,14 @@ function QuestionCard({
 export default function ResultsScreen() {
   const router = useRouter();
   const spanish = useSettingsStore((state) => state.spanish);
-  const data = spanish ? spanishData : englishData;
 
   const { type, id } = useLocalSearchParams<{
     type: "quiz" | "exam";
     id: string;
   }>();
 
-  const [premQuestions, setPremQuestions] = useState<any[]>([]);
-
   const quizHistory = useStatsStore((s) => s.quizHistory);
   const examHistory = useStatsStore((s) => s.examHistory);
-
-  useEffect(() => {
-    if (spanish) {
-      setPremQuestions([]);
-      return;
-    }
-
-    try {
-      setPremQuestions(getPremQuestions());
-    } catch {
-      setPremQuestions([]);
-    }
-  }, [spanish]);
 
   const result = useMemo(() => {
     if (type === "quiz") return quizHistory.find((q) => q.id === id);
@@ -129,18 +108,20 @@ export default function ResultsScreen() {
       }
     > = {};
 
-    data.forEach((section) => {
+    getQuestionData(spanish, false).forEach((section) => {
       section.questions.forEach((q) => {
         lookup[`free_${q.id}`] = { ...q, category: section.category };
       });
     });
 
-    premQuestions.forEach((q) => {
-      lookup[`prem_${q.id}`] = { ...q };
+    getQuestionData(spanish, true).forEach((section) => {
+      section.questions.forEach((q) => {
+        lookup[`prem_${q.id}`] = { ...q, category: section.category };
+      });
     });
 
     return lookup;
-  }, [data, premQuestions]);
+  }, [spanish]);
 
   const questions = useMemo((): FullQuestion[] => {
     if (!result?.questions) return [];

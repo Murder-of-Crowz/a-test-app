@@ -27,12 +27,12 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
-import englishData from "@/assets/questions.json";
-import spanishData from "@/assets/spanishQuestions.json";
-
 import { useSettingsStore } from "@/src/settingsStore";
-// @ts-ignore
-import { PremQuestion, getPremQuestions } from "@/src/premDB";
+import { useSubscription } from "@/src/hooks/useSubscription";
+import {
+  getQuestionData,
+  getQuestionBankSource,
+} from "@/src/data/questionData";
 import { useStatsStore } from "@/src/statsStore";
 import {
   BRAND,
@@ -181,23 +181,25 @@ const FlashCard = forwardRef<
 export default function FlashCardsScreen() {
   const router = useRouter();
   const spanish = useSettingsStore((state) => state.spanish);
-  const data = spanish ? spanishData : englishData;
+  const { hasEsthiPro } = useSubscription();
+  const data = getQuestionData(spanish, hasEsthiPro);
+  const source = getQuestionBankSource(hasEsthiPro);
 
   const flashCardRef = useRef<FlashCardRef>(null);
 
-  const freeCards: Card[] = useMemo(
+  const allCards: Card[] = useMemo(
     () =>
       data.flatMap((section) =>
         section.questions.map((q) => ({
           ...q,
           category: section.category,
-          source: "free" as const,
+          source,
         })),
       ),
-    [data],
+    [data, source],
   );
 
-  const freeCategories = useMemo(() => data.map((s) => s.category), [data]);
+  const categories = useMemo(() => data.map((s) => s.category), [data]);
 
   const [index, setIndex] = useState(0);
   const [shuffleOn, setShuffleOn] = useState(false);
@@ -210,7 +212,6 @@ export default function FlashCardsScreen() {
     new Set(),
   );
   const [reviewDeck, setReviewDeck] = useState<Card[] | null>(null);
-  const [premCards, setPremCards] = useState<Card[]>([]);
 
   const flashcardRatings = useStatsStore((s) => s.flashcardRatings);
   const flashcardNextReview = useStatsStore((s) => s.flashcardNextReview);
@@ -219,43 +220,11 @@ export default function FlashCardsScreen() {
   const resetFlashcardRatings = useStatsStore((s) => s.resetFlashcardRatings);
 
   useEffect(() => {
-    setSelectedSections(new Set(freeCategories));
-    setPendingSections(new Set(freeCategories));
+    setSelectedSections(new Set(categories));
+    setPendingSections(new Set(categories));
     setReviewDeck(null);
     setIndex(0);
-  }, [freeCategories]);
-
-  useEffect(() => {
-    if (spanish) {
-      setPremCards([]);
-      return;
-    }
-
-    try {
-      const prem = getPremQuestions();
-
-      setPremCards(
-        prem.map((q: PremQuestion) => ({ ...q, source: "prem" as const })),
-      );
-    } catch {
-      setPremCards([]);
-    }
-  }, [spanish]);
-
-  const allCards = useMemo(() => {
-    const combined = [...freeCards, ...premCards];
-    const categoryOrder = [...new Set(combined.map((c) => c.category))];
-
-    return combined.sort(
-      (a, b) =>
-        categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category),
-    );
-  }, [freeCards, premCards]);
-
-  const categories = useMemo(
-    () => [...new Set(allCards.map((c) => c.category))],
-    [allCards],
-  );
+  }, [categories]);
 
   const categoryCounts = useMemo(
     () =>
@@ -295,6 +264,12 @@ export default function FlashCardsScreen() {
 
   const reviewedCount = deck.filter(
     (c) => flashcardRatings[`${c.source}_${c.id}`] !== undefined,
+  ).length;
+  const currentBankKnown = allCards.filter(
+    (c) => flashcardRatings[`${c.source}_${c.id}`] === "know",
+  ).length;
+  const currentBankLearning = allCards.filter(
+    (c) => flashcardRatings[`${c.source}_${c.id}`] === "learning",
   ).length;
 
   const markCard = (id: number, source: "free" | "prem", state: CardState) => {
@@ -760,8 +735,7 @@ export default function FlashCardsScreen() {
             <View style={styles.overallRow}>
               <View style={styles.overallBadge}>
                 <Text style={styles.overallNum}>
-                  {Object.values(flashcardRatings).filter((s) => s === "know")
-                    .length}
+                  {currentBankKnown}
                 </Text>
                 <Text style={styles.overallLabel}>
                   {spanish ? "Lo sé" : "Know It"}
@@ -771,9 +745,7 @@ export default function FlashCardsScreen() {
               <View style={styles.overallBadge}>
                 <Text style={[styles.overallNum, { color: DANGER }]}>
                   {
-                    Object.values(flashcardRatings).filter(
-                      (s) => s === "learning",
-                    ).length
+                    currentBankLearning
                   }
                 </Text>
                 <Text style={styles.overallLabel}>
@@ -839,19 +811,15 @@ export default function FlashCardsScreen() {
               )}
             </ScrollView>
 
-            {Object.values(flashcardRatings).some((s) => s === "learning") && (
+            {currentBankLearning > 0 && (
               <Pressable style={styles.applyBtn} onPress={enterReviewMode}>
                 <Text style={styles.applyText}>
                   {spanish
                     ? `Repasar tarjetas fallidas (${
-                        Object.values(flashcardRatings).filter(
-                          (s) => s === "learning",
-                        ).length
+                        currentBankLearning
                       })`
                     : `Review Missed Cards (${
-                        Object.values(flashcardRatings).filter(
-                          (s) => s === "learning",
-                        ).length
+                        currentBankLearning
                       })`}
                 </Text>
               </Pressable>
