@@ -19,8 +19,6 @@ import {
   scheduleReminder,
 } from "@/src/notifications";
 
-const USER_NAME = "Joe";
-
 export default function DashboardScreen() {
   const router = useRouter();
   const spanish = useSettingsStore((state) => state.spanish);
@@ -55,7 +53,7 @@ export default function DashboardScreen() {
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>
-            {spanish ? `¡Hola, ${USER_NAME}!` : `Hello, ${USER_NAME}!`}
+            {spanish ? "Hola!" : "Welcome back"}
           </Text>
 
           <Text style={styles.sub}>

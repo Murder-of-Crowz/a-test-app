@@ -26,7 +26,9 @@ export default function RootLayout() {
       .then(async () => {
         Purchases.addCustomerInfoUpdateListener(handleCustomerInfoUpdate);
         await useSubscriptionStore.getState().fetchCustomerInfo();
-        console.log("[RevenueCat] Initialized successfully");
+        if (__DEV__) {
+          console.log("[RevenueCat] Initialized successfully");
+        }
       })
       .catch((error) => console.error("[RevenueCat] Failed to initialize:", error));
 

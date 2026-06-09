@@ -8,6 +8,7 @@ import {
   Pressable,
   ScrollView,
   Switch,
+  Linking,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,7 +19,6 @@ import {
   BG,
   TEXT,
   MUTED,
-  SUBTLE,
   DANGER,
 } from "@/src/theme/colors";
 import { SHADOW_MD } from "@/src/theme/shadows";
@@ -37,8 +37,6 @@ import { Paywall } from "@/src/components/Paywall";
 import { CustomerCenter } from "@/src/components/CustomerCenter";
 import { restorePurchases } from "@/src/revenuecat/subscriptionManager";
 
-const USER_NAME = "Joe";
-const USER_EMAIL = "joe@mama.com";
 const APP_VERSION = "1.0.0";
 
 type RowProps = {
@@ -48,6 +46,12 @@ type RowProps = {
   right?: React.ReactNode;
   danger?: boolean;
 };
+
+const PRIVACY_POLICY_URL = "https://esthiapp.com/privacy.html";
+const TERMS_OF_SERVICE_URL = "https://esthiapp.com/terms.html";
+const SUPPORT_URL = "https://esthiapp.com/support.html";
+
+
 
 function Row({ icon, label, onPress, right, danger }: RowProps) {
   return (
@@ -89,7 +93,6 @@ export default function SettingsScreen() {
   const forceFreeForTesting = useSettingsStore((state) => state.forceFreeForTesting);
   const { hasEsthiPro, refresh, updateCustomerInfo } = useSubscription();
 
-  const [signOutVisible, setSignOutVisible] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [reminderTime, setReminderTime] = useState({ hour: 8, minute: 0 });
   const [showPicker, setShowPicker] = useState(false);
@@ -163,33 +166,6 @@ export default function SettingsScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll}>
-        <View style={styles.accountCard}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {USER_NAME.charAt(0).toUpperCase()}
-            </Text>
-          </View>
-
-          <View>
-            <Text style={styles.accountName}>{USER_NAME}</Text>
-            <Text style={styles.accountEmail}>{USER_EMAIL}</Text>
-          </View>
-        </View>
-
-        <SectionHeader title="Account" />
-
-        <View style={styles.section}>
-          <Row icon="key-outline" label="Change Password" onPress={() => {}} />
-
-          <Row
-            icon="log-out-outline"
-            label="Sign Out"
-            onPress={() => setSignOutVisible(true)}
-            danger
-            right={null}
-          />
-        </View>
-
         <SectionHeader title="Preferences" />
 
         <View style={styles.section}>
@@ -245,23 +221,25 @@ export default function SettingsScreen() {
             </View>
           )}
 
-          <Pressable
-            style={({ pressed }) => [
-              styles.row,
-              pressed && styles.rowPressed,
-            ]}
-            onPress={sendTestNotif}
-          >
-            <Ionicons
-              name="notifications-outline"
-              size={28}
-              color={ACCENT}
-              style={styles.rowIcon}
-            />
+          {__DEV__ && (
+            <Pressable
+              style={({ pressed }) => [
+                styles.row,
+                pressed && styles.rowPressed,
+              ]}
+              onPress={sendTestNotif}
+            >
+              <Ionicons
+                name="notifications-outline"
+                size={28}
+                color={ACCENT}
+                style={styles.rowIcon}
+              />
 
-            <Text style={styles.rowLabel}>Test Notification</Text>
-            <Text style={{ color: MUTED, fontSize: 13 }}>Fires in 5s</Text>
-          </Pressable>
+              <Text style={styles.rowLabel}>Test Notification</Text>
+              <Text style={{ color: MUTED, fontSize: 13 }}>Fires in 5s</Text>
+            </Pressable>
+          )}
         </View>
 
         <SectionHeader title="Premium" />
@@ -349,8 +327,10 @@ export default function SettingsScreen() {
         <SectionHeader title="About" />
 
         <View style={styles.section}>
-          <Row icon="document-text-outline" label="Privacy Policy" onPress={() => {}} />
-          <Row icon="reader-outline" label="Terms of Service" onPress={() => {}} />
+          <Row icon="document-text-outline" label="Privacy Policy" onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}/>
+          <Row icon="reader-outline" label="Terms of Service" onPress={() => Linking.openURL(TERMS_OF_SERVICE_URL)}/>
+          <Row icon="help-circle-outline" label="Support" onPress={() => Linking.openURL(SUPPORT_URL)}/>
+
 
           <Row
             icon="information-circle-outline"
@@ -389,40 +369,6 @@ export default function SettingsScreen() {
         />
       </Modal>
 
-      <Modal
-        visible={signOutVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setSignOutVisible(false)}
-      >
-        <Pressable
-          style={styles.overlay}
-          onPress={() => setSignOutVisible(false)}
-        >
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Sign Out</Text>
-            <Text style={styles.modalBody}>
-              Are you sure you want to sign out?
-            </Text>
-
-            <View style={styles.modalActions}>
-              <Pressable
-                style={[styles.modalBtn, styles.modalBtnCancel]}
-                onPress={() => setSignOutVisible(false)}
-              >
-                <Text style={styles.modalBtnCancelText}>Cancel</Text>
-              </Pressable>
-
-              <Pressable
-                style={[styles.modalBtn, styles.modalBtnConfirm]}
-                onPress={() => setSignOutVisible(false)}
-              >
-                <Text style={styles.modalBtnConfirmText}>Sign Out</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Pressable>
-      </Modal>
     </SafeAreaView>
   );
 }
@@ -442,32 +388,6 @@ const styles = StyleSheet.create({
   headerTile: { color: "#fff", fontSize: 17, fontWeight: "700" },
 
   scroll: { padding: 20, gap: 8, paddingBottom: 40 },
-
-  accountCard: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-    marginBottom: 8,
-    ...SHADOW_MD,
-  },
-
-  avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: ACCENT,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  avatarText: { color: "#fff", fontSize: 22, fontWeight: "800" },
-
-  accountName: { color: TEXT, fontSize: 16, fontWeight: "700" },
-
-  accountEmail: { color: SUBTLE, fontSize: 13, marginTop: 2 },
 
   sectionHeader: {
     color: MUTED,
@@ -523,38 +443,6 @@ const styles = StyleSheet.create({
   upgradeText: { color: "#fff", fontWeight: "700", fontSize: 15 },
 
   versionText: { color: MUTED, fontSize: 14 },
-
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 32,
-  },
-
-  modalCard: {
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    padding: 24,
-    width: "100%",
-    gap: 8,
-  },
-
-  modalTitle: { color: TEXT, fontSize: 18, fontWeight: "800" },
-
-  modalBody: { color: SUBTLE, fontSize: 14, lineHeight: 20 },
-
-  modalActions: { flexDirection: "row", gap: 12, marginTop: 8 },
-
-  modalBtn: { flex: 1, borderRadius: 12, padding: 14, alignItems: "center" },
-
-  modalBtnCancel: { backgroundColor: BG },
-
-  modalBtnConfirm: { backgroundColor: DANGER },
-
-  modalBtnCancelText: { color: "#1d293b", fontWeight: "600" },
-
-  modalBtnConfirmText: { color: "#fff", fontWeight: "700" },
 
   timePickerRow: { backgroundColor: "#fff", alignItems: "center" },
 

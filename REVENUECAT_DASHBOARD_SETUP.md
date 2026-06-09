@@ -15,7 +15,7 @@ Follow these steps to configure RevenueCat for the Esthi app.
 
 - [ ] Go to "Projects" → "Esthi"
 - [ ] Click "Add app" → iOS
-- [ ] Set app bundle ID: `com.studyprep.esthetics` (from app.json)
+- [ ] Set app bundle ID: `com.studyprep.esthi` (from app.json)
 - [ ] Connect App Store
 
 ### 2. Configure Products in App Store Connect
@@ -47,7 +47,7 @@ Products to create in App Store Connect:
 
 - [ ] Go to "Projects" → "Esthi"
 - [ ] Click "Add app" → Android
-- [ ] Set package name: `com.anonymous.atestapp` (from app.json)
+- [ ] Set package name: `com.studyprep.esthi` (from app.json)
 - [ ] Connect Google Play Console
 
 ### 2. Configure Products in Google Play Console
@@ -245,5 +245,5 @@ Monitor in RevenueCat Dashboard:
 - `lifetime` - Lifetime purchase
 
 **Bundle IDs:**
-- iOS: `com.studyprep.esthetics`
-- Android: `com.anonymous.atestapp`
+- iOS: `com.studyprep.esthi`
+- Android: `com.studyprep.esthi`

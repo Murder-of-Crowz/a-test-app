@@ -57,7 +57,7 @@ function CollapsibleBody({
 
   useEffect(() => {
     maxHeight.value = withTiming(isOpen ? 600 : 0, { duration: 280 });
-  }, [isOpen]);
+  }, [isOpen, maxHeight]);
 
   const animStyle = useAnimatedStyle(() => ({
     maxHeight: maxHeight.value,

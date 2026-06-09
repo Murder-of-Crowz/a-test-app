@@ -98,7 +98,7 @@ const FlashCard = forwardRef<
 
   useEffect(() => {
     opacity.value = withTiming(1, { duration: 200 });
-  }, []);
+  }, [opacity]);
 
   const toggleFlipped = () => setFlipped((f) => !f);
 
