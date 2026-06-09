@@ -225,24 +225,7 @@ async function handleRestorePurchases() {
 }
 ```
 
-### 7. Set Custom User ID
-
-When user logs in:
-
-```typescript
-import { setRevenueCatUserID } from '@/src/revenuecat/config';
-
-async function handleUserLogin(userID: string) {
-  try {
-    await setRevenueCatUserID(userID);
-    // User ID is now tracked in RevenueCat
-  } catch (error) {
-    console.error('Failed to set user ID:', error);
-  }
-}
-```
-
-### 8. Get Customer Information
+### 7. Get Customer Information
 
 Access detailed customer info:
 
@@ -329,16 +312,7 @@ useFocusEffect(
 );
 ```
 
-### 3. Store User ID
-
-Always set custom user ID after login to track subscriptions:
-
-```typescript
-// In login flow
-await setRevenueCatUserID(user.id);
-```
-
-### 4. Test on Both Platforms
+### 3. Test on Both Platforms
 
 RevenueCat works differently on iOS and Android:
 - iOS: Uses StoreKit

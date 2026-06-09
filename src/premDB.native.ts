@@ -1,6 +1,8 @@
 import { open, type DB } from "@op-engineering/op-sqlite";
 import { File, Directory, Paths } from "expo-file-system";
 import { Asset } from "expo-asset";
+import premDbAsset from "../assets/premQ.db";
+import premVersionAsset from "../assets/premQ.version";
 
 const DB_NAME = "premQ.db";
 const VERSION_FILE = "premQ.version";
@@ -12,14 +14,14 @@ export async function initPremDB() {
   const dbFile = new File(Paths.document, "SQLite", DB_NAME);
   const versionFile = new File(Paths.document, "SQLite", VERSION_FILE)
 
-  const versionAsset = Asset.fromModule(require("../assets/premQ.version"));
+  const versionAsset = Asset.fromModule(premVersionAsset);
   await versionAsset.downloadAsync();
   const bundledVersion = await new File(versionAsset.localUri!).text();
   const storedVersion = versionFile.exists ? await versionFile.text() : "0"
   
   if (!dbFile.exists || storedVersion !== bundledVersion) {
     dbDir.create({ intermediates: true, idempotent: true });
-    const asset = Asset.fromModule(require("../assets/premQ.db"));
+    const asset = Asset.fromModule(premDbAsset);
     await asset.downloadAsync();
     const assetFile = new File(asset.localUri!);
     if (dbFile.exists) dbFile.delete();

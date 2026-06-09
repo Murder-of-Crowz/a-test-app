@@ -5,6 +5,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -57,7 +58,7 @@ function CollapsibleBody({
 
   useEffect(() => {
     maxHeight.value = withTiming(isOpen ? 600 : 0, { duration: 280 });
-  }, [isOpen]);
+  }, [isOpen, maxHeight]);
 
   const animStyle = useAnimatedStyle(() => ({
     maxHeight: maxHeight.value,
@@ -187,6 +188,7 @@ export default function StatsScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
       <View style={styles.header}>
         <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -217,7 +219,7 @@ export default function StatsScreen() {
         pagingEnabled
         scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
-        style={{ flex: 1 }}
+        style={styles.pager}
         onMomentumScrollEnd={(e) => {
           const page = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
           setActiveTab(page);
@@ -484,7 +486,7 @@ export default function StatsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: BG },
+  safe: { flex: 1, backgroundColor: BRAND },
 
   header: {
     backgroundColor: BRAND,
@@ -495,6 +497,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   headerTitle: { color: "#fff", fontSize: 17, fontWeight: "700" },
+
+  pager: { flex: 1, backgroundColor: BG },
 
   page: { padding: 20, gap: 12, paddingBottom: 40 },
 

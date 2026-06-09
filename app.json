@@ -1,16 +1,15 @@
 {
   "expo": {
-    "name": "a-test-app",
-    "slug": "a-test-app",
+    "name": "Esthi",
+    "slug": "esthi",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "atestapp",
+    "scheme": "esthi",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.studyprep.esthetics"
+      "bundleIdentifier": "com.studyprep.esthi"
     },
     "android": {
       "permissions": [
@@ -25,7 +24,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.atestapp"
+      "package": "com.studyprep.esthi"
     },
     "web": {
       "output": "static",

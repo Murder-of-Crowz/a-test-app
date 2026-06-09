@@ -96,12 +96,9 @@ export async function purchasePackage(
 ): Promise<CustomerInfo> {
   try {
     const { customerInfo } = await Purchases.purchasePackage(packageToPurchase);
-    console.log('[RevenueCat] Purchase successful');
     return customerInfo;
   } catch (error: any) {
-    if (error.userCancelled) {
-      console.log('[RevenueCat] Purchase cancelled by user');
-    } else {
+    if (!error.userCancelled) {
       console.error('[RevenueCat] Purchase failed:', error);
     }
     throw error;
@@ -114,7 +111,6 @@ export async function purchasePackage(
 export async function restorePurchases(): Promise<CustomerInfo> {
   try {
     const customerInfo = await Purchases.restorePurchases();
-    console.log('[RevenueCat] Purchases restored');
     return customerInfo;
   } catch (error) {
     console.error('[RevenueCat] Failed to restore purchases:', error);

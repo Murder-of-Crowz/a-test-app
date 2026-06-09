@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BRAND, ACCENT, SUBTLE } from "@/src/theme/colors";
+import { BRAND, ACCENT } from "@/src/theme/colors";
 import { useSettingsStore } from "@/src/settingsStore";
 
 export default function SplashScreen() {
@@ -41,7 +41,7 @@ export default function SplashScreen() {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [btnOpacity,logoOpacity,logoY]);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -84,11 +84,6 @@ export default function SplashScreen() {
           </Text>
         </Pressable>
 
-        <Text style={styles.footnote}>
-          {spanish
-            ? "La función de inicio de sesión aún no está lista"
-            : "Login functionality not ready"}
-        </Text>
       </Animated.View>
     </SafeAreaView>
   );
@@ -148,7 +143,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 
-  footer: { paddingHorizontal: 24, paddingBottom: 32, gap: 12 },
+  footer: { paddingHorizontal: 24, paddingBottom: 32 },
   btn: {
     backgroundColor: "#fff",
     borderRadius: 14,
@@ -157,5 +152,4 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.85 },
   btnText: { color: BRAND, fontSize: 16, fontWeight: "700" },
-  footnote: { color: SUBTLE, fontSize: 12, textAlign: "center" },
 });

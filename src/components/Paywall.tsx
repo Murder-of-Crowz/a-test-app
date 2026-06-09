@@ -31,7 +31,6 @@ export function Paywall({
           displayCloseButton: true,
         }}
         onPurchaseCompleted={({ customerInfo }) => {
-          console.log('[Paywall] Purchase completed');
           onPurchaseSuccess?.(customerInfo);
         }}
         onPurchaseError={({ error }: { error: PurchasesError }) => {
@@ -39,11 +38,9 @@ export function Paywall({
           onPurchaseError?.(error);
         }}
         onPurchaseCancelled={() => {
-          console.log('[Paywall] Purchase cancelled');
           onClose?.();
         }}
         onRestoreCompleted={({ customerInfo }) => {
-          console.log('[Paywall] Restore completed');
           onPurchaseSuccess?.(customerInfo);
         }}
         onRestoreError={({ error }: { error: PurchasesError }) => {
@@ -51,7 +48,6 @@ export function Paywall({
           onPurchaseError?.(error);
         }}
         onDismiss={() => {
-          console.log('[Paywall] Dismissed');
           onClose?.();
         }}
       />

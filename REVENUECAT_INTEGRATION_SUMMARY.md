@@ -130,8 +130,8 @@ Three products configured:
 - `Esthi Pro` - Premium access entitlement
 
 ### Bundle IDs
-- **iOS**: `com.studyprep.esthetics`
-- **Android**: `com.anonymous.atestapp`
+- **iOS**: `com.studyprep.esthi`
+- **Android**: `com.studyprep.esthi`
 
 ## 📊 Architecture
 

@@ -36,12 +36,11 @@ A mobile exam prep app built using React Native and Expo. Features flashcards an
 
 ## Project Structure (as of 5/21/2026)
 ```
-a-test-app/
+esthi/
 │
 ├── app/
 │    ├── _layout.tsx            # Root stack layout (headerShown: false)
 │    ├── index.tsx              # Splash screen with animated logo
-│    ├── login.tsx              # Login / registration screen
 │    ├── dashboard.tsx          # Home screen with navigation cards
 │    ├── flashcards.tsx         # Flashcard study mode
 │    ├── exam.tsx               # Weighted 25-question practice exam
@@ -88,11 +87,7 @@ a-test-app/
 
 ### Splash (`index.tsx`)
 - Animated logo fade-in with translateY. 
-- "Get Started" button routes to `/dashboard` (placeholder - will route to `/login` once auth is wired)
-
-### Login (`login.tsx`)
-- Email/password sign-in form.
-- Firebase auth **soon**.
+- "Get Started" button routes to `/dashboard`
 
 ### Dashboard (`dashboard.tsx`)
 - Personalized greeting with settings cog. 
@@ -110,14 +105,14 @@ a-test-app/
 - Stats modal
 - Review missed cards mode
 - Animated navigation
-- Selects the Free or Premium English/Spanish question bank from account access and language settings
+- Selects the Free or Premium English/Spanish question bank from subscription status and language settings
 
 ### Quiz Selection (`quizSelection.tsx`)
 - Category list with question count and weight per section.
 - Navigates to per-category quiz with section index and title.
 
 ### Quiz (`quiz/[subjectId].tsx`)
-- Up to 20 questions from the selected account/language question bank
+- Up to 20 questions from the selected subscription/language question bank
 - Answer choices shuffled per question.
 - Submit locked until all questions answered.
 - Results show score with Retake, New Quiz, and Home options
@@ -147,7 +142,6 @@ a-test-app/
 - Data persists via Zustand + AsyncStorage across sessions.
 
 ### Settings (`settings.tsx`)
-- Account info display (name, email placeholder until auth)
 - Daily reminder toggle with inline time picker (expo-notifications)
 - Test notification button (dev use)
 - Spanish language toggle

@@ -146,8 +146,8 @@ export const REVENUECAT_API_KEY = 'test_shvqxUHedVYHANlkMFhIGVJpKqL';
 - `Esthi Pro` - Premium access
 
 ### App Identifiers
-- iOS Bundle ID: `com.studyprep.esthetics`
-- Android Package: `com.anonymous.atestapp`
+- iOS Bundle ID: `com.studyprep.esthi`
+- Android Package: `com.studyprep.esthi`
 
 ## 🎓 Learning Path
 

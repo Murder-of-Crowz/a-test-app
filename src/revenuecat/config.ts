@@ -17,8 +17,7 @@ export const REVENUECAT_API_KEY = 'test_shvqxUHedVYHANlkMFhIGVJpKqL';
  */
 export async function initializeRevenueCat(): Promise<void> {
   try {
-    // Set log level for development (optional, remove or set to ERROR in production)
-    Purchases.setLogLevel(LOG_LEVEL.DEBUG);
+    Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.DEBUG : LOG_LEVEL.ERROR);
 
     // Configure the SDK with API key
     Purchases.configure({
@@ -26,37 +25,11 @@ export async function initializeRevenueCat(): Promise<void> {
       appUserID: undefined, // Let RevenueCat handle anonymous user ID, or set custom ID
     });
 
-    console.log('[RevenueCat] SDK initialized successfully');
+    if (__DEV__) {
+      console.log('[RevenueCat] SDK initialized successfully');
+    }
   } catch (error) {
     console.error('[RevenueCat] Failed to initialize SDK:', error);
-    throw error;
-  }
-}
-
-/**
- * Set a custom user ID for subscription tracking
- * Call this after user login
- */
-export async function setRevenueCatUserID(userID: string): Promise<void> {
-  try {
-    // Set the app user ID for tracking and analytics
-    await Purchases.logIn(userID);
-    console.log(`[RevenueCat] User ID set: ${userID}`);
-  } catch (error) {
-    console.error('[RevenueCat] Failed to set user ID:', error);
-    throw error;
-  }
-}
-
-/**
- * Log out the current user
- */
-export async function logOutRevenueCatUser(): Promise<void> {
-  try {
-    await Purchases.logOut();
-    console.log('[RevenueCat] User logged out');
-  } catch (error) {
-    console.error('[RevenueCat] Failed to log out user:', error);
     throw error;
   }
 }

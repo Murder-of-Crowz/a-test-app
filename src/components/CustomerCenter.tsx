@@ -81,7 +81,6 @@ export function CustomerCenter({ onClose, onError }: CustomerCenterProps) {
       {/* Using RevenueCat's official customer center UI */}
       <RevenueCatUI.CustomerCenterView
         onDismiss={() => {
-          console.log('[CustomerCenter] Dismissed');
           onClose?.();
         }}
       />

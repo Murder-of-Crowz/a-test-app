@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -160,6 +167,7 @@ export default function SubjectQuiz() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
       <View style={styles.header}>
         <View style={styles.headerSide}>
           <Pressable
@@ -182,7 +190,11 @@ export default function SubjectQuiz() {
         </View>
       </View>
 
-      <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
+      <ScrollView
+        ref={scrollRef}
+        style={styles.content}
+        contentContainerStyle={styles.scroll}
+      >
         {totalQuestions === 0 && (
           <View style={styles.card}>
             <Text style={styles.cardQuestion}>
@@ -313,8 +325,10 @@ export default function SubjectQuiz() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: BG,
+    backgroundColor: BRAND,
   },
+
+  content: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
