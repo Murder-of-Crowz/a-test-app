@@ -12,6 +12,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Switch,
   Text,
   View,
@@ -395,6 +396,7 @@ export default function FlashCardsScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
       <View style={styles.header}>
         <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -844,7 +846,7 @@ export default function FlashCardsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: BG },
+  safe: { flex: 1, backgroundColor: BRAND },
 
   header: {
     backgroundColor: BRAND,
@@ -882,7 +884,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
 
-  body: { flex: 1, padding: 20, gap: 12 },
+  body: { flex: 1, padding: 20, gap: 12, backgroundColor: BG },
   chapterLabel: {
     color: SUBTLE,
     fontSize: 13,

@@ -6,6 +6,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -216,6 +217,7 @@ export default function MockExamScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
       {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={() => router.replace("/dashboard")} hitSlop={12}>
@@ -227,7 +229,11 @@ export default function MockExamScreen() {
         </Text>
       </View>
 
-      <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
+      <ScrollView
+        ref={scrollRef}
+        style={styles.content}
+        contentContainerStyle={styles.scroll}
+      >
         {/* Result */}
         {submitted && (
           <View style={[styles.resultBanner, { backgroundColor: passed ? SUCCESS : DANGER }]}>
@@ -362,7 +368,9 @@ export default function MockExamScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: BG },
+  safe: { flex: 1, backgroundColor: BRAND },
+
+  content: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,

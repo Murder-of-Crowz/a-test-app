@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -192,6 +193,7 @@ export default function ExamScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
       <View style={styles.header}>
         <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -206,7 +208,11 @@ export default function ExamScreen() {
         </Text>
       </View>
 
-      <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
+      <ScrollView
+        ref={scrollRef}
+        style={styles.content}
+        contentContainerStyle={styles.scroll}
+      >
         {submitted && (
           <View style={styles.resultBanner}>
             <Text style={styles.resultText}>
@@ -390,7 +396,9 @@ export default function ExamScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: BG },
+  safe: { flex: 1, backgroundColor: BRAND },
+
+  content: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,

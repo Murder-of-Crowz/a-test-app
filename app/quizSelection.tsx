@@ -1,12 +1,18 @@
 import { useMemo, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  StatusBar,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   BRAND,
   ACCENT,
-  BG,
   MUTED,
   SUBTLE,
   BORDER,
@@ -46,6 +52,7 @@ export default function QuizSelection() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
       <View style={styles.header}>
         <View style={styles.headerSide}>
           <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
@@ -109,7 +116,7 @@ export default function QuizSelection() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: BG,
+    backgroundColor: BRAND,
   },
 
   header: {

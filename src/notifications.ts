@@ -1,6 +1,9 @@
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
+const REMINDER_DAYS_TO_SCHEDULE = 30;
+const REMINDER_NOTIFICATION_PREFIX = "daily-reminder";
+
 async function ensureChannel() {
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
@@ -21,22 +24,54 @@ export async function getPermissionStatus() {
   return status;  
 }
 
-export async function scheduleReminder(hour: number, minute: number): Promise<void> {
+function getNextReminderOccurrence(hour: number, minute: number): Date {
+  const now = new Date();
+  const reminder = new Date(now);
+  reminder.setHours(hour, minute, 0, 0);
+
+  if (reminder.getTime() <= now.getTime()) {
+    reminder.setDate(reminder.getDate() + 1);
+  }
+
+  return reminder;
+}
+
+function getReminderContent() {
+  return {
+    title: "Time to Study!",
+    body: "Don't slack off now, you got this!",
+    sound: true,
+  };
+}
+
+export async function scheduleReminder(hour: number, minute: number): Promise<string[]> {
   await ensureChannel();
-  await Notifications.cancelAllScheduledNotificationsAsync();
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "Time to Study!",
-      body: "Don't slack off now, you got this!",
-      sound: true,
-      ...(Platform.OS === "android" && { channelId: "default" }),
-    },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      hour,
-      minute,
-    },
-  });
+  await cancelReminder();
+
+  const firstReminder = getNextReminderOccurrence(hour, minute);
+  const scheduledIds: string[] = [];
+
+  for (let dayOffset = 0; dayOffset < REMINDER_DAYS_TO_SCHEDULE; dayOffset += 1) {
+    const reminderDate = new Date(firstReminder);
+    reminderDate.setDate(firstReminder.getDate() + dayOffset);
+
+    const id = await Notifications.scheduleNotificationAsync({
+      identifier: `${REMINDER_NOTIFICATION_PREFIX}-${dayOffset}`,
+      content: getReminderContent(),
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: reminderDate,
+        ...(Platform.OS === "android" && { channelId: "default" }),
+      },
+    });
+    scheduledIds.push(id);
+  }
+
+  return scheduledIds;
+}
+
+export async function getNextReminderDate(hour: number, minute: number): Promise<Date | null> {
+  return getNextReminderOccurrence(hour, minute);
 }
 
 export async function sendTestNotif(): Promise<void> {
@@ -50,16 +85,27 @@ export async function sendTestNotif(): Promise<void> {
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-      seconds: 1,
+      seconds: 5,
     },
   });
 }
 
 export async function cancelReminder(): Promise<void> {
-  await Notifications.cancelAllScheduledNotificationsAsync();
+  const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+  await Promise.all(
+    scheduled
+      .filter((notification) =>
+        notification.identifier.startsWith(REMINDER_NOTIFICATION_PREFIX),
+      )
+      .map((notification) =>
+        Notifications.cancelScheduledNotificationAsync(notification.identifier),
+      ),
+  );
 }
 
 export async function hasScheduledReminder(): Promise<boolean> {
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
-  return scheduled.length > 0;
+  return scheduled.some((notification) =>
+    notification.identifier.startsWith(REMINDER_NOTIFICATION_PREFIX),
+  );
 }

@@ -1,6 +1,13 @@
 import { useMemo } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useStatsStore } from "@/src/statsStore";
@@ -158,6 +165,7 @@ export default function ResultsScreen() {
   if (!result) {
     return (
       <SafeAreaView style={styles.safe} edges={["top"]}>
+        <StatusBar barStyle="light-content" backgroundColor={BRAND} />
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} hitSlop={12}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -179,6 +187,7 @@ export default function ResultsScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -191,7 +200,7 @@ export default function ResultsScreen() {
         </Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView style={styles.content} contentContainerStyle={styles.scroll}>
         {missed.length > 0 && (
           <>
             <View style={styles.sectionLabel}>
@@ -237,7 +246,9 @@ export default function ResultsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: BG },
+  safe: { flex: 1, backgroundColor: BRAND },
+
+  content: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
@@ -308,6 +319,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: BG,
     paddingTop: 80,
   },
   emptyText: { color: MUTED, fontSize: 15, fontWeight: "600" },

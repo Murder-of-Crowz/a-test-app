@@ -9,15 +9,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useStatsStore } from "@/src/statsStore";
 import { useSettingsStore } from "@/src/settingsStore";
 import { BRAND, ACCENT, BG, TEXT, SUBTLE, BORDER } from "@/src/theme/colors";
-import {
-  getPermissionStatus,
-  requestPermission,
-  scheduleReminder,
-} from "@/src/notifications";
 
 export default function DashboardScreen() {
   const router = useRouter();
@@ -26,19 +21,6 @@ export default function DashboardScreen() {
   const savedExam = useStatsStore((s) => s.savedExam);
   const clearSavedExam = useStatsStore((s) => s.clearSavedExam);
   const [resumeVisible, setResumeVisible] = useState(false);
-
-  useEffect(() => {
-    async function promptIfNeeded() {
-      const status = await getPermissionStatus();
-
-      if (status === "undetermined") {
-        const granted = await requestPermission();
-        if (granted) scheduleReminder(8, 0);
-      }
-    }
-
-    promptIfNeeded();
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -203,7 +185,7 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: BG },
+  safe: { flex: 1, backgroundColor: BRAND },
 
   header: {
     backgroundColor: BRAND,
@@ -217,7 +199,7 @@ const styles = StyleSheet.create({
   greeting: { color: "#fff", fontSize: 26, fontWeight: "800" },
   sub: { color: "#93c5fd", fontSize: 14, marginTop: 4 },
 
-  body: { flex: 1, padding: 20, gap: 16 },
+  body: { flex: 1, padding: 20, gap: 16, backgroundColor: BG },
 
   card: {
     flex: 1,

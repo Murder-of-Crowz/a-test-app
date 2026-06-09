@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
+import { useCallback, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
 import {
   Text,
   View,
@@ -9,6 +9,8 @@ import {
   ScrollView,
   Switch,
   Linking,
+  Alert,
+  StatusBar,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,6 +29,7 @@ import {
   cancelReminder,
   getPermissionStatus,
   hasScheduledReminder,
+  getNextReminderDate,
   requestPermission,
   sendTestNotif,
 } from "@/src/notifications";
@@ -51,7 +54,14 @@ const PRIVACY_POLICY_URL = "https://esthiapp.com/privacy.html";
 const TERMS_OF_SERVICE_URL = "https://esthiapp.com/terms.html";
 const SUPPORT_URL = "https://esthiapp.com/support.html";
 
-
+function formatReminderDate(date: Date | null, spanish: boolean) {
+  if (!date) return spanish ? "Recordatorio programado." : "Reminder scheduled.";
+  return `${spanish ? "Proximo recordatorio" : "Next reminder"}: ${date.toLocaleString(spanish ? "es-US" : undefined, {
+    weekday: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  })}`;
+}
 
 function Row({ icon, label, onPress, right, danger }: RowProps) {
   return (
@@ -92,6 +102,63 @@ export default function SettingsScreen() {
   const spanish = useSettingsStore((state) => state.spanish);
   const forceFreeForTesting = useSettingsStore((state) => state.forceFreeForTesting);
   const { hasEsthiPro, refresh, updateCustomerInfo } = useSubscription();
+  const copy = spanish
+    ? {
+        about: "Acerca de",
+        cancel: "Cancelar",
+        currentPlan: "Plan actual",
+        dailyReminder: "Recordatorio diario",
+        firesIn5s: "Se activa en 5s",
+        free: "Gratis",
+        manageSubscription: "Administrar suscripcion",
+        notificationsOffBody:
+          "Activa las notificaciones en la configuracion del sistema para usar recordatorios diarios.",
+        notificationsOffTitle: "Las notificaciones estan desactivadas",
+        openSettings: "Abrir configuracion",
+        preferences: "Preferencias",
+        premium: "Premium",
+        privacyPolicy: "Politica de privacidad",
+        reminderOnTitle: "Recordatorio diario activado",
+        reminderUpdatedTitle: "Recordatorio diario actualizado",
+        removeProForTesting: "Quitar Pro para pruebas",
+        restorePurchase: "Restaurar compra",
+        restoring: "Restaurando...",
+        settings: "Configuracion",
+        spanish: "Espanol",
+        support: "Soporte",
+        termsOfService: "Terminos de servicio",
+        testNotification: "Notificacion de prueba",
+        upgradeToPro: "Actualizar a Esthi Pro",
+        version: "Version",
+      }
+    : {
+        about: "About",
+        cancel: "Cancel",
+        currentPlan: "Current Plan",
+        dailyReminder: "Daily Reminder",
+        firesIn5s: "Fires in 5s",
+        free: "Free",
+        manageSubscription: "Manage Subscription",
+        notificationsOffBody:
+          "Turn on notifications in system settings to use daily reminders.",
+        notificationsOffTitle: "Notifications are off",
+        openSettings: "Open Settings",
+        preferences: "Preferences",
+        premium: "Premium",
+        privacyPolicy: "Privacy Policy",
+        reminderOnTitle: "Daily reminder on",
+        reminderUpdatedTitle: "Daily reminder updated",
+        removeProForTesting: "Remove Pro for Testing",
+        restorePurchase: "Restore Purchase",
+        restoring: "Restoring...",
+        settings: "Settings",
+        spanish: "Spanish",
+        support: "Support",
+        termsOfService: "Terms of Service",
+        testNotification: "Test Notification",
+        upgradeToPro: "Upgrade to Esthi Pro",
+        version: "Version",
+      };
 
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [reminderTime, setReminderTime] = useState({ hour: 8, minute: 0 });
@@ -100,9 +167,57 @@ export default function SettingsScreen() {
   const [customerCenterVisible, setCustomerCenterVisible] = useState(false);
   const [restoreLoading, setRestoreLoading] = useState(false);
 
-  useEffect(() => {
-    hasScheduledReminder().then(setNotificationsEnabled);
+  const showNotificationSettingsAlert = useCallback(() => {
+    Alert.alert(
+      copy.notificationsOffTitle,
+      copy.notificationsOffBody,
+      [
+        { text: copy.cancel, style: "cancel" },
+        { text: copy.openSettings, onPress: () => Linking.openSettings() },
+      ],
+    );
+  }, [
+    copy.cancel,
+    copy.notificationsOffBody,
+    copy.notificationsOffTitle,
+    copy.openSettings,
+  ]);
+
+  const syncNotificationState = useCallback(async () => {
+    try {
+      const [status, scheduled] = await Promise.all([
+        getPermissionStatus(),
+        hasScheduledReminder(),
+      ]);
+      const canShowReminder = status === "granted" && scheduled;
+
+      if (scheduled && status !== "granted") {
+        await cancelReminder();
+      }
+
+      setNotificationsEnabled(canShowReminder);
+      if (!canShowReminder) setShowPicker(false);
+    } catch (error) {
+      console.error("Failed to sync notification state:", error);
+    }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      syncNotificationState();
+    }, [syncNotificationState]),
+  );
+
+  const ensureNotificationPermission = useCallback(async () => {
+    const status = await getPermissionStatus();
+    if (status === "granted") return true;
+
+    const granted = await requestPermission();
+    if (granted) return true;
+
+    showNotificationSettingsAlert();
+    return false;
+  }, [showNotificationSettingsAlert]);
 
   const handleSpanishToggle = (value: boolean) => {
     useSettingsStore.setState({ spanish: value });
@@ -114,18 +229,45 @@ export default function SettingsScreen() {
 
   const handleNotificationToggle = async (val: boolean) => {
     if (val) {
-      const status = await getPermissionStatus();
-      const granted = status === "granted" || (await requestPermission());
+      const granted = await ensureNotificationPermission();
 
-      if (!granted) return;
+      if (!granted) {
+        setNotificationsEnabled(false);
+        setShowPicker(false);
+        return;
+      }
 
-      await scheduleReminder(reminderTime.hour, reminderTime.minute);
-      setNotificationsEnabled(true);
-      setShowPicker(true);
+      try {
+        await scheduleReminder(reminderTime.hour, reminderTime.minute);
+        const nextReminder = await getNextReminderDate(
+          reminderTime.hour,
+          reminderTime.minute,
+        );
+        setNotificationsEnabled(true);
+        setShowPicker(true);
+        Alert.alert(
+          copy.reminderOnTitle,
+          formatReminderDate(nextReminder, spanish),
+        );
+      } catch (error) {
+        console.error("Failed to schedule reminder:", error);
+        setNotificationsEnabled(false);
+        setShowPicker(false);
+      }
     } else {
       await cancelReminder();
       setNotificationsEnabled(false);
+      setShowPicker(false);
     }
+  };
+
+  const handleReminderRowPress = async () => {
+    if (notificationsEnabled) {
+      setShowPicker(true);
+      return;
+    }
+
+    await handleNotificationToggle(true);
   };
 
   const handleRestorePurchases = async () => {
@@ -155,23 +297,24 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <StatusBar barStyle="light-content" backgroundColor={BRAND} />
       <View style={styles.header}>
         <Pressable onPress={() => router.push("/dashboard")} hitSlop={12}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </Pressable>
 
-        <Text style={styles.headerTile}>Settings</Text>
+        <Text style={styles.headerTile}>{copy.settings}</Text>
 
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <SectionHeader title="Preferences" />
+      <ScrollView style={styles.content} contentContainerStyle={styles.scroll}>
+        <SectionHeader title={copy.preferences} />
 
         <View style={styles.section}>
           <Row
             icon="language-outline"
-            label="Spanish"
+            label={copy.spanish}
             right={
               <Switch
                 value={spanish}
@@ -182,18 +325,31 @@ export default function SettingsScreen() {
             }
           />
 
-          <Row
-            icon="notifications-outline"
-            label="Daily Reminder"
-            right={
-              <Switch
-                value={notificationsEnabled}
-                onValueChange={handleNotificationToggle}
-                trackColor={{ false: "#cbd5e1", true: ACCENT }}
-                thumbColor="#fff"
+          <View style={styles.row}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.rowPressTarget,
+                pressed && styles.rowPressed,
+              ]}
+              onPress={handleReminderRowPress}
+            >
+              <Ionicons
+                name="notifications-outline"
+                size={20}
+                color={BRAND}
+                style={styles.rowIcon}
               />
-            }
-          />
+
+              <Text style={styles.rowLabel}>{copy.dailyReminder}</Text>
+            </Pressable>
+
+            <Switch
+              value={notificationsEnabled}
+              onValueChange={handleNotificationToggle}
+              trackColor={{ false: "#cbd5e1", true: ACCENT }}
+              thumbColor="#fff"
+            />
+          </View>
 
           {notificationsEnabled && showPicker && (
             <View style={styles.timePickerRow}>
@@ -214,7 +370,18 @@ export default function SettingsScreen() {
                   const minute = date.getMinutes();
 
                   setReminderTime({ hour, minute });
-                  scheduleReminder(hour, minute);
+                  scheduleReminder(hour, minute)
+                    .then(() => getNextReminderDate(hour, minute))
+                    .then((nextReminder) => {
+                      Alert.alert(
+                        copy.reminderUpdatedTitle,
+                        formatReminderDate(nextReminder, spanish),
+                      );
+                    })
+                    .catch((error) => {
+                      console.error("Failed to schedule reminder:", error);
+                      setNotificationsEnabled(false);
+                    });
                 }}
                 style={styles.timePicker}
               />
@@ -236,18 +403,18 @@ export default function SettingsScreen() {
                 style={styles.rowIcon}
               />
 
-              <Text style={styles.rowLabel}>Test Notification</Text>
-              <Text style={{ color: MUTED, fontSize: 13 }}>Fires in 5s</Text>
+              <Text style={styles.rowLabel}>{copy.testNotification}</Text>
+              <Text style={{ color: MUTED, fontSize: 13 }}>{copy.firesIn5s}</Text>
             </Pressable>
           )}
         </View>
 
-        <SectionHeader title="Premium" />
+        <SectionHeader title={copy.premium} />
 
         <View style={styles.section}>
           <Row
             icon="star-outline"
-            label="Current Plan"
+            label={copy.currentPlan}
             right={
               <View
                 style={[
@@ -256,7 +423,7 @@ export default function SettingsScreen() {
                 ]}
               >
                 <Text style={styles.badgeText}>
-                  {hasEsthiPro ? "Esthi Pro" : "Free"}
+                  {hasEsthiPro ? "Esthi Pro" : copy.free}
                 </Text>
               </View>
             }
@@ -265,7 +432,7 @@ export default function SettingsScreen() {
           {__DEV__ && (
             <Row
               icon="flask-outline"
-              label="Remove Pro for Testing"
+              label={copy.removeProForTesting}
               right={
                 <Switch
                   value={forceFreeForTesting}
@@ -292,7 +459,7 @@ export default function SettingsScreen() {
               style={styles.rowIcon}
             />
             <Text style={styles.rowLabel}>
-              {restoreLoading ? "Restoring..." : "Restore Purchase"}
+              {restoreLoading ? copy.restoring : copy.restorePurchase}
             </Text>
             <Ionicons name="chevron-forward" size={16} color="#cbd5e1" />
           </Pressable>
@@ -310,7 +477,7 @@ export default function SettingsScreen() {
               color={BRAND}
               style={styles.rowIcon}
             />
-            <Text style={styles.rowLabel}>Manage Subscription</Text>
+            <Text style={styles.rowLabel}>{copy.manageSubscription}</Text>
             <Ionicons name="chevron-forward" size={16} color="#cbd5e1" />
           </Pressable>
 
@@ -319,22 +486,22 @@ export default function SettingsScreen() {
               style={styles.upgradeBtn}
               onPress={() => setPaywallVisible(true)}
             >
-              <Text style={styles.upgradeText}>Upgrade to Esthi Pro</Text>
+              <Text style={styles.upgradeText}>{copy.upgradeToPro}</Text>
             </Pressable>
           )}
         </View>
 
-        <SectionHeader title="About" />
+        <SectionHeader title={copy.about} />
 
         <View style={styles.section}>
-          <Row icon="document-text-outline" label="Privacy Policy" onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}/>
-          <Row icon="reader-outline" label="Terms of Service" onPress={() => Linking.openURL(TERMS_OF_SERVICE_URL)}/>
-          <Row icon="help-circle-outline" label="Support" onPress={() => Linking.openURL(SUPPORT_URL)}/>
+          <Row icon="document-text-outline" label={copy.privacyPolicy} onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}/>
+          <Row icon="reader-outline" label={copy.termsOfService} onPress={() => Linking.openURL(TERMS_OF_SERVICE_URL)}/>
+          <Row icon="help-circle-outline" label={copy.support} onPress={() => Linking.openURL(SUPPORT_URL)}/>
 
 
           <Row
             icon="information-circle-outline"
-            label="Version"
+            label={copy.version}
             right={<Text style={styles.versionText}>{APP_VERSION}</Text>}
           />
         </View>
@@ -374,7 +541,9 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: BG },
+  safe: { flex: 1, backgroundColor: BRAND },
+
+  content: { flex: 1, backgroundColor: BG },
 
   header: {
     backgroundColor: BRAND,
@@ -417,6 +586,17 @@ const styles = StyleSheet.create({
   },
 
   rowPressed: { backgroundColor: "#f8fafc" },
+
+  rowPressTarget: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "stretch",
+    marginVertical: -14,
+    marginLeft: -16,
+    paddingLeft: 16,
+    paddingVertical: 14,
+  },
 
   rowIcon: { marginRight: 12 },
 
