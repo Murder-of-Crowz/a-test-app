@@ -9,7 +9,13 @@ import Purchases, {
 
 // API Key - Store this securely in your environment
 // IMPORTANT: Never hardcode this in production - use environment variables or secure storage
-export const REVENUECAT_API_KEY = 'test_shvqxUHedVYHANlkMFhIGVJpKqL';
+export const REVENUECAT_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY ?? "";
+if (!REVENUECAT_API_KEY) {
+  throw new Error("Missing EXPO_PUBLIC_REVENUECAT_API_KEY");
+}
+if (!__DEV__ && REVENUECAT_API_KEY.startsWith("test_")) {
+  throw new Error("Production builds cannot use a RevenueCat test API key");
+}
 
 /**
  * Initialize RevenueCat SDK

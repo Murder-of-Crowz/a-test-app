@@ -831,6 +831,8 @@ export default function FlashCardsScreen() {
               style={styles.applyBtn}
               onPress={() => {
                 resetFlashcardRatings();
+                setReviewDeck(null);
+                setIndex(0);
                 setStatsVisible(false);
               }}
             >

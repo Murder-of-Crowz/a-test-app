@@ -93,7 +93,8 @@ export const useStatsStore = create<StatsState>()(
             ...state.quizHistory,
           ],
         })),
-      resetFlashcardRatings: () => set({ flashcardRatings: {} }),
+      resetFlashcardRatings: () =>
+        set({ flashcardRatings: {}, flashcardNextReview: {} }),
       resetExamHistory: () => set ({ examHistory: [] }),
       resetQuizHistory: () => set({ quizHistory: [] }),
       resetStats: () => set({ flashcardRatings: {}, flashcardNextReview: {}, savedExam: null, examHistory: [], quizHistory: [] })
