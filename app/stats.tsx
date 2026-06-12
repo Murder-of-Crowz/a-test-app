@@ -143,6 +143,10 @@ export default function StatsScreen() {
   const totalLearning = currentBankRatings.filter(([, rating]) => rating === "learning").length;
   const totalCards = data.reduce((sum, s) => sum + s.questions.length, 0);
   const totalUnreviewed = totalCards - totalKnown - totalLearning;
+  const flashcardProgressPercent =
+    totalCards > 0
+      ? Math.round(((totalKnown + totalLearning) / totalCards) * 100)
+      : 0;
 
   const quizBySection = useMemo(() => {
     const map: Record<string, typeof quizHistory> = {};
@@ -227,6 +231,27 @@ export default function StatsScreen() {
         }}
       >
         <ScrollView style={{ width: SCREEN_WIDTH }} contentContainerStyle={styles.page}>
+          <View style={styles.progressOverview}>
+            <View style={styles.overviewCopy}>
+              <Text style={styles.overviewEyebrow}>
+                {spanish ? "Tarjetas" : "Flashcards"}
+              </Text>
+              <Text style={styles.overviewTitle}>
+                {flashcardProgressPercent}% {spanish ? "revisado" : "reviewed"}
+              </Text>
+              <Text style={styles.overviewSub}>
+                {totalKnown + totalLearning} / {totalCards}{" "}
+                {spanish ? "tarjetas con progreso" : "cards with progress"}
+              </Text>
+            </View>
+
+            <View style={styles.overviewBadge}>
+              <Text style={styles.overviewBadgeText}>
+                {flashcardProgressPercent}%
+              </Text>
+            </View>
+          </View>
+
           <View style={styles.overallRow}>
             <View style={styles.overallBadge}>
               <Text style={[styles.overallNum, { color: SUCCESS }]}>{totalKnown}</Text>
@@ -501,6 +526,38 @@ const styles = StyleSheet.create({
   pager: { flex: 1, backgroundColor: BG },
 
   page: { padding: 20, gap: 12, paddingBottom: 40 },
+
+  progressOverview: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+    ...SHADOW_SM,
+  },
+  overviewCopy: { flex: 1 },
+  overviewEyebrow: {
+    color: SUBTLE,
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
+  },
+  overviewTitle: { color: TEXT, fontSize: 23, fontWeight: "800", marginTop: 4 },
+  overviewSub: { color: SUBTLE, fontSize: 13, marginTop: 2 },
+  overviewBadge: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    borderWidth: 6,
+    borderColor: ACCENT,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#eff6ff",
+  },
+  overviewBadgeText: { color: BRAND, fontSize: 13, fontWeight: "800" },
 
   tabBar: {
     flexDirection: "row",

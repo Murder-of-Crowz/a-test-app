@@ -47,7 +47,7 @@ import {
   DANGER,
   WARNING,
 } from "@/src/theme/colors";
-import { SHADOW_LG } from "@/src/theme/shadows";
+import { SHADOW_LG, SHADOW_SM } from "@/src/theme/shadows";
 
 const REVIEW_INTERVAL_MS = 24 * 60 * 60 * 1000;
 
@@ -272,6 +272,12 @@ export default function FlashCardsScreen() {
   const currentBankLearning = allCards.filter(
     (c) => flashcardRatings[`${c.source}_${c.id}`] === "learning",
   ).length;
+  const currentBankReviewed = currentBankKnown + currentBankLearning;
+  const currentBankUnreviewed = allCards.length - currentBankReviewed;
+  const progressPercent =
+    allCards.length > 0
+      ? Math.round((currentBankReviewed / allCards.length) * 100)
+      : 0;
 
   const markCard = (id: number, source: "free" | "prem", state: CardState) => {
     const key = `${source}_${id}`;
@@ -453,20 +459,53 @@ export default function FlashCardsScreen() {
       )}
 
       <View style={styles.body}>
-        <View style={styles.shuffleBody}>
-          <Text style={styles.chapterLabel}>{current?.category ?? ""}</Text>
+        <View style={styles.studyPanel}>
+          <View style={styles.studyPanelTop}>
+            <View style={styles.studyPanelCopy}>
+              <Text style={styles.chapterLabel}>{current?.category ?? ""}</Text>
+              <Text style={styles.studyTitle}>
+                {spanish ? "Sesion de tarjetas" : "Flashcard session"}
+              </Text>
+              <Text style={styles.studySub}>
+                {currentBankReviewed} / {allCards.length}{" "}
+                {spanish ? "tarjetas revisadas" : "cards reviewed"}
+              </Text>
+            </View>
 
-          <View style={styles.shuffleRow}>
-            <Text style={styles.shuffleLabel}>
-              {spanish ? "Mezclar" : "Shuffle"}
-            </Text>
+            <View style={styles.progressBadge}>
+              <Text style={styles.progressBadgeText}>{progressPercent}%</Text>
+            </View>
+          </View>
 
-            <Switch
-              value={shuffleOn}
-              onValueChange={setShuffleOn}
-              trackColor={{ false: "#cbd5e1", true: ACCENT }}
-              thumbColor="#fff"
+          <View style={styles.studyMeterBg}>
+            <View
+              style={[
+                styles.studyMeterFill,
+                { width: `${progressPercent}%` },
+              ]}
             />
+          </View>
+
+          <View style={styles.studyPanelBottom}>
+            <View style={styles.reviewDueChip}>
+              <Ionicons name="time-outline" size={15} color={ACCENT} />
+              <Text style={styles.reviewDueText}>
+                {total} {spanish ? "disponibles" : "review due"}
+              </Text>
+            </View>
+
+            <View style={styles.shuffleRow}>
+              <Text style={styles.shuffleLabel}>
+                {spanish ? "Mezclar" : "Shuffle"}
+              </Text>
+
+              <Switch
+                value={shuffleOn}
+                onValueChange={setShuffleOn}
+                trackColor={{ false: "#cbd5e1", true: ACCENT }}
+                thumbColor="#fff"
+              />
+            </View>
           </View>
         </View>
 
@@ -757,12 +796,7 @@ export default function FlashCardsScreen() {
 
               <View style={styles.overallBadge}>
                 <Text style={[styles.overallNum, { color: MUTED }]}>
-                  {
-                    deck.filter(
-                      (c) =>
-                        flashcardRatings[`${c.source}_${c.id}`] === undefined,
-                    ).length
-                  }
+                  {currentBankUnreviewed}
                 </Text>
                 <Text style={styles.overallLabel}>
                   {spanish ? "Sin repasar" : "Unreviewed"}
@@ -887,14 +921,67 @@ const styles = StyleSheet.create({
   },
 
   body: { flex: 1, padding: 20, gap: 12, backgroundColor: BG },
+  studyPanel: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 16,
+    gap: 12,
+    ...SHADOW_SM,
+  },
+  studyPanelTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  studyPanelCopy: { flex: 1 },
   chapterLabel: {
     color: SUBTLE,
-    fontSize: 13,
-    fontWeight: "600",
+    fontSize: 11,
+    fontWeight: "800",
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 0.6,
   },
-  shuffleBody: { flexDirection: "row", justifyContent: "space-between" },
+  studyTitle: { color: TEXT, fontSize: 18, fontWeight: "800", marginTop: 4 },
+  studySub: { color: SUBTLE, fontSize: 13, marginTop: 2 },
+  progressBadge: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    borderWidth: 5,
+    borderColor: ACCENT,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#eff6ff",
+  },
+  progressBadgeText: { color: BRAND, fontSize: 13, fontWeight: "800" },
+  studyMeterBg: {
+    height: 7,
+    backgroundColor: BORDER,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  studyMeterFill: {
+    height: 7,
+    backgroundColor: ACCENT,
+    borderRadius: 4,
+  },
+  studyPanelBottom: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  reviewDueChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    borderRadius: 12,
+    backgroundColor: "#eff6ff",
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  reviewDueText: { color: BRAND, fontSize: 12, fontWeight: "800" },
   shuffleRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -905,9 +992,9 @@ const styles = StyleSheet.create({
 
   card: {
     backgroundColor: "#fff",
-    borderRadius: 20,
+    borderRadius: 16,
     padding: 28,
-    minHeight: 280,
+    minHeight: 260,
     justifyContent: "center",
     ...SHADOW_LG,
     gap: 16,
